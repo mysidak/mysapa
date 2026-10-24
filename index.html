@@ -135,41 +135,53 @@
 
   .header{
     background:linear-gradient(160deg,#0a2463 0%,#1558c9 60%,#4aa3ff 100%);
-    color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 70px;border-radius:0 0 30px 30px;position:relative;
+    color:#fff;padding:calc(16px + env(safe-area-inset-top)) 18px 22px;border-radius:0 0 30px 30px;position:relative;
   }
-  .baris-atas{display:flex;align-items:center;justify-content:space-between}
-  .kiri-user{display:flex;align-items:center;gap:12px;min-width:0}
-  .avatar{width:46px;height:46px;border-radius:50%;flex:none;border:0;cursor:pointer;
-    background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);color:#fff;font-size:1.2rem;
+  .baris-atas{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .kiri-user{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+  .avatar{flex:none;width:46px;height:46px;border-radius:50%;font-size:1.2rem;color:#fff;
+    background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);
     display:flex;align-items:center;justify-content:center}
-  .sapaan{line-height:1.25;min-width:0}
-  .sapaan small{display:block;font-size:.76rem;opacity:.9}
-  .sapaan strong{display:block;font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
-  .kanan-lonceng{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;font-weight:600;
-    background:none;border:0;color:#fff;cursor:pointer;position:relative}
-  .kanan-lonceng i{font-size:1.3rem}
-  .titik-notif{position:absolute;top:-2px;right:2px;width:9px;height:9px;border-radius:50%;
-    background:var(--oranye);border:2px solid #1558c9;display:none}
-  .titik-notif.tampil{display:block}
+  .sapaan{line-height:1.25;min-width:0;text-align:left}
+  .sapaan small{display:block;font-size:.78rem;opacity:.9}
+  .sapaan strong{display:block;font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .aksi-kanan{display:flex;align-items:center;gap:10px;flex:none}
+  .btn-ikon{position:relative;width:40px;height:40px;border-radius:50%;cursor:pointer;color:#fff;font-size:1.05rem;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center}
+  .btn-ikon:active{transform:scale(.94)}
+  .badge-notif{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--oranye);
+    color:#fff;font-size:.65rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid #1558c9;line-height:1}
+  .badge-notif.tampil{display:flex}
+  .btn-ikon.berbunyi i{animation:goyang 1.8s ease-in-out infinite;transform-origin:50% 0}
+  @keyframes goyang{0%,55%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-12deg)}30%{transform:rotate(8deg)}40%{transform:rotate(-6deg)}50%{transform:rotate(3deg)}}
 
-  .panel-statistik{
-    position:absolute;left:16px;right:16px;bottom:-62px;
-    background:var(--kartu);color:var(--teks);border-radius:var(--radius);padding:14px;
-    box-shadow:0 14px 34px rgba(11,42,111,.18);
-    display:grid;grid-template-columns:1fr 1fr;gap:10px;
-  }
-  .kolom-chart{display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .kolom-chart .wadah{position:relative;width:118px;height:118px}
-  .legenda{display:flex;gap:12px;margin-top:6px;font-size:.68rem;color:var(--abu)}
+  .logo-header{text-align:center;margin-top:4px}
+  .logo-header img{height:60px;width:auto;max-width:70%;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25))}
+  .tanggal{margin-top:6px;font-size:.78rem;opacity:.92;letter-spacing:.2px}
+
+  /* Infografis menyatu dengan latar header (tanpa kotak/latar sendiri) */
+  .infografis{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center;margin-top:16px}
+  .kolom-chart{display:flex;flex-direction:column;align-items:center}
+  .kolom-chart .wadah{position:relative;width:128px;height:128px}
+  .pusat-donut{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;color:rgba(255,255,255,.75);pointer-events:none}
+  .legenda{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin-top:8px;font-size:.72rem;
+    color:rgba(255,255,255,.92);white-space:nowrap}
   .legenda i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
-  .kolom-angka{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .kolom-angka{display:flex;flex-direction:column;justify-content:center;gap:9px}
+  .hs-baris{display:flex;align-items:baseline;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.9);
+    border-bottom:1px dashed rgba(255,255,255,.35);padding-bottom:6px}
+  .hs-baris b{font-size:1.1rem;color:#fff}
+  .btn-selengkapnya{border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:8px;font:inherit;font-size:.76rem;
+    font-weight:600;color:#fff;cursor:pointer;background:rgba(255,255,255,.16)}
+  .btn-selengkapnya:active{background:rgba(255,255,255,.28)}
+
+  /* Kelas di bawah masih dipakai di dalam subform Data Statistik */
   .baris-angka{display:flex;align-items:baseline;justify-content:space-between;font-size:.76rem;color:var(--abu);
     border-bottom:1px dashed #e2e8f0;padding-bottom:5px}
   .baris-angka b{font-size:1.05rem;color:var(--biru-tua)}
-  .btn-kecil{border:0;border-radius:10px;padding:8px;font:inherit;font-size:.76rem;font-weight:600;color:#fff;cursor:pointer;
-    background:linear-gradient(135deg,var(--biru),var(--biru-muda))}
 
-  .isi{padding:78px 16px 24px}
+  .isi{padding:16px 16px 24px}
   .judul-seksi{font-size:.92rem;font-weight:600;color:var(--biru-tua);margin:18px 2px 10px}
 
   .kartu-surat{
@@ -212,9 +224,14 @@
   /* ============ SUBFORM (halaman geser dari kanan) ============ */
   .subform{
     position:absolute;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;
-    transform:translateX(100%);transition:transform .35s cubic-bezier(.22,.8,.3,1);visibility:hidden;
+    transform:translateX(100%);visibility:hidden;box-shadow:-12px 0 30px rgba(4,18,60,0);
+    /* menutup: geser ke kanan; visibility baru berubah setelah geseran selesai agar animasi terlihat */
+    transition:transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, visibility 0s linear .3s;
   }
-  .subform.buka{transform:none;visibility:visible}
+  .subform.buka{
+    transform:none;visibility:visible;box-shadow:-12px 0 30px rgba(4,18,60,.18);
+    transition:transform .35s cubic-bezier(.22,.8,.3,1), box-shadow .35s, visibility 0s;
+  }
   .subform-header{display:flex;align-items:center;gap:12px;color:#fff;
     padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
     background:linear-gradient(160deg,#0a2463,#1558c9)}
@@ -284,31 +301,41 @@
     <header class="header">
       <div class="baris-atas">
         <div class="kiri-user">
-          <button class="avatar" id="btnProfil" aria-label="Profil / Keluar"><i class="fa-solid fa-user"></i></button>
+          <div class="avatar" aria-hidden="true"><i class="fa-solid fa-user"></i></div>
           <div class="sapaan">
             <small id="teksSapaan">Selamat pagi</small>
             <strong id="namaUser">-</strong>
           </div>
         </div>
-        <button class="kanan-lonceng" id="btnLonceng" aria-label="Notifikasi">
-          <i class="fa-solid fa-bell"></i><span class="titik-notif" id="titikNotif"></span>
-          <span>MySapa</span>
-        </button>
+        <div class="aksi-kanan">
+          <button class="btn-ikon" id="btnKeluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+          <button class="btn-ikon" id="btnLonceng" aria-label="Verifikasi surat pengantar">
+            <i class="fa-solid fa-bell"></i><span class="badge-notif" id="badgeNotif">0</span>
+          </button>
+        </div>
       </div>
 
-      <div class="panel-statistik">
+      <div class="logo-header">
+        <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792800203/Logo_My_SAPA_Biru_Oranye_jrtabx.webp" alt="MySapa">
+        <div class="tanggal" id="teksTanggal">-</div>
+      </div>
+
+      <div class="infografis">
         <div class="kolom-chart">
-          <div class="wadah"><canvas id="chartGender"></canvas></div>
+          <div class="wadah">
+            <canvas id="chartGender"></canvas>
+            <div class="pusat-donut"><i class="fa-solid fa-users"></i></div>
+          </div>
           <div class="legenda">
-            <span><i style="background:#1558c9"></i>Laki-laki</span>
-            <span><i style="background:#ff8a1f"></i>Perempuan</span>
+            <span><i style="background:#ffffff"></i><span id="legL">Laki-laki</span></span>
+            <span><i style="background:#ff8a1f"></i><span id="legP">Perempuan</span></span>
           </div>
         </div>
         <div class="kolom-angka">
-          <div class="baris-angka">Jumlah KK <b id="angkaKK">-</b></div>
-          <div class="baris-angka">Jumlah Jiwa <b id="angkaJiwa">-</b></div>
-          <div class="baris-angka">Jumlah Wafat <b id="angkaWafat">-</b></div>
-          <button class="btn-kecil" data-buka="statistik">Selengkapnya</button>
+          <div class="hs-baris">Jumlah KK <b id="angkaKK">-</b></div>
+          <div class="hs-baris">Jumlah Jiwa <b id="angkaJiwa">-</b></div>
+          <div class="hs-baris">Jumlah Wafat <b id="angkaWafat">-</b></div>
+          <button class="btn-selengkapnya" data-buka="statistik">Selengkapnya</button>
         </div>
       </div>
     </header>
@@ -367,6 +394,7 @@ const $ = (id) => document.getElementById(id);
 let tokenSesi = null;
 let statistik = null;
 let chartGender = null;
+let suratMenunggu = 0;
 
 /* ---------- Utilitas ---------- */
 function toast(pesan){
@@ -409,7 +437,11 @@ function tampilkanUtama(profil){
   perbaruiSapaan();
   muatStatistik();
 }
-function perbaruiSapaan(){ $('teksSapaan').textContent = ucapanWaktu(); }
+function perbaruiSapaan(){
+  $('teksSapaan').textContent = ucapanWaktu();
+  $('teksTanggal').textContent = new Date().toLocaleDateString('id-ID',
+    { weekday:'long', day:'numeric', month:'long', year:'numeric' });   // contoh: Minggu, 25 Oktober 2026
+}
 setInterval(perbaruiSapaan, 60 * 1000);
 
 /* Splash: tampil sebentar, geser ke kiri, memperlihatkan Login (atau Utama bila sesi masih berlaku) */
@@ -472,7 +504,7 @@ async function keluar(){
   hapusToken(); tokenSesi = null; statistik = null;
   tampilkanLogin();
 }
-$('btnProfil').addEventListener('click', keluar);
+$('btnKeluar').addEventListener('click', keluar);
 
 /* ---------- Statistik & Chart ---------- */
 async function muatStatistik(){
@@ -484,9 +516,15 @@ async function muatStatistik(){
     $('angkaKK').textContent = fmt(data.jumlah_kk);
     $('angkaJiwa').textContent = fmt(data.jumlah_jiwa);
     $('angkaWafat').textContent = fmt(data.jumlah_wafat);
-    const ada = Number(data.info_aktif) > 0;
-    $('alertInfo').classList.toggle('tampil', ada);
-    $('titikNotif').classList.toggle('tampil', ada);
+    $('alertInfo').classList.toggle('tampil', Number(data.info_aktif) > 0);
+    /* Lonceng: pengajuan surat pengantar yang menunggu verifikasi (hanya Admin/Pengurus; server mengirim 0 untuk lainnya) */
+    suratMenunggu = Number(data.surat_menunggu) || 0;
+    const badge = $('badgeNotif');
+    badge.textContent = suratMenunggu > 9 ? '9+' : String(suratMenunggu);
+    badge.classList.toggle('tampil', suratMenunggu > 0);
+    $('btnLonceng').classList.toggle('berbunyi', suratMenunggu > 0);
+    $('btnLonceng').setAttribute('aria-label', suratMenunggu > 0
+      ? suratMenunggu + ' pengajuan surat pengantar menunggu verifikasi' : 'Verifikasi surat pengantar');
     gambarChart(data.laki_laki, data.perempuan);
   }catch(err){
     console.error(err); toast('Gagal memuat statistik.');
@@ -494,14 +532,18 @@ async function muatStatistik(){
 }
 function gambarChart(l, p){
   const ctx = $('chartGender');
-  const data = (l + p) === 0 ? [1] : [l, p];
-  const warna = (l + p) === 0 ? ['#e2e8f0'] : ['#1558c9','#ff8a1f'];
+  const kosong = (l + p) === 0;
+  $('legL').textContent = 'Laki-laki · ' + fmt(l);
+  $('legP').textContent = 'Perempuan · ' + fmt(p);
   if (chartGender) chartGender.destroy();
   chartGender = new Chart(ctx, {
-    type: 'pie',
-    data: { labels: ['Laki-laki','Perempuan'], datasets: [{ data, backgroundColor: warna, borderColor:'#fff', borderWidth: 2 }] },
-    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false},
-      tooltip:{ enabled:(l+p)>0 } } }
+    type: 'doughnut',
+    data: { labels: ['Laki-laki','Perempuan'],
+      datasets: [{ data: kosong ? [1] : [l, p],
+        backgroundColor: kosong ? ['rgba(255,255,255,.25)'] : ['#ffffff','#ff8a1f'],
+        borderWidth: 0, spacing: kosong ? 0 : 3, borderRadius: kosong ? 0 : 6, hoverOffset: 4 }] },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'68%',
+      plugins:{ legend:{display:false}, tooltip:{ enabled: !kosong } } }
   });
 }
 
@@ -509,6 +551,7 @@ function gambarChart(l, p){
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
   surat:         { judul:'Pengajuan Surat Pengantar' },
+  verifikasi:    { judul:'Verifikasi Surat Pengantar' },
   arsip:         { judul:'Arsip & Aset' },
   info:          { judul:'Info Aktual' },
   mydata:        { judul:'MyData' },
@@ -532,6 +575,13 @@ function bukaSubform(kunci){
         <div class="baris-angka">Jumlah Wafat <b>${fmt(statistik.jumlah_wafat)}</b></div>
       </div>
       <div class="kosong" style="margin-top:20px">Rincian statistik lainnya akan ditambahkan.</div>`;
+  } else if (kunci === 'verifikasi'){
+    isi.innerHTML = suratMenunggu > 0
+      ? `<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>
+         <b>${fmt(suratMenunggu)}</b> pengajuan surat pengantar menunggu verifikasi.<br>
+         <small>Daftar dan verifikasi dengan nomor surat sedang disiapkan.</small></div>`
+      : `<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>
+         Tidak ada pengajuan yang menunggu verifikasi.</div>`;
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
@@ -544,7 +594,7 @@ function tutupSubform(){
   $('subform').setAttribute('aria-hidden','true');
 }
 $('btnKembali').addEventListener('click', tutupSubform);
-$('btnLonceng').addEventListener('click', () => bukaSubform('info'));
+$('btnLonceng').addEventListener('click', () => bukaSubform('verifikasi'));
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-buka]');
   if (el) bukaSubform(el.dataset.buka);
