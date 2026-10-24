@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2a6f">
+<title>Sistem Informasi dan Pelayanan Administrasi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+  :root{
+    --biru-tua:#0b2a6f;
+    --biru:#1558c9;
+    --biru-muda:#4aa3ff;
+    --oranye:#ff8a1f;
+    --teks:#1e293b;
+    --abu:#64748b;
+    --bg:#eef3fb;
+    --kartu:#ffffff;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Poppins',system-ui,sans-serif;background:#0b2a6f;color:var(--teks);overflow:hidden}
+
+  /* Wadah aplikasi (tampilan mobile di tengah pada layar lebar) */
+  #app{position:relative;width:100%;max-width:480px;height:100%;margin:0 auto;overflow:hidden;background:var(--bg)}
+
+  /* ============ LATAR BIRU ABSTRAK (dipakai Splash & Login) ============ */
+  .latar-biru{
+    position:absolute;inset:0;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 10% 0%, #2a7bff 0%, transparent 55%),
+      radial-gradient(100% 70% at 100% 100%, #00b4ff 0%, transparent 55%),
+      linear-gradient(160deg,#0a2463 0%,#0f3a9e 55%,#1558c9 100%);
+  }
+  .latar-biru::before{ /* garis grid halus */
+    content:"";position:absolute;inset:0;opacity:.12;
+    background-image:
+      linear-gradient(rgba(255,255,255,.7) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.7) 1px,transparent 1px);
+    background-size:44px 44px;
+    -webkit-mask-image:radial-gradient(circle at 50% 45%,#000 0%,transparent 75%);
+            mask-image:radial-gradient(circle at 50% 45%,#000 0%,transparent 75%);
+  }
+  .bentuk{position:absolute;pointer-events:none}
+  .b1{width:320px;height:320px;border-radius:50%;top:-110px;right:-100px;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),rgba(255,255,255,0) 65%);
+      animation:melayang 9s ease-in-out infinite}
+  .b2{width:260px;height:260px;border-radius:42% 58% 63% 37%/45% 40% 60% 55%;bottom:-90px;left:-80px;
+      background:linear-gradient(135deg,rgba(255,138,31,.55),rgba(255,138,31,0));
+      animation:melayang 11s ease-in-out infinite reverse}
+  .b3{width:150px;height:150px;border-radius:32px;top:18%;left:-50px;transform:rotate(25deg);
+      border:2px solid rgba(255,255,255,.28);animation:putar 22s linear infinite}
+  .b4{width:90px;height:90px;border-radius:50%;bottom:22%;right:8%;
+      border:2px solid rgba(255,255,255,.3)}
+  .b5{width:14px;height:14px;border-radius:50%;top:30%;right:18%;background:rgba(255,255,255,.7);
+      box-shadow:0 0 18px 6px rgba(255,255,255,.35)}
+  .b6{width:10px;height:10px;border-radius:50%;bottom:30%;left:16%;background:var(--oranye);
+      box-shadow:0 0 18px 6px rgba(255,138,31,.45)}
+  .b7{width:200px;height:200px;border-radius:50%;top:55%;right:-90px;
+      border:30px solid rgba(255,255,255,.06)}
+  @keyframes melayang{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,22px)}}
+  @keyframes putar{to{transform:rotate(385deg)}}
+
+  /* ============ SPLASH ============ */
+  #splash{
+    position:absolute;inset:0;z-index:30;
+    transition:transform .7s cubic-bezier(.77,0,.18,1);
+  }
+  #splash.keluar{transform:translateX(-100%)}
+  .logo-pusat{ /* kotak logo tetap 200x200, tepat di tengah vertikal & horizontal */
+    position:absolute;top:50%;left:50%;width:200px;height:200px;
+    transform:translate(-50%,-50%);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo-pusat img{max-width:100%;max-height:100%;object-fit:contain;
+    filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));animation:muncul .9s ease both}
+  .teks-selamat{ /* jarak 24px di atas logo: tepi bawah teks = tepi atas logo - 24px */
+    position:absolute;left:0;right:0;
+    bottom:calc(50% + 100px + 24px);
+    text-align:center;color:#fff;font-size:1.6rem;font-weight:600;letter-spacing:.5px;
+    text-shadow:0 2px 12px rgba(0,0,0,.25);animation:muncul .9s .15s ease both;
+  }
+  .footer-biru{
+    position:absolute;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));
+    text-align:center;color:rgba(255,255,255,.85);font-size:.75rem;
+  }
+  @keyframes muncul{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .logo-pusat img{animation-name:muncul-logo}
+  @keyframes muncul-logo{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+
+  /* ============ LOGIN ============ */
+  #login{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px}
+  .kotak-login{
+    position:relative;width:100%;max-width:380px;padding:30px 24px 24px;border-radius:24px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
+    -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+    box-shadow:0 24px 60px rgba(4,18,60,.45);color:#fff;
+  }
+  .kotak-login .logo-kecil{display:block;width:96px;height:96px;object-fit:contain;margin:0 auto 10px}
+  .kotak-login h1{font-size:1.05rem;text-align:center;font-weight:600;line-height:1.35}
+  .kotak-login p.sub{text-align:center;font-size:.78rem;opacity:.85;margin:4px 0 20px}
+  .field{position:relative;margin-bottom:14px}
+  .field label{display:block;font-size:.75rem;margin-bottom:5px;opacity:.9}
+  .field .ikon{position:absolute;left:14px;bottom:13px;color:var(--biru);font-size:.95rem}
+  .field input{
+    width:100%;padding:12px 44px 12px 40px;border-radius:12px;border:2px solid transparent;
+    font:inherit;font-size:.92rem;background:#fff;color:var(--teks);outline:none;transition:.2s;
+  }
+  .field input:focus{border-color:var(--oranye)}
+  .field .mata{position:absolute;right:6px;bottom:4px;width:38px;height:38px;border:0;background:none;
+    color:var(--abu);font-size:.95rem;cursor:pointer}
+  .btn{
+    width:100%;padding:13px;border:0;border-radius:12px;font:inherit;font-weight:600;font-size:.95rem;
+    color:#fff;cursor:pointer;background:linear-gradient(135deg,#ff9a3c,#ff7a00);
+    box-shadow:0 8px 20px rgba(255,122,0,.4);transition:.2s;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn:disabled{opacity:.7;cursor:wait}
+  .pesan-error{display:none;margin:0 0 12px;padding:9px 12px;border-radius:10px;font-size:.78rem;
+    background:rgba(255,80,80,.9);color:#fff}
+  .pesan-error.tampil{display:block}
+  .catatan-login{margin-top:14px;text-align:center;font-size:.72rem;opacity:.8}
+
+  /* ============ HALAMAN UTAMA ============ */
+  #utama{position:absolute;inset:0;z-index:10;overflow-y:auto;overflow-x:hidden;background:var(--bg);
+    display:none;-webkit-overflow-scrolling:touch}
+  #utama.tampil{display:block}
+
+  .header{
+    background:linear-gradient(160deg,#0a2463 0%,#1558c9 60%,#4aa3ff 100%);
+    color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 70px;border-radius:0 0 30px 30px;position:relative;
+  }
+  .baris-atas{display:flex;align-items:center;justify-content:space-between}
+  .kiri-user{display:flex;align-items:center;gap:12px;min-width:0}
+  .avatar{width:46px;height:46px;border-radius:50%;flex:none;border:0;cursor:pointer;
+    background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);color:#fff;font-size:1.2rem;
+    display:flex;align-items:center;justify-content:center}
+  .sapaan{line-height:1.25;min-width:0}
+  .sapaan small{display:block;font-size:.76rem;opacity:.9}
+  .sapaan strong{display:block;font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+  .kanan-lonceng{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.68rem;font-weight:600;
+    background:none;border:0;color:#fff;cursor:pointer;position:relative}
+  .kanan-lonceng i{font-size:1.3rem}
+  .titik-notif{position:absolute;top:-2px;right:2px;width:9px;height:9px;border-radius:50%;
+    background:var(--oranye);border:2px solid #1558c9;display:none}
+  .titik-notif.tampil{display:block}
+
+  .panel-statistik{
+    position:absolute;left:16px;right:16px;bottom:-62px;
+    background:var(--kartu);color:var(--teks);border-radius:var(--radius);padding:14px;
+    box-shadow:0 14px 34px rgba(11,42,111,.18);
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  .kolom-chart{display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .kolom-chart .wadah{position:relative;width:118px;height:118px}
+  .legenda{display:flex;gap:12px;margin-top:6px;font-size:.68rem;color:var(--abu)}
+  .legenda i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
+  .kolom-angka{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .baris-angka{display:flex;align-items:baseline;justify-content:space-between;font-size:.76rem;color:var(--abu);
+    border-bottom:1px dashed #e2e8f0;padding-bottom:5px}
+  .baris-angka b{font-size:1.05rem;color:var(--biru-tua)}
+  .btn-kecil{border:0;border-radius:10px;padding:8px;font:inherit;font-size:.76rem;font-weight:600;color:#fff;cursor:pointer;
+    background:linear-gradient(135deg,var(--biru),var(--biru-muda))}
+
+  .isi{padding:78px 16px 24px}
+  .judul-seksi{font-size:.92rem;font-weight:600;color:var(--biru-tua);margin:18px 2px 10px}
+
+  .kartu-surat{
+    display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);color:#fff;
+    background:linear-gradient(135deg,#ff9a3c,#ff6a00);box-shadow:0 12px 26px rgba(255,122,0,.3);margin-top:6px;
+    position:relative;overflow:hidden;
+  }
+  .kartu-surat::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;
+    background:rgba(255,255,255,.18)}
+  .kartu-surat .ikon-besar{flex:none;width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+  .kartu-surat h3{font-size:.98rem;font-weight:600}
+  .kartu-surat p{font-size:.72rem;opacity:.92;margin:2px 0 9px}
+  .kartu-surat button{border:0;border-radius:10px;padding:8px 14px;font:inherit;font-size:.78rem;font-weight:600;
+    background:#fff;color:#e65f00;cursor:pointer;position:relative;z-index:1}
+
+  .grid-fitur{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .fitur{
+    position:relative;background:var(--kartu);border:0;border-radius:var(--radius);padding:16px 6px 12px;
+    display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font:inherit;
+    box-shadow:0 6px 16px rgba(11,42,111,.08);transition:.15s;color:var(--teks);
+  }
+  .fitur:active{transform:scale(.96)}
+  .fitur .lingkaran{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+    font-size:1.25rem;color:#fff}
+  .fitur span.nama{font-size:.72rem;font-weight:500;text-align:center;line-height:1.2}
+  .fitur .alert{position:absolute;top:8px;right:10px;color:#e53935;font-size:1.05rem;display:none;
+    animation:denyut 1.4s ease-in-out infinite}
+  .fitur .alert.tampil{display:block}
+  @keyframes denyut{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+  .c1{background:linear-gradient(135deg,#1558c9,#4aa3ff)}
+  .c2{background:linear-gradient(135deg,#ff9a3c,#ff6a00)}
+  .c3{background:linear-gradient(135deg,#0ea5a4,#34d399)}
+  .c4{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+  .c5{background:linear-gradient(135deg,#0b2a6f,#3b6fd8)}
+  .c6{background:linear-gradient(135deg,#e11d74,#fb7185)}
+
+  .footer-utama{text-align:center;font-size:.72rem;color:var(--abu);padding:8px 0 calc(22px + env(safe-area-inset-bottom))}
+
+  /* ============ SUBFORM (halaman geser dari kanan) ============ */
+  .subform{
+    position:absolute;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;
+    transform:translateX(100%);transition:transform .35s cubic-bezier(.22,.8,.3,1);visibility:hidden;
+  }
+  .subform.buka{transform:none;visibility:visible}
+  .subform-header{display:flex;align-items:center;gap:12px;color:#fff;
+    padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
+    background:linear-gradient(160deg,#0a2463,#1558c9)}
+  .subform-header button{border:0;background:rgba(255,255,255,.18);color:#fff;width:38px;height:38px;border-radius:12px;
+    font-size:1rem;cursor:pointer}
+  .subform-header h2{font-size:1rem;font-weight:600}
+  .subform-isi{flex:1;overflow-y:auto;padding:16px}
+  .kosong{margin-top:40px;text-align:center;color:var(--abu);font-size:.85rem}
+  .kosong i{font-size:2.4rem;color:var(--biru-muda);margin-bottom:10px;display:block}
+  .kartu-stat{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 6px 16px rgba(11,42,111,.08)}
+  .kartu-stat .baris-angka:last-child{border:0}
+
+  /* Toast */
+  #toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:#1e293b;color:#fff;
+    padding:10px 16px;border-radius:12px;font-size:.8rem;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90%}
+  #toast.tampil{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ========== A. SPLASH SCREEN ========== -->
+  <section id="splash">
+    <div class="latar-biru">
+      <i class="bentuk b1"></i><i class="bentuk b2"></i><i class="bentuk b3"></i><i class="bentuk b4"></i>
+      <i class="bentuk b5"></i><i class="bentuk b6"></i><i class="bentuk b7"></i>
+    </div>
+    <div class="teks-selamat">Selamat Datang</div>
+    <div class="logo-pusat">
+      <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792800203/Logo_My_SAPA_Biru_Oranye_jrtabx.webp" alt="Logo MySapa">
+    </div>
+    <div class="footer-biru">Powered by Anto Design Concept &copy; 2026</div>
+  </section>
+
+  <!-- ========== A. HALAMAN LOGIN ========== -->
+  <section id="login">
+    <div class="latar-biru">
+      <i class="bentuk b1"></i><i class="bentuk b2"></i><i class="bentuk b3"></i><i class="bentuk b4"></i>
+      <i class="bentuk b5"></i><i class="bentuk b6"></i><i class="bentuk b7"></i>
+    </div>
+    <form class="kotak-login" id="formLogin" autocomplete="off" novalidate>
+      <img class="logo-kecil" src="https://res.cloudinary.com/q7sznixw/image/upload/v1792800203/Logo_My_SAPA_Biru_Oranye_jrtabx.webp" alt="Logo MySapa">
+      <h1>Sistem Informasi dan<br>Pelayanan Administrasi</h1>
+      <p class="sub">Silakan masuk untuk melanjutkan</p>
+
+      <div class="pesan-error" id="pesanLogin" role="alert"></div>
+
+      <div class="field">
+        <label for="inTelp">Nama Pengguna (Nomor Telepon)</label>
+        <i class="fa-solid fa-phone ikon"></i>
+        <input id="inTelp" type="tel" inputmode="tel" placeholder="Contoh: 081234567890" maxlength="16">
+      </div>
+      <div class="field">
+        <label for="inNik">Kata Sandi (NIK)</label>
+        <i class="fa-solid fa-id-card ikon"></i>
+        <input id="inNik" type="password" inputmode="numeric" placeholder="16 digit NIK" maxlength="16">
+        <button type="button" class="mata" id="tglMata" aria-label="Tampilkan/sembunyikan NIK"><i class="fa-solid fa-eye"></i></button>
+      </div>
+      <button class="btn" id="btnMasuk" type="submit">Masuk</button>
+      <div class="catatan-login"><i class="fa-solid fa-lock"></i> Data Anda dijaga kerahasiaannya</div>
+    </form>
+    <div class="footer-biru">Powered by Anto Design Concept &copy; 2026</div>
+  </section>
+
+  <!-- ========== B. HALAMAN UTAMA ========== -->
+  <main id="utama">
+    <header class="header">
+      <div class="baris-atas">
+        <div class="kiri-user">
+          <button class="avatar" id="btnProfil" aria-label="Profil / Keluar"><i class="fa-solid fa-user"></i></button>
+          <div class="sapaan">
+            <small id="teksSapaan">Selamat pagi</small>
+            <strong id="namaUser">-</strong>
+          </div>
+        </div>
+        <button class="kanan-lonceng" id="btnLonceng" aria-label="Notifikasi">
+          <i class="fa-solid fa-bell"></i><span class="titik-notif" id="titikNotif"></span>
+          <span>MySapa</span>
+        </button>
+      </div>
+
+      <div class="panel-statistik">
+        <div class="kolom-chart">
+          <div class="wadah"><canvas id="chartGender"></canvas></div>
+          <div class="legenda">
+            <span><i style="background:#1558c9"></i>Laki-laki</span>
+            <span><i style="background:#ff8a1f"></i>Perempuan</span>
+          </div>
+        </div>
+        <div class="kolom-angka">
+          <div class="baris-angka">Jumlah KK <b id="angkaKK">-</b></div>
+          <div class="baris-angka">Jumlah Jiwa <b id="angkaJiwa">-</b></div>
+          <div class="baris-angka">Jumlah Wafat <b id="angkaWafat">-</b></div>
+          <button class="btn-kecil" data-buka="statistik">Selengkapnya</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="isi">
+      <div class="kartu-surat">
+        <div class="ikon-besar"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <div>
+          <h3>Surat Pengantar RT</h3>
+          <p>Ajukan surat pengantar dengan cepat dan mudah.</p>
+          <button data-buka="surat">Ajukan Sekarang</button>
+        </div>
+      </div>
+
+      <div class="judul-seksi">Fitur Utama</div>
+      <div class="grid-fitur">
+        <button class="fitur" data-buka="arsip"><span class="lingkaran c1"><i class="fa-solid fa-box-archive"></i></span><span class="nama">Arsip &amp; Aset</span></button>
+        <button class="fitur" data-buka="info">
+          <i class="fa-solid fa-circle-exclamation alert" id="alertInfo"></i>
+          <span class="lingkaran c2"><i class="fa-solid fa-bullhorn"></i></span><span class="nama">Info Aktual</span>
+        </button>
+        <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><i class="fa-solid fa-address-card"></i></span><span class="nama">MyData</span></button>
+        <button class="fitur" data-buka="korespondensi"><span class="lingkaran c4"><i class="fa-solid fa-envelopes-bulk"></i></span><span class="nama">Korespondensi</span></button>
+        <button class="fitur" data-buka="database"><span class="lingkaran c5"><i class="fa-solid fa-database"></i></span><span class="nama">Database</span></button>
+        <button class="fitur" data-buka="bantuan"><span class="lingkaran c6"><i class="fa-solid fa-headset"></i></span><span class="nama">Bantuan</span></button>
+      </div>
+
+      <div class="footer-utama" style="margin-top:26px">Powered by Anto Design Concept &copy; 2026</div>
+    </div>
+  </main>
+
+  <!-- ========== SUBFORM (kerangka; isi menyusul sesuai penjabaran) ========== -->
+  <section class="subform" id="subform" aria-hidden="true">
+    <div class="subform-header">
+      <button id="btnKembali" aria-label="Kembali"><i class="fa-solid fa-arrow-left"></i></button>
+      <h2 id="judulSubform">Subform</h2>
+    </div>
+    <div class="subform-isi" id="isiSubform"></div>
+  </section>
+</div>
+<div id="toast"></div>
+
+<script>
+/* =====================================================================
+   KONFIGURASI SUPABASE — ganti dengan milik Anda
+   (Supabase Dashboard > Project Settings > API)
+   ===================================================================== */
+const SUPABASE_URL = 'https://GANTI-PROJECT-ID.supabase.co';
+const SUPABASE_ANON_KEY = 'GANTI_DENGAN_ANON_PUBLIC_KEY';
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const KUNCI_TOKEN = 'mysapa_sipa_token';
+const DURASI_SPLASH = 2600; // ms
+
+const $ = (id) => document.getElementById(id);
+let tokenSesi = null;
+let statistik = null;
+let chartGender = null;
+
+/* ---------- Utilitas ---------- */
+function toast(pesan){
+  const t = $('toast'); t.textContent = pesan; t.classList.add('tampil');
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('tampil'), 2600);
+}
+function simpanToken(t){ try{ localStorage.setItem(KUNCI_TOKEN,t);}catch(e){} }
+function ambilToken(){ try{ return localStorage.getItem(KUNCI_TOKEN);}catch(e){ return null;} }
+function hapusToken(){ try{ localStorage.removeItem(KUNCI_TOKEN);}catch(e){} }
+const fmt = (n) => (n ?? 0).toLocaleString('id-ID');
+
+/* Sapaan: pagi 03.00–10.59, siang 11.00–14.59, sore 15.00–17.59, malam 18.00–02.59 */
+function ucapanWaktu(d = new Date()){
+  const h = d.getHours();
+  if (h >= 3 && h < 11) return 'Selamat pagi';
+  if (h >= 11 && h < 15) return 'Selamat siang';
+  if (h >= 15 && h < 18) return 'Selamat sore';
+  return 'Selamat malam';
+}
+
+/* Nama tanpa gelar: "Dr. H. Budi Santoso, S.Pd., M.M." -> "Budi Santoso" */
+function namaTanpaGelar(nama){
+  if (!nama) return '-';
+  const depan = String(nama).split(',')[0];
+  const gelarDepan = /^(dr|drs|dra|ir|prof|h|hj|haji|hajjah|kh|ust|ustadz|ustadzah|dato|datuk)\.?$/i;
+  const gelarBelakang = /^[A-Za-z]{1,4}\.[A-Za-z.]+$/; // S.Pd, S.E., M.Kom.
+  const kata = depan.trim().split(/\s+/).filter(k => !gelarDepan.test(k) && !gelarBelakang.test(k));
+  return kata.join(' ') || depan.trim();
+}
+
+/* ---------- Alur layar ---------- */
+function tampilkanLogin(){
+  $('utama').classList.remove('tampil');
+  $('login').style.display = 'flex';
+}
+function tampilkanUtama(profil){
+  $('login').style.display = 'none';
+  $('utama').classList.add('tampil');
+  $('namaUser').textContent = namaTanpaGelar(profil.nama);
+  perbaruiSapaan();
+  muatStatistik();
+}
+function perbaruiSapaan(){ $('teksSapaan').textContent = ucapanWaktu(); }
+setInterval(perbaruiSapaan, 60 * 1000);
+
+/* Splash: tampil sebentar, geser ke kiri, memperlihatkan Login (atau Utama bila sesi masih berlaku) */
+async function mulai(){
+  tokenSesi = ambilToken();
+  let profil = null;
+  const tunggu = new Promise(r => setTimeout(r, DURASI_SPLASH));
+
+  if (tokenSesi){
+    try{
+      const { data } = await db.rpc('cek_sesi', { p_token: tokenSesi });
+      if (data && data.ok) profil = data.profil; else hapusToken();
+    }catch(e){ /* anggap sesi tidak valid */ }
+  }
+  await tunggu;
+
+  if (profil) tampilkanUtama(profil); else tampilkanLogin();
+  $('splash').classList.add('keluar');
+  setTimeout(()=> $('splash').style.display = 'none', 800);
+}
+
+/* ---------- Login ---------- */
+$('tglMata').addEventListener('click', () => {
+  const i = $('inNik'), ikon = $('tglMata').firstElementChild;
+  const sembunyi = i.type === 'password';
+  i.type = sembunyi ? 'text' : 'password';
+  ikon.className = sembunyi ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+});
+['inTelp','inNik'].forEach(id => $(id).addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/[^0-9+]/g,'');
+  $('pesanLogin').classList.remove('tampil');
+}));
+
+function galatLogin(msg){ const p = $('pesanLogin'); p.textContent = msg; p.classList.add('tampil'); }
+
+$('formLogin').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const telp = $('inTelp').value.trim(), nik = $('inNik').value.trim();
+  if (telp.replace(/\D/g,'').length < 9) return galatLogin('Nomor telepon belum lengkap.');
+  if (!/^\d{16}$/.test(nik)) return galatLogin('NIK harus 16 digit angka.');
+
+  const btn = $('btnMasuk'); btn.disabled = true; btn.textContent = 'Memeriksa...';
+  try{
+    const { data, error } = await db.rpc('login_warga', { p_telp: telp, p_nik: nik });
+    if (error) throw error;
+    if (!data.ok) return galatLogin(data.pesan || 'Login gagal.');
+    tokenSesi = data.token; simpanToken(tokenSesi);
+    $('inNik').value = '';
+    tampilkanUtama(data.profil);
+  }catch(err){
+    console.error(err); galatLogin('Tidak dapat terhubung ke server. Periksa koneksi Anda.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Masuk';
+  }
+});
+
+async function keluar(){
+  if (!confirm('Keluar dari aplikasi?')) return;
+  try{ await db.rpc('logout_warga', { p_token: tokenSesi }); }catch(e){}
+  hapusToken(); tokenSesi = null; statistik = null;
+  tampilkanLogin();
+}
+$('btnProfil').addEventListener('click', keluar);
+
+/* ---------- Statistik & Chart ---------- */
+async function muatStatistik(){
+  try{
+    const { data, error } = await db.rpc('get_statistik', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok){ hapusToken(); toast('Sesi berakhir, silakan masuk kembali.'); return tampilkanLogin(); }
+    statistik = data;
+    $('angkaKK').textContent = fmt(data.jumlah_kk);
+    $('angkaJiwa').textContent = fmt(data.jumlah_jiwa);
+    $('angkaWafat').textContent = fmt(data.jumlah_wafat);
+    const ada = Number(data.info_aktif) > 0;
+    $('alertInfo').classList.toggle('tampil', ada);
+    $('titikNotif').classList.toggle('tampil', ada);
+    gambarChart(data.laki_laki, data.perempuan);
+  }catch(err){
+    console.error(err); toast('Gagal memuat statistik.');
+  }
+}
+function gambarChart(l, p){
+  const ctx = $('chartGender');
+  const data = (l + p) === 0 ? [1] : [l, p];
+  const warna = (l + p) === 0 ? ['#e2e8f0'] : ['#1558c9','#ff8a1f'];
+  if (chartGender) chartGender.destroy();
+  chartGender = new Chart(ctx, {
+    type: 'pie',
+    data: { labels: ['Laki-laki','Perempuan'], datasets: [{ data, backgroundColor: warna, borderColor:'#fff', borderWidth: 2 }] },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false},
+      tooltip:{ enabled:(l+p)>0 } } }
+  });
+}
+
+/* ---------- Subform (kerangka) ---------- */
+const DAFTAR_SUBFORM = {
+  statistik:     { judul:'Data Statistik' },
+  surat:         { judul:'Pengajuan Surat Pengantar' },
+  arsip:         { judul:'Arsip & Aset' },
+  info:          { judul:'Info Aktual' },
+  mydata:        { judul:'MyData' },
+  korespondensi: { judul:'Korespondensi' },
+  database:      { judul:'Database' },
+  bantuan:       { judul:'Bantuan' }
+};
+
+function bukaSubform(kunci){
+  const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
+  $('judulSubform').textContent = s.judul;
+  const isi = $('isiSubform');
+
+  if (kunci === 'statistik' && statistik){
+    isi.innerHTML = `
+      <div class="kartu-stat">
+        <div class="baris-angka">Jumlah KK <b>${fmt(statistik.jumlah_kk)}</b></div>
+        <div class="baris-angka">Jumlah Jiwa <b>${fmt(statistik.jumlah_jiwa)}</b></div>
+        <div class="baris-angka">Laki-laki <b>${fmt(statistik.laki_laki)}</b></div>
+        <div class="baris-angka">Perempuan <b>${fmt(statistik.perempuan)}</b></div>
+        <div class="baris-angka">Jumlah Wafat <b>${fmt(statistik.jumlah_wafat)}</b></div>
+      </div>
+      <div class="kosong" style="margin-top:20px">Rincian statistik lainnya akan ditambahkan.</div>`;
+  } else {
+    isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
+      Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
+  }
+  $('subform').classList.add('buka');
+  $('subform').setAttribute('aria-hidden','false');
+}
+function tutupSubform(){
+  $('subform').classList.remove('buka');
+  $('subform').setAttribute('aria-hidden','true');
+}
+$('btnKembali').addEventListener('click', tutupSubform);
+$('btnLonceng').addEventListener('click', () => bukaSubform('info'));
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-buka]');
+  if (el) bukaSubform(el.dataset.buka);
+});
+
+mulai();
+</script>
+</body>
+</html>
