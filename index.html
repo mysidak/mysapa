@@ -184,7 +184,7 @@
 
   .kartu-surat{
     display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);color:#fff;
-    background:linear-gradient(135deg,#16883f,#0d6330);box-shadow:0 12px 26px rgba(13,99,48,.32);margin-top:6px;
+    background:linear-gradient(135deg,#1558c9,#2f86ec);box-shadow:0 12px 26px rgba(21,88,201,.30);margin-top:6px;
     position:relative;overflow:hidden;
   }
   .kartu-surat::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;
@@ -194,7 +194,7 @@
   .kartu-surat h3{font-size:.98rem;font-weight:600}
   .kartu-surat p{font-size:.72rem;opacity:.92;margin:2px 0 9px}
   .kartu-surat button{border:0;border-radius:10px;padding:8px 14px;font:inherit;font-size:.78rem;font-weight:600;
-    background:#fff;color:#0d6330;cursor:pointer;position:relative;z-index:1}
+    background:#fff;color:#1558c9;cursor:pointer;position:relative;z-index:1}
 
   .grid-fitur{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .fitur{
@@ -221,6 +221,8 @@
   .c4{background:linear-gradient(135deg,#7c3aed,#a78bfa);--sh:#7c3aed}
   .c5{background:linear-gradient(135deg,#0b2a6f,#3b6fd8);--sh:#0b2a6f}
   .c6{background:linear-gradient(135deg,#e11d74,#fb7185);--sh:#e11d74}
+  .c7{background:linear-gradient(135deg,#d98a00,#f2b134);--sh:#d98a00}
+  .fitur[hidden]{display:none}
 
   .footer-utama{text-align:center;font-size:.72rem;color:var(--abu);padding:8px 0 calc(22px + env(safe-area-inset-bottom))}
 
@@ -246,6 +248,26 @@
   .kosong i{font-size:2.4rem;color:var(--biru-muda);margin-bottom:10px;display:block}
   .kartu-stat{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 6px 16px rgba(11,42,111,.08)}
   .kartu-stat .baris-angka:last-child{border:0}
+
+  /* Modal konfirmasi keluar */
+  .modal-latar{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:rgba(8,20,60,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    opacity:0;visibility:hidden;transition:opacity .2s ease, visibility 0s linear .2s}
+  .modal-latar.tampil{opacity:1;visibility:visible;transition:opacity .2s ease, visibility 0s}
+  .modal-kotak{width:100%;max-width:320px;background:#fff;border-radius:22px;padding:26px 22px 20px;text-align:center;
+    box-shadow:0 24px 60px rgba(4,18,60,.45);transform:translateY(14px) scale(.92);opacity:0;
+    transition:transform .25s cubic-bezier(.34,1.4,.5,1), opacity .2s ease}
+  .modal-latar.tampil .modal-kotak{transform:none;opacity:1}
+  .modal-ikon{width:58px;height:58px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;color:#1558c9;background:linear-gradient(135deg,#e8f1ff,#d3e5ff)}
+  .modal-kotak h3{font-size:1.05rem;font-weight:600;color:var(--biru-tua);margin-bottom:6px}
+  .modal-kotak p{font-size:.8rem;color:var(--abu);line-height:1.5;margin-bottom:20px}
+  .modal-aksi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mb{padding:12px 8px;border-radius:12px;font:inherit;font-size:.88rem;font-weight:600;cursor:pointer;border:1.5px solid transparent}
+  .mb:active{transform:scale(.97)}
+  .mb.batal{background:#fff;color:var(--biru-tua);border-color:#d8e0ee}
+  .mb.ya{color:#fff;background:linear-gradient(135deg,#ff9a3c,#ff7a00);box-shadow:0 8px 18px rgba(255,122,0,.35)}
+  .mb:focus-visible{outline:3px solid rgba(21,88,201,.35);outline-offset:2px}
 
   /* Toast */
   #toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:#1e293b;color:#fff;
@@ -358,8 +380,9 @@
           <span class="lingkaran c2"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 9.5h3l8-4v13l-8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/><path d="M7 14.5 8.2 19h2.4"/><path d="M18.2 9.2a4.5 4.5 0 0 1 0 5.6"/></svg></span><span class="nama">Info Aktual</span>
         </button>
         <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="9" cy="10.8" r="2.2"/><path d="M5.4 16.4c.7-1.6 2-2.4 3.6-2.4s2.9.8 3.6 2.4"/><path d="M15 10h3.5M15 13.5h3"/></svg></span><span class="nama">MyData</span></button>
-        <button class="fitur" data-buka="korespondensi"><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Korespondensi</span></button>
-        <button class="fitur" data-buka="database"><span class="lingkaran c5"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="d" cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span><span class="nama">Database</span></button>
+        <button class="fitur" data-buka="polling"><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
+        <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Korespondensi</span></button>
+        <button class="fitur" data-buka="database" data-akses="khusus" hidden><span class="lingkaran c5"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="d" cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span><span class="nama">Database</span></button>
         <button class="fitur" data-buka="bantuan"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
       </div>
 
@@ -375,6 +398,19 @@
     </div>
     <div class="subform-isi" id="isiSubform"></div>
   </section>
+
+  <!-- Modal konfirmasi keluar -->
+  <div class="modal-latar" id="modalKeluar" aria-hidden="true">
+    <div class="modal-kotak" role="dialog" aria-modal="true" aria-labelledby="mkJudul" aria-describedby="mkIsi">
+      <div class="modal-ikon"><i class="fa-solid fa-right-from-bracket"></i></div>
+      <h3 id="mkJudul">Keluar dari aplikasi?</h3>
+      <p id="mkIsi">Anda perlu masuk kembali dengan nomor telepon dan NIK untuk membuka aplikasi.</p>
+      <div class="modal-aksi">
+        <button class="mb batal" id="mkBatal" type="button">Batal</button>
+        <button class="mb ya" id="mkYa" type="button">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div id="toast"></div>
 
@@ -425,12 +461,24 @@ function namaTanpaGelar(nama){
   return kata.join(' ') || depan.trim();
 }
 
+/* ---------- Menu khusus: hanya tampil untuk pengguna tertentu ---------- */
+const NAMA_AKSES_PENUH = 'zhul harmanto';          // Korespondensi & Database hanya untuk nama ini
+const MENU_KHUSUS = ['korespondensi', 'database'];
+let aksesPenuh = false;
+function aturMenuPengguna(profil){
+  const nama = namaTanpaGelar(profil && profil.nama).toLowerCase().replace(/\s+/g, ' ').trim();
+  aksesPenuh = nama === NAMA_AKSES_PENUH;
+  document.querySelectorAll('[data-akses="khusus"]').forEach(el => { el.hidden = !aksesPenuh; });
+}
+
 /* ---------- Alur layar ---------- */
 function tampilkanLogin(){
+  aturMenuPengguna(null);
   $('utama').classList.remove('tampil');
   $('login').style.display = 'flex';
 }
 function tampilkanUtama(profil){
+  aturMenuPengguna(profil);
   $('login').style.display = 'none';
   $('utama').classList.add('tampil');
   $('namaUser').textContent = namaTanpaGelar(profil.nama);
@@ -498,8 +546,38 @@ $('formLogin').addEventListener('submit', async (e) => {
   }
 });
 
+/* Modal konfirmasi keluar (buatan sendiri, bukan dialog bawaan browser) */
+let modalResolve = null, fokusSebelum = null;
+function konfirmasiKeluar(){
+  return new Promise(resolve => {
+    fokusSebelum = document.activeElement;
+    modalResolve = resolve;
+    const m = $('modalKeluar');
+    m.classList.add('tampil'); m.setAttribute('aria-hidden', 'false');
+    setTimeout(() => $('mkBatal').focus(), 60);
+  });
+}
+function tutupModalKeluar(hasil){
+  const m = $('modalKeluar');
+  m.classList.remove('tampil'); m.setAttribute('aria-hidden', 'true');
+  if (fokusSebelum && fokusSebelum.focus) fokusSebelum.focus();
+  if (modalResolve){ const r = modalResolve; modalResolve = null; r(hasil); }
+}
+$('mkBatal').addEventListener('click', () => tutupModalKeluar(false));
+$('mkYa').addEventListener('click', () => tutupModalKeluar(true));
+$('modalKeluar').addEventListener('click', e => { if (e.target === e.currentTarget) tutupModalKeluar(false); });
+document.addEventListener('keydown', e => {
+  if (!$('modalKeluar').classList.contains('tampil')) return;
+  if (e.key === 'Escape') return tutupModalKeluar(false);
+  if (e.key === 'Tab'){                                  // fokus berputar di antara dua tombol
+    const a = $('mkBatal'), b = $('mkYa');
+    if (e.shiftKey && document.activeElement === a){ e.preventDefault(); b.focus(); }
+    else if (!e.shiftKey && document.activeElement === b){ e.preventDefault(); a.focus(); }
+  }
+});
+
 async function keluar(){
-  if (!confirm('Keluar dari aplikasi?')) return;
+  if (!(await konfirmasiKeluar())) return;
   try{ await db.rpc('logout_warga', { p_token: tokenSesi }); }catch(e){}
   hapusToken(); tokenSesi = null; statistik = null;
   tampilkanLogin();
@@ -555,6 +633,7 @@ const DAFTAR_SUBFORM = {
   arsip:         { judul:'Arsip & Aset' },
   info:          { judul:'Info Aktual' },
   mydata:        { judul:'MyData' },
+  polling:       { judul:'Polling' },
   korespondensi: { judul:'Korespondensi' },
   database:      { judul:'Database' },
   bantuan:       { judul:'Bantuan' }
@@ -562,6 +641,7 @@ const DAFTAR_SUBFORM = {
 
 function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
+  if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
   $('judulSubform').textContent = s.judul;
   const isi = $('isiSubform');
 
