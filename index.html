@@ -184,7 +184,7 @@
 
   .kartu-surat{
     display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);color:#fff;
-    background:linear-gradient(135deg,#1558c9,#2f86ec);box-shadow:0 12px 26px rgba(21,88,201,.30);margin-top:6px;
+    background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 12px 26px rgba(5,150,105,.30);margin-top:6px;
     position:relative;overflow:hidden;
   }
   .kartu-surat::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;
@@ -194,7 +194,7 @@
   .kartu-surat h3{font-size:.98rem;font-weight:600}
   .kartu-surat p{font-size:.72rem;opacity:.92;margin:2px 0 9px}
   .kartu-surat button{border:0;border-radius:10px;padding:8px 14px;font:inherit;font-size:.78rem;font-weight:600;
-    background:#fff;color:#1558c9;cursor:pointer;position:relative;z-index:1}
+    background:#fff;color:#047857;cursor:pointer;position:relative;z-index:1}
 
   .grid-fitur{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .fitur{
@@ -222,7 +222,61 @@
   .c5{background:linear-gradient(135deg,#0b2a6f,#3b6fd8);--sh:#0b2a6f}
   .c6{background:linear-gradient(135deg,#e11d74,#fb7185);--sh:#e11d74}
   .c7{background:linear-gradient(135deg,#d98a00,#f2b134);--sh:#d98a00}
+  .c8{background:linear-gradient(135deg,#0891b2,#22d3ee);--sh:#0891b2}
+  .c9{background:linear-gradient(135deg,#475569,#94a3b8);--sh:#475569}
+  .c10{background:linear-gradient(135deg,#16a34a,#4ade80);--sh:#16a34a}
+  .c11{background:linear-gradient(135deg,#dc2626,#f97316);--sh:#dc2626}
   .fitur[hidden]{display:none}
+
+  /* ---- Korespondensi: daftar tombol ---- */
+  .daftar-menu{display:flex;flex-direction:column;gap:10px}
+  .menu-baris{display:flex;align-items:center;gap:14px;width:100%;border:0;background:#fff;border-radius:var(--radius);
+    padding:14px;font:inherit;color:var(--teks);text-align:left;cursor:pointer;box-shadow:0 6px 16px rgba(11,42,111,.08)}
+  .menu-baris:active{transform:scale(.98)}
+  .menu-baris .mi{flex:none;width:44px;height:44px;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.15rem}
+  .menu-baris b{display:block;font-size:.88rem;font-weight:600}
+  .menu-baris small{display:block;font-size:.7rem;color:var(--abu);margin-top:1px}
+  .menu-baris .panah{margin-left:auto;color:#94a3b8;font-size:.8rem}
+
+  /* ---- Agenda RT (Info Aktual) ---- */
+  .agenda h3{font-size:.92rem;font-weight:600;color:var(--biru-tua);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .agenda-item{padding:12px 0;border-top:1px dashed #e2e8f0}
+  .agenda-item:first-of-type{border-top:0;padding-top:2px}
+  .agenda-jenis{display:inline-block;font-size:.64rem;font-weight:600;border-radius:999px;padding:2px 9px;color:#fff;margin-bottom:5px}
+  .agenda-jenis.masuk{background:#1558c9}.agenda-jenis.keluar{background:#7c3aed}.agenda-jenis.undangan{background:#d98a00}
+  .agenda-perihal{font-size:.86rem;font-weight:600;color:var(--teks);margin-bottom:5px;word-break:break-word}
+  .agenda-baris{display:flex;gap:8px;font-size:.72rem;color:var(--abu);line-height:1.5}
+  .agenda-baris span:first-child{flex:none;width:98px}
+  .agenda-baris span:last-child{color:var(--teks);word-break:break-word}
+  .agenda-durasi{margin-top:5px;font-size:.7rem;font-weight:600;color:#d97706}
+
+  /* ---- Modal form (lembar dari bawah) ---- */
+  .mf-latar{position:absolute;inset:0;z-index:70;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(8,20,60,.55);opacity:0;visibility:hidden;transition:opacity .2s ease, visibility 0s linear .2s}
+  .mf-latar.tampil{opacity:1;visibility:visible;transition:opacity .2s ease, visibility 0s}
+  .mf-kotak{width:100%;max-height:92%;background:#fff;border-radius:22px 22px 0 0;display:flex;flex-direction:column;
+    transform:translateY(40px);transition:transform .28s cubic-bezier(.22,.8,.3,1)}
+  .mf-latar.tampil .mf-kotak{transform:none}
+  .mf-kepala{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 10px}
+  .mf-kepala h3{font-size:1rem;font-weight:600;color:var(--biru-tua)}
+  .mf-kepala button{border:0;background:#eef3fb;color:var(--abu);width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:.95rem}
+  #mfForm{display:flex;flex-direction:column;min-height:0;flex:1}
+  .mf-isi{padding:4px 18px 8px;overflow-y:auto;flex:1}
+  .mf-field{margin-bottom:12px}
+  .mf-field label{display:block;font-size:.72rem;font-weight:500;color:var(--abu);margin-bottom:4px}
+  .mf-field label b{color:#e53935}
+  .mf-field input,.mf-field select,.mf-field textarea{width:100%;font:inherit;font-size:.86rem;color:var(--teks);background:#f8fafc;
+    border:1.5px solid #e2e8f0;border-radius:12px;padding:10px 12px;outline:none}
+  .mf-field textarea{min-height:84px;resize:vertical}
+  .mf-field input:focus,.mf-field select:focus,.mf-field textarea:focus{border-color:var(--biru);background:#fff}
+  .mf-dua{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mf-galat{display:none;margin:0 18px 8px;background:#fdecec;color:#b42318;border-radius:10px;padding:8px 12px;font-size:.76rem}
+  .mf-galat.tampil{display:block}
+  .mf-aksi{display:flex;gap:10px;padding:10px 18px calc(16px + env(safe-area-inset-bottom));border-top:1px solid #eef2f7}
+  .mf-aksi button{flex:1;border:0;border-radius:12px;padding:12px;font:inherit;font-size:.86rem;font-weight:600;cursor:pointer}
+  .mf-aksi .batal{background:#eef3fb;color:var(--abu)}
+  .mf-aksi .simpan{background:linear-gradient(135deg,#1558c9,#2f86ec);color:#fff}
+  .mf-aksi button:disabled{opacity:.6}
 
   .footer-utama{text-align:center;font-size:.72rem;color:var(--abu);padding:8px 0 calc(22px + env(safe-area-inset-bottom))}
 
@@ -381,9 +435,13 @@
         </button>
         <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="9" cy="10.8" r="2.2"/><path d="M5.4 16.4c.7-1.6 2-2.4 3.6-2.4s2.9.8 3.6 2.4"/><path d="M15 10h3.5M15 13.5h3"/></svg></span><span class="nama">MyData</span></button>
         <button class="fitur" data-buka="polling"><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
+        <button class="fitur" data-buka="pengaduan"><span class="lingkaran c11"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5V17H4A1.5 1.5 0 0 1 2.5 15.5V7A1.5 1.5 0 0 1 4 5.5Z"/><path d="M12 9v3.2"/><path d="M12 14.4v.1"/></svg></span><span class="nama">Pengaduan</span></button>
         <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Korespondensi</span></button>
         <button class="fitur" data-buka="database" data-akses="khusus" hidden><span class="lingkaran c5"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="d" cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span><span class="nama">Database</span></button>
-        <button class="fitur" data-buka="bantuan"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
+        <button class="fitur" data-buka="inventaris" data-akses="khusus" hidden><span class="lingkaran c8"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16V8Z"/><path d="M3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></span><span class="nama">Inventaris</span></button>
+        <button class="fitur" data-buka="laporan" data-akses="khusus" hidden><span class="lingkaran c9"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V3.5Z"/><path d="M14 3.5V8h4M9 12h6M9 15.5h6"/></svg></span><span class="nama">Laporan</span></button>
+        <button class="fitur" data-buka="pendataan" data-akses="khusus" hidden><span class="lingkaran c10"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="5" y="4.5" width="14" height="16" rx="2.5"/><path d="M9 4.5h6v2.5H9zM9 13l2.2 2.2L15.2 11"/></svg></span><span class="nama">Pendataan</span></button>
+        <button class="fitur" data-buka="bantuan" data-akses="biasa"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
       </div>
 
       <div class="footer-utama" style="margin-top:26px">Powered by Anto Design Concept &copy; 2026</div>
@@ -409,6 +467,20 @@
         <button class="mb batal" id="mkBatal" type="button">Batal</button>
         <button class="mb ya" id="mkYa" type="button">Ya, Keluar</button>
       </div>
+    </div>
+  </div>
+  <!-- Modal form (dipakai Korespondensi) -->
+  <div class="mf-latar" id="modalForm" aria-hidden="true">
+    <div class="mf-kotak" role="dialog" aria-modal="true" aria-labelledby="mfJudul">
+      <div class="mf-kepala"><h3 id="mfJudul">Form</h3><button type="button" id="mfTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></div>
+      <form id="mfForm" autocomplete="off" novalidate>
+        <div class="mf-isi" id="mfIsi"></div>
+        <div class="mf-galat" id="mfGalat" role="alert"></div>
+        <div class="mf-aksi">
+          <button type="button" class="batal" id="mfBatal">Batal</button>
+          <button type="submit" class="simpan" id="mfSimpan">Simpan</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -463,12 +535,13 @@ function namaTanpaGelar(nama){
 
 /* ---------- Menu khusus: hanya tampil untuk pengguna tertentu ---------- */
 const NAMA_AKSES_PENUH = 'zhul harmanto';          // Korespondensi & Database hanya untuk nama ini
-const MENU_KHUSUS = ['korespondensi', 'database'];
+const MENU_KHUSUS = ['korespondensi', 'database', 'inventaris', 'laporan', 'pendataan'];
 let aksesPenuh = false;
 function aturMenuPengguna(profil){
   const nama = namaTanpaGelar(profil && profil.nama).toLowerCase().replace(/\s+/g, ' ').trim();
   aksesPenuh = nama === NAMA_AKSES_PENUH;
   document.querySelectorAll('[data-akses="khusus"]').forEach(el => { el.hidden = !aksesPenuh; });
+  document.querySelectorAll('[data-akses="biasa"]').forEach(el => { el.hidden = aksesPenuh; });   // Bantuan: disembunyikan untuk admin
 }
 
 /* ---------- Alur layar ---------- */
@@ -636,12 +709,18 @@ const DAFTAR_SUBFORM = {
   polling:       { judul:'Polling' },
   korespondensi: { judul:'Korespondensi' },
   database:      { judul:'Database' },
+  pengaduan:     { judul:'Pengaduan' },
+  inventaris:    { judul:'Inventaris' },
+  laporan:       { judul:'Laporan' },
+  pendataan:     { judul:'Pendataan' },
   bantuan:       { judul:'Bantuan' }
 };
+let versiSubform = 0;
 
 function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
   if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
+  versiSubform++;
   $('judulSubform').textContent = s.judul;
   const isi = $('isiSubform');
 
@@ -662,6 +741,10 @@ function bukaSubform(kunci){
          <small>Daftar dan verifikasi dengan nomor surat sedang disiapkan.</small></div>`
       : `<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>
          Tidak ada pengajuan yang menunggu verifikasi.</div>`;
+  } else if (kunci === 'korespondensi'){
+    renderKorespondensi(isi);
+  } else if (kunci === 'info'){
+    renderInfoAktual(isi);
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
@@ -679,6 +762,256 @@ document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-buka]');
   if (el) bukaSubform(el.dataset.buka);
 });
+
+/* =====================================================================
+   KORESPONDENSI & AGENDA RT
+   ===================================================================== */
+const esc = (t) => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function hariIni(){
+  const d = new Date(), p = (n) => String(n).padStart(2,'0');
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate());
+}
+function tglIndo(iso){
+  if (!iso) return '-';
+  const [y,m,d] = String(iso).slice(0,10).split('-').map(Number);
+  return new Date(y, m-1, d).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+}
+function jamIndo(t){ return t ? String(t).slice(0,5).replace(':','.') : ''; }
+
+/* Durasi sejak surat dibuat: <1 mnt "baru saja", menit, jam+menit, hari+jam, minggu+hari, bln+minggu */
+function durasiLalu(tglSurat, dibuatPada){
+  const [y,m,d] = String(tglSurat).slice(0,10).split('-').map(Number);
+  const c = new Date(dibuatPada);
+  const acuan = new Date(y, m-1, d, c.getHours(), c.getMinutes(), c.getSeconds());
+  const menit = Math.floor((Date.now() - acuan.getTime()) / 60000);
+  if (menit < 1) return 'Baru saja';
+  if (menit < 60) return menit + ' menit lalu';
+  const jam = Math.floor(menit / 60);
+  if (jam < 24) return jam + ' jam ' + (menit % 60) + ' menit lalu';
+  const hari = Math.floor(jam / 24);
+  if (hari < 7) return hari + ' hari ' + (jam % 24) + ' jam lalu';
+  if (hari < 30) return Math.floor(hari / 7) + ' minggu ' + (hari % 7) + ' hari lalu';
+  return Math.floor(hari / 30) + ' bln ' + Math.floor((hari % 30) / 7) + ' minggu lalu';
+}
+
+async function kirimRpc(fn, p){
+  try{
+    const { data, error } = await db.rpc(fn, { p_token: tokenSesi, p });
+    if (error) throw error;
+    return data || { ok:false, pesan:'Tidak ada respons dari server.' };
+  }catch(e){ console.error(e); return { ok:false, pesan:'Tidak dapat terhubung ke server.' }; }
+}
+
+/* ---------- Modal form generik ---------- */
+let mfSimpanFn = null;
+function bukaModalForm(judul, isiHtml, onSimpan, labelSimpan){
+  $('mfJudul').textContent = judul;
+  $('mfIsi').innerHTML = isiHtml;
+  $('mfGalat').classList.remove('tampil');
+  $('mfSimpan').textContent = labelSimpan || 'Simpan';
+  $('mfSimpan').style.display = onSimpan ? '' : 'none';
+  mfSimpanFn = onSimpan;
+  $('modalForm').classList.add('tampil'); $('modalForm').setAttribute('aria-hidden','false');
+  $('mfIsi').scrollTop = 0;
+}
+function tutupModalForm(){
+  $('modalForm').classList.remove('tampil'); $('modalForm').setAttribute('aria-hidden','true');
+  mfSimpanFn = null;
+}
+$('mfTutup').addEventListener('click', tutupModalForm);
+$('mfBatal').addEventListener('click', tutupModalForm);
+$('modalForm').addEventListener('click', e => { if (e.target === e.currentTarget) tutupModalForm(); });
+$('mfForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!mfSimpanFn) return;
+  const btn = $('mfSimpan'), galat = $('mfGalat');
+  galat.classList.remove('tampil');
+  btn.disabled = true; const teks = btn.textContent; btn.textContent = 'Menyimpan...';
+  try{
+    const hasil = await mfSimpanFn(new FormData($('mfForm')));
+    if (hasil && hasil.ok){
+      tutupModalForm();
+      toast(hasil.nomor_surat ? (hasil.pesan + ' No. ' + hasil.nomor_surat) : (hasil.pesan || 'Tersimpan.'));
+      muatStatistik();
+    } else {
+      galat.textContent = (hasil && hasil.pesan) || 'Gagal menyimpan.'; galat.classList.add('tampil');
+    }
+  } finally { btn.disabled = false; btn.textContent = teks; }
+});
+
+const fld = (label, html, wajib) =>
+  `<div class="mf-field"><label>${label}${wajib ? ' <b>*</b>' : ''}</label>${html}</div>`;
+const val = (fd, k) => String(fd.get(k) ?? '').trim();
+
+/* ---------- Subform Korespondensi ---------- */
+function renderKorespondensi(isi){
+  const baris = (kunci, c, ikon, judul, ket) =>
+    `<button class="menu-baris" data-kores="${kunci}"><span class="mi ${c}"><i class="fa-solid ${ikon}"></i></span>
+       <span><b>${judul}</b><small>${ket}</small></span><i class="fa-solid fa-chevron-right panah"></i></button>`;
+  isi.innerHTML = `<div class="daftar-menu">
+    ${baris('masuk','c1','fa-inbox','Surat Masuk','Catat surat yang diterima & arsipkan berkasnya')}
+    ${baris('keluar','c4','fa-paper-plane','Surat Keluar','Buat surat keluar (nomor otomatis)')}
+    ${baris('undangan','c2','fa-calendar-check','Undangan','Buat undangan rapat / kegiatan (nomor otomatis)')}
+    ${baris('notula','c3','fa-file-pen','Notula','Catat hasil rapat dari undangan')}
+  </div>`;
+}
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-kores]'); if (!el) return;
+  ({ masuk:formSuratMasuk, keluar:formSuratKeluar, undangan:formUndangan, notula:formNotula })[el.dataset.kores]();
+});
+
+const EKSTENSI_ARSIP = { 'application/pdf':'pdf', 'image/png':'png', 'image/jpeg':'jpg' };
+const BATAS_ARSIP = 5 * 1024 * 1024;
+
+function formSuratMasuk(){
+  bukaModalForm('Surat Masuk',
+    fld('Nomor Surat', '<input name="nomor_surat" type="text" maxlength="100">', 1) +
+    '<div class="mf-dua">' +
+      fld('Tgl Surat', `<input name="tgl_surat" type="date" value="${hariIni()}">`, 1) +
+      fld('Tgl Pelaksanaan', '<input name="tgl_pelaksanaan" type="date">') +
+    '</div>' +
+    fld('Perihal', '<input name="perihal" type="text" maxlength="200">', 1) +
+    fld('Dari', '<input name="dari" type="text" maxlength="200">', 1) +
+    fld('Arsip (PDF, PNG, JPG, JPEG — maks. 5 MB)',
+        '<input name="arsip" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">'),
+    async (fd) => {
+      const nomor = val(fd,'nomor_surat'), perihal = val(fd,'perihal'), dari = val(fd,'dari');
+      if (!nomor) return { ok:false, pesan:'Nomor surat wajib diisi.' };
+      if (!val(fd,'tgl_surat')) return { ok:false, pesan:'Tgl surat wajib diisi.' };
+      if (!perihal) return { ok:false, pesan:'Perihal wajib diisi.' };
+      if (!dari) return { ok:false, pesan:'Pengirim (Dari) wajib diisi.' };
+
+      let path = null;
+      const file = fd.get('arsip');
+      if (file && file.size > 0){
+        const ext = EKSTENSI_ARSIP[file.type];
+        if (!ext) return { ok:false, pesan:'Arsip harus berupa PDF, PNG, JPG, atau JPEG.' };
+        if (file.size > BATAS_ARSIP) return { ok:false, pesan:'Ukuran arsip maksimal 5 MB.' };
+        path = 'masuk/' + crypto.randomUUID() + '.' + ext;
+        const { error } = await db.storage.from('arsip_surat').upload(path, file, { contentType:file.type, upsert:false });
+        if (error) return { ok:false, pesan:'Gagal mengunggah arsip: ' + error.message };
+      }
+      return kirimRpc('simpan_surat_masuk', {
+        nomor_surat:nomor, tgl_surat:val(fd,'tgl_surat'), tgl_pelaksanaan:val(fd,'tgl_pelaksanaan'),
+        perihal, dari, arsip_path:path
+      });
+    });
+}
+
+const PERIHAL_KELUAR = ['Himbauan','Penyampaian','Pemberitahuan','Pengumuman','Edaran',
+                        'Rekomendasi','Peringatan','Pemberhentian','Pengangkatan'];
+function formSuratKeluar(){
+  bukaModalForm('Surat Keluar',
+    fld('Perihal', '<select name="perihal"><option value="">— Pilih perihal —</option>' +
+        PERIHAL_KELUAR.map(p => `<option>${p}</option>`).join('') + '</select>', 1) +
+    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
+    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
+    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>') +
+    fld('Deskripsi', '<textarea name="deskripsi" placeholder="Isi / keterangan surat"></textarea>') +
+    fld('Lampiran (opsional)', '<input name="lampiran" type="text" maxlength="200" placeholder="Contoh: 1 (satu) berkas">'),
+    async (fd) => {
+      if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib dipilih.' };
+      if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
+      return kirimRpc('simpan_surat_keluar', {
+        tgl_surat:hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'), pembuka:val(fd,'pembuka'),
+        penutup:val(fd,'penutup'), deskripsi:val(fd,'deskripsi'), lampiran:val(fd,'lampiran')
+      });
+    });
+}
+
+function formUndangan(){
+  bukaModalForm('Undangan',
+    fld('Perihal', '<input name="perihal" type="text" maxlength="200" placeholder="Contoh: Rapat Pengurus RT">', 1) +
+    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
+    '<div class="mf-dua">' +
+      fld('Tanggal', '<input name="tgl_acara" type="date">', 1) +
+      fld('Jam', '<input name="jam_acara" type="time">', 1) +
+    '</div>' +
+    fld('Tempat', '<input name="tempat" type="text" maxlength="200">', 1) +
+    fld('Agenda', '<textarea name="agenda"></textarea>') +
+    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
+    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>'),
+    async (fd) => {
+      if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib diisi.' };
+      if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
+      if (!val(fd,'tgl_acara') || !val(fd,'jam_acara')) return { ok:false, pesan:'Tanggal dan jam wajib diisi.' };
+      if (!val(fd,'tempat'))  return { ok:false, pesan:'Tempat wajib diisi.' };
+      return kirimRpc('simpan_undangan', {
+        tgl_surat:hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'), tgl_acara:val(fd,'tgl_acara'),
+        jam_acara:val(fd,'jam_acara'), tempat:val(fd,'tempat'), agenda:val(fd,'agenda'),
+        pembuka:val(fd,'pembuka'), penutup:val(fd,'penutup')
+      });
+    });
+}
+
+async function formNotula(){
+  let daftar = [];
+  try{
+    const { data, error } = await db.rpc('daftar_undangan_rapat', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) return toast(data.pesan || 'Tidak dapat memuat undangan.');
+    daftar = data.items || [];
+  }catch(e){ console.error(e); return toast('Tidak dapat terhubung ke server.'); }
+
+  if (!daftar.length){
+    return bukaModalForm('Notula',
+      '<div class="kosong" style="margin:10px 0 20px"><i class="fa-solid fa-file-circle-question"></i>' +
+      'Belum ada undangan berperihal Rapat atau Rembug Warga.<br>Buat undangannya terlebih dahulu.</div>', null);
+  }
+  const opsi = daftar.map(u =>
+    `<option value="${esc(u.id)}">${esc(u.nomor_surat)} — ${esc(u.perihal)} (${tglIndo(u.tgl_acara)})</option>`).join('');
+  bukaModalForm('Notula',
+    fld('Nomor Undangan', `<select name="undangan_id"><option value="">— Pilih nomor undangan —</option>${opsi}</select>`, 1) +
+    fld('Jumlah Peserta Rapat', '<input name="jumlah_peserta" type="number" inputmode="numeric" min="0" max="99999">', 1) +
+    '<div class="mf-dua">' +
+      fld('Jam Mulai', '<input name="jam_mulai" type="time">', 1) +
+      fld('Jam Selesai', '<input name="jam_selesai" type="time">', 1) +
+    '</div>' +
+    fld('Pembahasan Rapat', '<textarea name="pembahasan"></textarea>', 1) +
+    fld('Hasil Rapat', '<textarea name="hasil"></textarea>', 1),
+    async (fd) => {
+      if (!val(fd,'undangan_id')) return { ok:false, pesan:'Nomor undangan wajib dipilih.' };
+      if (val(fd,'jumlah_peserta') === '') return { ok:false, pesan:'Jumlah peserta wajib diisi.' };
+      if (!val(fd,'jam_mulai') || !val(fd,'jam_selesai')) return { ok:false, pesan:'Jam mulai dan jam selesai wajib diisi.' };
+      if (!val(fd,'pembahasan')) return { ok:false, pesan:'Pembahasan rapat wajib diisi.' };
+      if (!val(fd,'hasil')) return { ok:false, pesan:'Hasil rapat wajib diisi.' };
+      return kirimRpc('simpan_notula', {
+        undangan_id:val(fd,'undangan_id'), jumlah_peserta:val(fd,'jumlah_peserta'),
+        jam_mulai:val(fd,'jam_mulai'), jam_selesai:val(fd,'jam_selesai'),
+        pembahasan:val(fd,'pembahasan'), hasil:val(fd,'hasil')
+      });
+    });
+}
+
+/* ---------- Info Aktual: kartu Agenda RT ---------- */
+const NAMA_JENIS = { masuk:'Surat Masuk', keluar:'Surat Keluar', undangan:'Undangan' };
+async function renderInfoAktual(isi){
+  const versi = versiSubform;
+  isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat info...</div>';
+  let items = [], gagal = '';
+  try{
+    const { data, error } = await db.rpc('get_agenda_rt', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) gagal = data.pesan || 'Gagal memuat agenda.'; else items = data.items || [];
+  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat agenda. Periksa koneksi Anda.'; }
+  if (versi !== versiSubform) return;          // subform sudah ditutup / diganti
+
+  const kartu = gagal
+    ? `<div class="kosong" style="margin:10px 0">${esc(gagal)}</div>`
+    : !items.length
+      ? '<div class="kosong" style="margin:10px 0">Belum ada agenda.</div>'
+      : items.map(it => `
+        <div class="agenda-item">
+          <span class="agenda-jenis ${esc(it.jenis)}">${NAMA_JENIS[it.jenis] || ''}</span>
+          <div class="agenda-perihal">${esc(it.perihal)}</div>
+          <div class="agenda-baris"><span>No. Surat</span><span>${esc(it.nomor)}</span></div>
+          <div class="agenda-baris"><span>Tgl Surat</span><span>${tglIndo(it.tgl_surat)}</span></div>
+          <div class="agenda-baris"><span>Tgl Pelaksanaan</span><span>${it.tgl_pelaksanaan
+            ? tglIndo(it.tgl_pelaksanaan) + (it.jam_pelaksanaan ? ', ' + jamIndo(it.jam_pelaksanaan) : '') : '-'}</span></div>
+          <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(it.tgl_surat, it.dibuat_pada)}</div>
+        </div>`).join('');
+  isi.innerHTML = `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-calendar-days"></i> Agenda RT</h3>${kartu}</div>`;
+}
 
 mulai();
 </script>
