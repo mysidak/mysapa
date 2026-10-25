@@ -184,7 +184,7 @@
 
   .kartu-surat{
     display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);color:#fff;
-    background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 12px 26px rgba(5,150,105,.30);margin-top:6px;
+    background:linear-gradient(135deg,#047857,#10b981);box-shadow:0 12px 26px rgba(4,120,87,.32);margin-top:6px;
     position:relative;overflow:hidden;
   }
   .kartu-surat::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;
@@ -227,6 +227,60 @@
   .c10{background:linear-gradient(135deg,#16a34a,#4ade80);--sh:#16a34a}
   .c11{background:linear-gradient(135deg,#dc2626,#f97316);--sh:#dc2626}
   .fitur[hidden]{display:none}
+
+
+  /* ---- Polling nonaktif ---- */
+  .fitur.nonaktif{opacity:.45;filter:grayscale(1);cursor:not-allowed}
+  .fitur.nonaktif:active{transform:none}
+  .baris-saklar{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+  .baris-saklar b{display:block;font-size:.86rem;color:var(--biru-tua)}
+  .baris-saklar small{display:block;font-size:.7rem;color:var(--abu);margin-top:2px}
+  .saklar{position:relative;flex:none;width:46px;height:26px}
+  .saklar input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:1}
+  .saklar i{position:absolute;inset:0;border-radius:999px;background:#cbd5e1;transition:.2s}
+  .saklar i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;
+    transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .saklar input:checked + i{background:#10b981}
+  .saklar input:checked + i::after{transform:translateX(20px)}
+
+  /* ---- MyData ---- */
+  .md-profil{text-align:center;margin-bottom:16px}
+  .md-avatar{width:78px;height:78px;border-radius:50%;margin:4px auto 10px;display:flex;align-items:center;justify-content:center;
+    font-size:2.3rem;color:#fff;box-shadow:0 10px 20px -8px rgba(11,42,111,.45)}
+  .md-avatar.l{background:linear-gradient(135deg,#1558c9,#4aa3ff)}
+  .md-avatar.p{background:linear-gradient(135deg,#e11d74,#fb7185)}
+  .md-nama{font-size:1.05rem;font-weight:600;color:var(--biru-tua)}
+  .md-id{margin-top:10px}
+  .md-id small{display:block;font-size:.66rem;color:var(--abu)}
+  .md-id .baris{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:2px}
+  .md-id .nilai{font-size:.92rem;font-weight:500;letter-spacing:.05em;font-variant-numeric:tabular-nums}
+  .md-mata{border:0;background:#e3ecfb;color:var(--biru);width:28px;height:28px;border-radius:9px;cursor:pointer;font-size:.75rem}
+  details.md-seksi{background:#fff;border-radius:var(--radius);box-shadow:0 6px 16px rgba(11,42,111,.08);margin-bottom:12px;overflow:hidden}
+  details.md-seksi summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;font-size:.88rem;font-weight:600;color:var(--biru-tua)}
+  details.md-seksi summary::-webkit-details-marker{display:none}
+  details.md-seksi summary .chev{color:var(--abu);font-size:.8rem;transition:transform .2s}
+  details.md-seksi[open] summary .chev{transform:rotate(180deg)}
+  .md-isi{padding:0 16px 14px}
+  .md-baris{display:flex;gap:10px;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px dashed #e2e8f0;font-size:.78rem}
+  .md-baris span:first-child{color:var(--abu);flex:none;width:40%}
+  .md-baris span:last-child{text-align:right;color:var(--teks);font-weight:500;word-break:break-word}
+  .md-tabel-wadah{overflow-x:auto;margin-top:6px}
+  table.md-tabel{width:100%;border-collapse:collapse;font-size:.72rem}
+  .md-tabel th{background:#eef3fb;color:var(--biru-tua);text-align:left;padding:7px 8px;font-weight:600;white-space:nowrap}
+  .md-tabel td{padding:7px 8px;border-top:1px solid #eef2f7;vertical-align:top}
+  .md-tabel tr.saya td{background:#fff4e0}
+  .md-badge-saya{display:inline-block;background:#ff8a1f;color:#fff;border-radius:999px;font-size:.58rem;padding:1px 7px;margin-left:5px;font-weight:600;vertical-align:middle}
+  .md-tombol{width:100%;margin-top:12px;border:0;border-radius:12px;padding:11px;font:inherit;font-size:.82rem;font-weight:600;
+    color:#fff;background:linear-gradient(135deg,#1558c9,#2f86ec);cursor:pointer}
+  .md-link{border:0;background:#e3ecfb;color:var(--biru);border-radius:9px;padding:5px 11px;font:inherit;font-size:.72rem;
+    font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+  .md-surat{padding:10px 0;border-top:1px dashed #e2e8f0}
+  .md-surat:first-of-type{border-top:0}
+  .md-surat .judul{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:.82rem;font-weight:600;color:var(--teks)}
+  .md-surat .ket{font-size:.7rem;color:var(--abu);margin-top:3px}
+  .md-surat .ket b{color:#d97706;font-weight:600}
+  .md-status{font-size:.62rem;font-weight:600;border-radius:999px;padding:2px 9px;background:#e3ecfb;color:var(--biru);white-space:nowrap}
 
   /* ---- Korespondensi: daftar tombol ---- */
   .daftar-menu{display:flex;flex-direction:column;gap:10px}
@@ -296,7 +350,8 @@
     background:linear-gradient(160deg,#0a2463,#1558c9)}
   .subform-header button{border:0;background:rgba(255,255,255,.18);color:#fff;width:38px;height:38px;border-radius:12px;
     font-size:1rem;cursor:pointer}
-  .subform-header h2{font-size:1rem;font-weight:600}
+  .subform-header h2{flex:1;text-align:center;font-size:1rem;font-weight:600}
+  .subform-header::after{content:"";flex:none;width:38px}   /* penyeimbang tombol kembali agar judul tepat di tengah */
   .subform-isi{flex:1;overflow-y:auto;padding:16px}
   .kosong{margin-top:40px;text-align:center;color:var(--abu);font-size:.85rem}
   .kosong i{font-size:2.4rem;color:var(--biru-muda);margin-bottom:10px;display:block}
@@ -434,7 +489,7 @@
           <span class="lingkaran c2"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 9.5h3l8-4v13l-8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/><path d="M7 14.5 8.2 19h2.4"/><path d="M18.2 9.2a4.5 4.5 0 0 1 0 5.6"/></svg></span><span class="nama">Info Aktual</span>
         </button>
         <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="9" cy="10.8" r="2.2"/><path d="M5.4 16.4c.7-1.6 2-2.4 3.6-2.4s2.9.8 3.6 2.4"/><path d="M15 10h3.5M15 13.5h3"/></svg></span><span class="nama">MyData</span></button>
-        <button class="fitur" data-buka="polling"><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
+        <button class="fitur nonaktif" id="btnPolling" data-buka="polling" disabled aria-disabled="true"><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="pengaduan"><span class="lingkaran c11"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5V17H4A1.5 1.5 0 0 1 2.5 15.5V7A1.5 1.5 0 0 1 4 5.5Z"/><path d="M12 9v3.2"/><path d="M12 14.4v.1"/></svg></span><span class="nama">Pengaduan</span></button>
         <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Korespondensi</span></button>
         <button class="fitur" data-buka="database" data-akses="khusus" hidden><span class="lingkaran c5"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="d" cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span><span class="nama">Database</span></button>
@@ -542,15 +597,18 @@ function aturMenuPengguna(profil){
   aksesPenuh = nama === NAMA_AKSES_PENUH;
   document.querySelectorAll('[data-akses="khusus"]').forEach(el => { el.hidden = !aksesPenuh; });
   document.querySelectorAll('[data-akses="biasa"]').forEach(el => { el.hidden = aksesPenuh; });   // Bantuan: disembunyikan untuk admin
+  aturPolling();
 }
 
 /* ---------- Alur layar ---------- */
 function tampilkanLogin(){
+  resetLapisan();
   aturMenuPengguna(null);
   $('utama').classList.remove('tampil');
   $('login').style.display = 'flex';
 }
 function tampilkanUtama(profil){
+  pasangRiwayat();
   aturMenuPengguna(profil);
   $('login').style.display = 'none';
   $('utama').classList.add('tampil');
@@ -628,6 +686,7 @@ function konfirmasiKeluar(){
     const m = $('modalKeluar');
     m.classList.add('tampil'); m.setAttribute('aria-hidden', 'false');
     setTimeout(() => $('mkBatal').focus(), 60);
+    bukaLapisan(() => tutupModalKeluar(false));
   });
 }
 function tutupModalKeluar(hasil){
@@ -636,12 +695,12 @@ function tutupModalKeluar(hasil){
   if (fokusSebelum && fokusSebelum.focus) fokusSebelum.focus();
   if (modalResolve){ const r = modalResolve; modalResolve = null; r(hasil); }
 }
-$('mkBatal').addEventListener('click', () => tutupModalKeluar(false));
-$('mkYa').addEventListener('click', () => tutupModalKeluar(true));
-$('modalKeluar').addEventListener('click', e => { if (e.target === e.currentTarget) tutupModalKeluar(false); });
+$('mkBatal').addEventListener('click', () => kembaliLapisan());
+$('mkYa').addEventListener('click', () => { lapisan.pop(); tutupModalKeluar(true); });
+$('modalKeluar').addEventListener('click', e => { if (e.target === e.currentTarget) kembaliLapisan(); });
 document.addEventListener('keydown', e => {
   if (!$('modalKeluar').classList.contains('tampil')) return;
-  if (e.key === 'Escape') return tutupModalKeluar(false);
+  if (e.key === 'Escape') return kembaliLapisan();
   if (e.key === 'Tab'){                                  // fokus berputar di antara dua tombol
     const a = $('mkBatal'), b = $('mkYa');
     if (e.shiftKey && document.activeElement === a){ e.preventDefault(); b.focus(); }
@@ -677,6 +736,7 @@ async function muatStatistik(){
     $('btnLonceng').setAttribute('aria-label', suratMenunggu > 0
       ? suratMenunggu + ' pengajuan surat pengantar menunggu verifikasi' : 'Verifikasi surat pengantar');
     gambarChart(data.laki_laki, data.perempuan);
+    aturPolling();
   }catch(err){
     console.error(err); toast('Gagal memuat statistik.');
   }
@@ -720,6 +780,7 @@ let versiSubform = 0;
 function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
   if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
+  if (kunci === 'polling' && !pollingAktifUntukSaya()){ toast('Polling belum dibuka oleh admin.'); return; }
   versiSubform++;
   $('judulSubform').textContent = s.judul;
   const isi = $('isiSubform');
@@ -745,18 +806,24 @@ function bukaSubform(kunci){
     renderKorespondensi(isi);
   } else if (kunci === 'info'){
     renderInfoAktual(isi);
+  } else if (kunci === 'mydata'){
+    renderMyData(isi);
+  } else if (kunci === 'polling'){
+    renderPolling(isi);
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
   }
   $('subform').classList.add('buka');
+  bukaLapisan(tutupSubform);
   $('subform').setAttribute('aria-hidden','false');
 }
 function tutupSubform(){
+  versiSubform++;
   $('subform').classList.remove('buka');
   $('subform').setAttribute('aria-hidden','true');
 }
-$('btnKembali').addEventListener('click', tutupSubform);
+$('btnKembali').addEventListener('click', kembaliLapisan);
 $('btnLonceng').addEventListener('click', () => bukaSubform('verifikasi'));
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-buka]');
@@ -783,6 +850,9 @@ function durasiLalu(tglSurat, dibuatPada){
   const [y,m,d] = String(tglSurat).slice(0,10).split('-').map(Number);
   const c = new Date(dibuatPada);
   const acuan = new Date(y, m-1, d, c.getHours(), c.getMinutes(), c.getSeconds());
+  return durasiDari(acuan);
+}
+function durasiDari(acuan){
   const menit = Math.floor((Date.now() - acuan.getTime()) / 60000);
   if (menit < 1) return 'Baru saja';
   if (menit < 60) return menit + ' menit lalu';
@@ -813,14 +883,15 @@ function bukaModalForm(judul, isiHtml, onSimpan, labelSimpan){
   mfSimpanFn = onSimpan;
   $('modalForm').classList.add('tampil'); $('modalForm').setAttribute('aria-hidden','false');
   $('mfIsi').scrollTop = 0;
+  bukaLapisan(tutupModalForm);
 }
 function tutupModalForm(){
   $('modalForm').classList.remove('tampil'); $('modalForm').setAttribute('aria-hidden','true');
   mfSimpanFn = null;
 }
-$('mfTutup').addEventListener('click', tutupModalForm);
-$('mfBatal').addEventListener('click', tutupModalForm);
-$('modalForm').addEventListener('click', e => { if (e.target === e.currentTarget) tutupModalForm(); });
+$('mfTutup').addEventListener('click', kembaliLapisan);
+$('mfBatal').addEventListener('click', kembaliLapisan);
+$('modalForm').addEventListener('click', e => { if (e.target === e.currentTarget) kembaliLapisan(); });
 $('mfForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   if (!mfSimpanFn) return;
@@ -830,7 +901,7 @@ $('mfForm').addEventListener('submit', async (e) => {
   try{
     const hasil = await mfSimpanFn(new FormData($('mfForm')));
     if (hasil && hasil.ok){
-      tutupModalForm();
+      kembaliLapisan();
       toast(hasil.nomor_surat ? (hasil.pesan + ' No. ' + hasil.nomor_surat) : (hasil.pesan || 'Tersimpan.'));
       muatStatistik();
     } else {
@@ -1011,6 +1082,196 @@ async function renderInfoAktual(isi){
           <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(it.tgl_surat, it.dibuat_pada)}</div>
         </div>`).join('');
   isi.innerHTML = `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-calendar-days"></i> Agenda RT</h3>${kartu}</div>`;
+}
+
+/* =====================================================================
+   TOMBOL BACK HP (riwayat browser): subform -> menu utama -> konfirmasi keluar
+   ===================================================================== */
+const lapisan = [];                       // lapisan yang sedang terbuka (modal / subform), paling atas di akhir
+function bukaLapisan(fungsiTutup){ lapisan.push(fungsiTutup); history.pushState({ l: lapisan.length }, ''); }
+function kembaliLapisan(){ if (lapisan.length) history.back(); }
+function pasangRiwayat(){ lapisan.length = 0; history.pushState({ s: 1 }, ''); }   // penjaga: back di menu utama tidak keluar halaman
+function resetLapisan(){
+  lapisan.length = 0;
+  $('subform').classList.remove('buka'); $('subform').setAttribute('aria-hidden','true');
+  $('modalForm').classList.remove('tampil'); $('modalForm').setAttribute('aria-hidden','true');
+  mfSimpanFn = null;
+}
+window.addEventListener('popstate', () => {
+  if (!$('utama').classList.contains('tampil')) return;
+  const tutup = lapisan.pop();
+  if (tutup) return tutup();              // tutup lapisan teratas (modal form / subform / konfirmasi)
+  history.pushState({ s: 1 }, '');         // sedang di menu utama: tahan di halaman, tanyakan dulu
+  keluar();
+});
+
+/* =====================================================================
+   POLLING (dibuka admin)
+   ===================================================================== */
+function pollingAktifUntukSaya(){ return aksesPenuh || !!(statistik && statistik.polling_aktif); }
+function aturPolling(){
+  const b = $('btnPolling'); if (!b) return;
+  const on = pollingAktifUntukSaya();
+  b.classList.toggle('nonaktif', !on); b.disabled = !on; b.setAttribute('aria-disabled', String(!on));
+  b.title = on ? '' : 'Polling belum dibuka oleh admin';
+}
+function renderPolling(isi){
+  const saklar = aksesPenuh ? `<div class="kartu-stat"><label class="baris-saklar">
+      <span><b>Aktifkan Polling</b><small>Pengguna lain baru bisa membuka menu Polling saat saklar ini aktif.</small></span>
+      <span class="saklar"><input type="checkbox" id="sakPolling" ${statistik && statistik.polling_aktif ? 'checked' : ''}><i></i></span>
+    </label></div>` : '';
+  isi.innerHTML = saklar + `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>Subform <b>Polling</b> sedang disiapkan.</div>`;
+  const sak = $('sakPolling'); if (!sak) return;
+  sak.addEventListener('change', async () => {
+    const mau = sak.checked; sak.disabled = true;
+    try{
+      const { data, error } = await db.rpc('set_polling', { p_token: tokenSesi, p_aktif: mau });
+      if (error) throw error;
+      if (!data.ok) throw new Error(data.pesan || 'Gagal');
+      if (statistik) statistik.polling_aktif = !!data.polling_aktif;
+      aturPolling();
+      toast(mau ? 'Polling diaktifkan.' : 'Polling dinonaktifkan.');
+    }catch(e){ console.error(e); sak.checked = !mau; toast('Gagal mengubah status polling.'); }
+    finally{ sak.disabled = false; }
+  });
+}
+
+/* =====================================================================
+   MYDATA
+   ===================================================================== */
+function keDate(s){
+  if (!s) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+  const d = new Date(s); return isNaN(d) ? null : d;
+}
+let klienSesi = null, klienToken = null;
+function dbSesi(){      // klien khusus yang mengirim token sesi (header x-sesi) untuk membaca Arsip KK
+  if (!klienSesi || klienToken !== tokenSesi){
+    klienToken = tokenSesi;
+    klienSesi = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession:false, autoRefreshToken:false, detectSessionInUrl:false },
+      global: { headers: { 'x-sesi': tokenSesi } } });
+  }
+  return klienSesi;
+}
+async function bukaKK(path){
+  const w = window.open('', '_blank');
+  try{
+    const { data, error } = await dbSesi().storage.from('kk').createSignedUrl(path, 120);
+    if (error || !data) throw error || new Error('tanpa tautan');
+    if (w) w.location.href = data.signedUrl; else window.open(data.signedUrl, '_blank');
+  }catch(e){ console.error(e); if (w) w.close(); toast('Arsip KK tidak dapat dibuka.'); }
+}
+
+const JK_LABEL = { L:'Laki-laki', P:'Perempuan' };
+async function renderMyData(isi){
+  const versi = versiSubform;
+  const terbuka = {};
+  isi.querySelectorAll('details[data-k]').forEach(d => { terbuka[d.dataset.k] = d.open; });
+  if (!isi.querySelector('.md-profil'))
+    isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat data...</div>';
+
+  let hasil = null, gagal = '';
+  try{
+    const { data, error } = await db.rpc('get_mydata', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) gagal = data.pesan || 'Gagal memuat data.'; else hasil = data;
+  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat data. Periksa koneksi Anda.'; }
+  if (versi !== versiSubform) return;
+  if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
+
+  const p = hasil.profil, k = hasil.keluarga, surat = hasil.surat || [];
+  const nilai = (v) => (v === null || v === undefined || v === '') ? '-' : esc(v);
+  const baris = (label, isiHtml) => `<div class="md-baris"><span>${label}</span><span>${isiHtml}</span></div>`;
+  const idBaris = (label, v) => `<div class="md-id"><small>${label}</small><div class="baris">
+      <span class="nilai" data-nilai="${esc(v)}" data-tampil="0">${'*'.repeat(String(v || '').length || 16)}</span>
+      <button type="button" class="md-mata" data-mata aria-label="Tampilkan ${label}"><i class="fa-solid fa-eye"></i></button></div></div>`;
+  const seksi = (kunci, judul, isiHtml, bukaDefault) =>
+    `<details class="md-seksi" data-k="${kunci}" ${(kunci in terbuka ? terbuka[kunci] : bukaDefault) ? 'open' : ''}>
+       <summary>${judul}<i class="fa-solid fa-chevron-down chev"></i></summary><div class="md-isi">${isiHtml}</div></details>`;
+
+  const pribadi =
+    baris('Jenis Kelamin', nilai(JK_LABEL[p.jenis_kelamin])) + baris('Tempat Lahir', nilai(p.tempat_lahir)) +
+    baris('Tanggal Lahir', p.tgl_lahir ? tglIndo(p.tgl_lahir) : '-') +
+    baris('Usia', p.usia === null || p.usia === undefined ? '-' : esc(p.usia) + ' tahun') +
+    baris('Status Nikah', nilai(p.status_kawin)) + baris('Agama', nilai(p.agama)) +
+    baris('Pendidikan', nilai(p.pendidikan)) + baris('Pekerjaan', nilai(p.pekerjaan)) +
+    baris('Status dalam Keluarga', nilai(p.hubungan)) + baris('Status Politik', nilai(p.status_pemilu));
+
+  const anggota = (k.anggota || []).map(a => `<tr class="${a.saya ? 'saya' : ''}">
+      <td>${esc(namaTanpaGelar(a.nama))}${a.saya ? '<span class="md-badge-saya">Anda</span>' : ''}</td>
+      <td>${nilai(a.usia)}</td><td>${nilai(a.pekerjaan)}</td><td>${nilai(a.hubungan)}</td></tr>`).join('');
+  const keluarga =
+    baris('Email', nilai(k.email)) + baris('Alamat', nilai(k.alamat)) +
+    baris('Arsip KK', k.link_kk ? `<button type="button" class="md-link" data-kk="${esc(k.link_kk)}"><i class="fa-solid fa-file-lines"></i> Lihat KK</button>` : '-') +
+    baris('Laki-laki', fmt(k.laki_laki)) + baris('Perempuan', fmt(k.perempuan)) +
+    `<div class="md-tabel-wadah"><table class="md-tabel"><thead><tr><th>Nama</th><th>Usia</th><th>Pekerjaan</th><th>Status</th></tr></thead>
+       <tbody>${anggota || '<tr><td colspan="4">Belum ada anggota.</td></tr>'}</tbody></table></div>
+     <button type="button" class="md-tombol" id="btnTambahKeluarga"><i class="fa-solid fa-user-plus"></i> Tambah Data Keluarga</button>`;
+
+  const arsip = surat.length ? surat.map(x => {
+    const tgl = keDate(x.tanggal);
+    const link = /^https?:\/\//i.test(x.link || '') ? `<a class="md-link" href="${esc(x.link)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</a>` : '';
+    return `<div class="md-surat"><div class="judul"><span>${esc(x.jenis)}</span>${x.status ? `<span class="md-status">${esc(x.status)}</span>` : ''}</div>
+      <div class="ket">${tgl ? tglIndo(x.tanggal) + ' · <b>' + durasiDari(tgl) + '</b>' : '-'}</div>${link ? `<div style="margin-top:6px">${link}</div>` : ''}</div>`;
+  }).join('') : '<div class="kosong" style="margin:8px 0 4px">Belum ada pengajuan surat pengantar.</div>';
+
+  isi.innerHTML = `
+    <div class="md-profil">
+      <div class="md-avatar ${p.jenis_kelamin === 'P' ? 'p' : 'l'}"><i class="fa-solid ${p.jenis_kelamin === 'P' ? 'fa-person-dress' : 'fa-person'}"></i></div>
+      <div class="md-nama">${esc(namaTanpaGelar(p.nama))}</div>
+      ${idBaris('NIK', p.nik)}${idBaris('NKK', p.nkk)}
+    </div>
+    ${seksi('pribadi', 'Data Pribadi', pribadi, false)}
+    ${seksi('keluarga', 'Data Keluarga', keluarga, false)}
+    ${seksi('surat', 'Arsip Surat Pengantar', arsip, true)}`;
+}
+
+document.addEventListener('click', (e) => {
+  const mata = e.target.closest('[data-mata]');
+  if (mata){
+    const n = mata.parentElement.querySelector('.nilai'), tampil = n.dataset.tampil === '1';
+    n.textContent = tampil ? '*'.repeat(n.dataset.nilai.length || 16) : n.dataset.nilai;
+    n.dataset.tampil = tampil ? '0' : '1';
+    mata.firstElementChild.className = tampil ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+    return;
+  }
+  const kk = e.target.closest('[data-kk]');
+  if (kk) return bukaKK(kk.dataset.kk);
+  if (e.target.closest('#btnTambahKeluarga')) formTambahKeluarga();
+});
+
+const OPSI = {
+  agama: ['Islam','Kristen','Katolik','Hindu','Buddha','Khonghucu'],
+  status: ['Belum Kawin','Kawin','Cerai Hidup','Cerai Mati'],
+  pendidikan: ['Tidak/Belum Sekolah','SD/Sederajat','SMP/Sederajat','SMA/Sederajat','Diploma','S1','S2','S3'],
+  hubungan: ['Kepala Keluarga','Istri','Suami','Anak','Menantu','Cucu','Orang Tua','Mertua','Famili Lain','Lainnya']
+};
+const pilih = (nama, daftar) => `<select name="${nama}"><option value="">— Pilih —</option>${daftar.map(o => `<option>${o}</option>`).join('')}</select>`;
+
+function formTambahKeluarga(){
+  bukaModalForm('Tambah Data Keluarga',
+    fld('NIK', '<input name="nik" type="text" inputmode="numeric" maxlength="16" placeholder="16 digit">', 1) +
+    fld('Nama Lengkap', '<input name="nama_lengkap" type="text" maxlength="150">', 1) +
+    fld('Jenis Kelamin', '<select name="jender"><option value="">— Pilih —</option><option value="L">Laki-laki</option><option value="P">Perempuan</option></select>', 1) +
+    '<div class="mf-dua">' + fld('Tempat Lahir', '<input name="tempat_lahir" type="text" maxlength="100">') +
+      fld('Tanggal Lahir', `<input name="tgl_lahir" type="date" max="${hariIni()}">`) + '</div>' +
+    fld('Status dalam Keluarga', pilih('hubungan', OPSI.hubungan)) +
+    '<div class="mf-dua">' + fld('Status Nikah', pilih('status', OPSI.status)) + fld('Agama', pilih('agama', OPSI.agama)) + '</div>' +
+    fld('Pendidikan', pilih('pendidikan', OPSI.pendidikan)) +
+    fld('Pekerjaan', '<input name="pekerjaan" type="text" maxlength="100">'),
+    async (fd) => {
+      const nik = val(fd,'nik').replace(/\D/g,'');
+      if (!/^\d{16}$/.test(nik)) return { ok:false, pesan:'NIK harus 16 digit angka.' };
+      if (!val(fd,'nama_lengkap')) return { ok:false, pesan:'Nama lengkap wajib diisi.' };
+      if (!val(fd,'jender')) return { ok:false, pesan:'Jenis kelamin wajib dipilih.' };
+      const r = await kirimRpc('tambah_anggota_keluarga', {
+        nik, nama_lengkap:val(fd,'nama_lengkap'), jender:val(fd,'jender'), tempat_lahir:val(fd,'tempat_lahir'),
+        tgl_lahir:val(fd,'tgl_lahir'), hubungan:val(fd,'hubungan'), status:val(fd,'status'),
+        agama:val(fd,'agama'), pendidikan:val(fd,'pendidikan'), pekerjaan:val(fd,'pekerjaan') });
+      if (r.ok) renderMyData($('isiSubform'));
+      return r;
+    }, 'Simpan');
 }
 
 mulai();
