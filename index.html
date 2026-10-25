@@ -281,6 +281,8 @@
   .md-surat .ket{font-size:.7rem;color:var(--abu);margin-top:3px}
   .md-surat .ket b{color:#d97706;font-weight:600}
   .md-status{font-size:.62rem;font-weight:600;border-radius:999px;padding:2px 9px;background:#e3ecfb;color:var(--biru);white-space:nowrap}
+  .md-status.proses{background:#fff3d6;color:#b45309}
+  .md-status.setuju{background:#dcfce7;color:#15803d}
 
 
   /* ---- Form Surat Pengantar & Notifikasi ---- */
@@ -752,18 +754,7 @@ async function muatStatistik(){
     $('angkaWafat').textContent = fmt(data.jumlah_wafat);
     $('alertInfo').classList.toggle('tampil', Number(data.info_aktif) > 0);
     /* Lonceng: pengajuan surat pengantar yang menunggu verifikasi (hanya Admin/Pengurus; server mengirim 0 untuk lainnya) */
-    adminSurat = !!data.admin_surat;
-    suratMenunggu = Number(data.surat_menunggu) || 0;
-    notifSuratUser = Number(data.notif_surat_user) || 0;
-    const jmlNotif = adminSurat ? suratMenunggu : notifSuratUser;
-    const badge = $('badgeNotif');
-    badge.textContent = jmlNotif > 9 ? '9+' : String(jmlNotif);
-    badge.classList.toggle('tampil', jmlNotif > 0);
-    $('btnLonceng').classList.toggle('berbunyi', jmlNotif > 0);
-    $('btnLonceng').setAttribute('aria-label', jmlNotif > 0
-      ? (adminSurat ? jmlNotif + ' pengajuan surat pengantar menunggu verifikasi'
-                    : jmlNotif + ' surat pengantar baru diverifikasi')
-      : 'Notifikasi surat pengantar');
+    aturLonceng(data);
     gambarChart(data.laki_laki, data.perempuan);
     aturPolling();
   }catch(err){
@@ -1237,8 +1228,8 @@ async function renderMyData(isi){
 
   const arsip = surat.length ? surat.map(x => {
     const tgl = keDate(x.tanggal);
-    const link = /^https?:\/\//i.test(x.link || '') ? `<a class="md-link" href="${esc(x.link)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</a>` : '';
-    return `<div class="md-surat"><div class="judul"><span>${esc(x.jenis)}</span>${x.status ? `<span class="md-status">${esc(x.status)}</span>` : ''}</div>
+    const link = /^https?:\/\//i.test(x.link || '') ? `<a class="md-link" href="${esc(x.link)}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> Arsip Surat (PDF)</a>` : '';
+    return `<div class="md-surat"><div class="judul"><span>${esc(x.jenis)}</span>${statusBadge(x.status)}</div>
       <div class="ket">${x.no_surat ? esc(x.no_surat) + '<br>' : ''}${tgl ? tglIndoDT(x.tanggal) + ' · <b>' + durasiDari(tgl) + '</b>' : '-'}</div>${link ? `<div style="margin-top:6px">${link}</div>` : ''}</div>`;
   }).join('') : '<div class="kosong" style="margin:8px 0 4px">Belum ada pengajuan surat pengantar.</div>';
 
@@ -1452,6 +1443,45 @@ const LABEL_DATA = {
 };
 const linkAman = (u) => /^https?:\/\//i.test(u || '') ? u : '';
 
+/* ----- Status pengajuan ----- */
+const STATUS_LABEL = { Diajukan:'Proses persetujuan', Disetujui:'Disetujui' };
+function statusBadge(st){
+  if (!st) return '';
+  return `<span class="md-status ${st === 'Disetujui' ? 'setuju' : 'proses'}">${esc(STATUS_LABEL[st] || st)}</span>`;
+}
+const tautanArsip = (u) => linkAman(u)
+  ? `<a class="md-link" href="${esc(linkAman(u))}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> Arsip Surat (PDF)</a>` : '';
+
+/* URL web app Apps Script "Persetujuan.gs" (Deploy > Web app > salin URL berakhiran /exec) */
+const URL_PERSETUJUAN = 'https://script.google.com/macros/s/AKfycbw6YkF7nqexpXBLspxbNiXS4hqyLgmv1rlMKjVDwQRAUsHt2SZorQyDmIIs8wKA963k7Q/exec';
+
+/* ----- Lonceng: badge + penyegaran otomatis ----- */
+function aturLonceng(data){
+  adminSurat = !!data.admin_surat;
+  suratMenunggu = Number(data.surat_menunggu) || 0;
+  notifSuratUser = Number(data.notif_surat_user) || 0;
+  const jml = adminSurat ? suratMenunggu : notifSuratUser;
+  const badge = $('badgeNotif');
+  badge.textContent = jml > 9 ? '9+' : String(jml);
+  badge.classList.toggle('tampil', jml > 0);
+  $('btnLonceng').classList.toggle('berbunyi', jml > 0);
+  $('btnLonceng').setAttribute('aria-label', jml > 0
+    ? (adminSurat ? jml + ' pengajuan surat pengantar menunggu persetujuan' : jml + ' notifikasi surat pengantar baru')
+    : 'Notifikasi surat pengantar');
+}
+let sedangSegarkan = false;
+async function segarkanLonceng(){        // senyap: tanpa toast bila gagal
+  if (sedangSegarkan || !tokenSesi || document.hidden || !$('utama').classList.contains('tampil')) return;
+  sedangSegarkan = true;
+  try{
+    const { data, error } = await db.rpc('get_statistik', { p_token: tokenSesi });
+    if (!error && data && data.ok){ statistik = data; aturLonceng(data); aturPolling(); }
+  }catch(e){ /* diabaikan */ }
+  finally{ sedangSegarkan = false; }
+}
+setInterval(segarkanLonceng, 30 * 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) segarkanLonceng(); });
+
 async function renderNotifSurat(isi){
   const versi = versiSubform;
   isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat notifikasi...</div>';
@@ -1465,60 +1495,68 @@ async function renderNotifSurat(isi){
   if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
 
   if (d.mode === 'admin'){
-    $('judulSubform').textContent = 'Verifikasi Surat';
+    $('judulSubform').textContent = 'Persetujuan Surat';
     const rinci = (data) => Object.keys(data || {}).map(k => {
       let v = data[k]; if (k.startsWith('tgl_')) v = tglIndo(v);
       return `<div class="md-baris"><span>${esc(LABEL_DATA[k] || k)}</span><span>${esc(v)}</span></div>`; }).join('');
     const menunggu = (d.menunggu || []).map(x => {
-      const dt = keDate(x.diajukan_pada), link = linkAman(x.link_persetujuan);
+      const dt = keDate(x.diajukan_pada);
       return `<div class="notif-item">
-        <div class="notif-no">${esc(x.no_surat)}</div>
-        <div class="notif-jenis">${esc(x.jenis_label)}</div>
+        <div class="notif-atas"><div><div class="notif-no">${esc(x.no_surat)}</div><div class="notif-jenis">${esc(x.jenis_label)}</div></div>${statusBadge('Diajukan')}</div>
         <div class="notif-ket">${esc(namaTanpaGelar(x.nama))} · NIK ${esc(x.nik)}<br>${tglIndoDT(x.diajukan_pada, true)}${dt ? ' · <b>' + durasiDari(dt) + '</b>' : ''}</div>
         <details class="notif-rinci"><summary>Rincian pengajuan</summary>${rinci(x.data) || '<div class="md-baris"><span>-</span><span></span></div>'}</details>
         <div class="notif-aksi">
-          ${link ? `<a class="md-link" href="${esc(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-check"></i> Form Persetujuan</a>` : ''}
-          <button type="button" class="md-link hijau" data-verif="${esc(x.id)}" data-no="${esc(x.no_surat)}" data-jenis="${esc(x.jenis_label)}"><i class="fa-solid fa-check"></i> Verifikasi</button>
+          <button type="button" class="md-link hijau" data-setuju="${esc(x.id)}" data-no="${esc(x.no_surat)}" data-jenis="${esc(x.jenis_label)}" data-nama="${esc(namaTanpaGelar(x.nama))}"><i class="fa-solid fa-circle-check"></i> Persetujuan</button>
         </div></div>`; }).join('');
-    const selesai = (d.selesai || []).map(x => `<div class="notif-item"><div class="notif-no">${esc(x.no_surat)}</div>
-        <div class="notif-jenis">${esc(x.jenis_label)}</div>
-        <div class="notif-ket">${esc(namaTanpaGelar(x.nama))} · diverifikasi ${tglIndoDT(x.diverifikasi_pada, true)}</div></div>`).join('');
+    const selesai = (d.selesai || []).map(x => `<div class="notif-item">
+        <div class="notif-atas"><div><div class="notif-no">${esc(x.no_surat)}</div><div class="notif-jenis">${esc(x.jenis_label)}</div></div>${statusBadge('Disetujui')}</div>
+        <div class="notif-ket">${esc(namaTanpaGelar(x.nama))} · disetujui ${tglIndoDT(x.diverifikasi_pada, true)}</div>
+        ${tautanArsip(x.link) ? `<div style="margin-top:8px">${tautanArsip(x.link)}</div>` : ''}</div>`).join('');
     isi.innerHTML =
-      `<div class="notif-judul">Menunggu Verifikasi (${fmt((d.menunggu || []).length)})</div>` +
-      (menunggu || '<div class="kosong" style="margin:10px 0 24px"><i class="fa-solid fa-envelope-circle-check"></i>Tidak ada pengajuan yang menunggu verifikasi.</div>') +
-      (selesai ? `<div class="notif-judul" style="margin-top:16px">Terakhir Diverifikasi</div>${selesai}` : '');
+      `<div class="notif-judul">Menunggu Persetujuan (${fmt((d.menunggu || []).length)})</div>` +
+      (menunggu || '<div class="kosong" style="margin:10px 0 24px"><i class="fa-solid fa-envelope-circle-check"></i>Tidak ada pengajuan yang menunggu persetujuan.</div>') +
+      (selesai ? `<div class="notif-judul" style="margin-top:16px">Terakhir Disetujui</div>${selesai}` : '');
     return;
   }
 
-  $('judulSubform').textContent = 'Riwayat Surat Pengantar';
+  $('judulSubform').textContent = 'Notifikasi Surat';
   const items = d.items || [];
   const adaBaru = items.some(x => x.belum_dibaca);
   isi.innerHTML = items.length ? items.map(x => {
-    const dt = keDate(x.diverifikasi_pada), link = linkAman(x.link);
+    const setuju = x.status === 'Disetujui';
+    const dt = keDate(setuju ? x.diverifikasi_pada : x.diajukan_pada);
     return `<div class="notif-item ${x.belum_dibaca ? 'baru' : ''}">
       <div class="notif-atas"><div><div class="notif-no">${esc(x.no_surat)}</div><div class="notif-jenis">${esc(x.jenis_label)}</div></div>
-        ${x.belum_dibaca ? '<span><i class="fa-solid fa-circle-exclamation notif-alert"></i> <span class="badge-baru">Baru</span></span>' : ''}</div>
-      <div class="notif-ket"><i class="fa-solid fa-circle-check" style="color:#16a34a"></i> Diverifikasi ${tglIndoDT(x.diverifikasi_pada, true)}${dt ? ' · <b>' + durasiDari(dt) + '</b>' : ''}</div>
-      ${link ? `<div style="margin-top:8px"><a class="md-link" href="${esc(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Arsip</a></div>` : ''}</div>`;
-  }).join('') : '<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>Belum ada pengajuan surat pengantar yang diverifikasi.</div>';
+        <span>${x.belum_dibaca ? '<i class="fa-solid fa-circle-exclamation notif-alert"></i> ' : ''}${statusBadge(x.status)}</span></div>
+      <div class="notif-ket">${setuju ? 'Disetujui ' + tglIndoDT(x.diverifikasi_pada, true) : 'Diajukan ' + tglIndoDT(x.diajukan_pada, true)}${dt ? ' · <b>' + durasiDari(dt) + '</b>' : ''}</div>
+      ${setuju && tautanArsip(x.link) ? `<div style="margin-top:8px">${tautanArsip(x.link)}</div>` : ''}</div>`;
+  }).join('') : '<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>Belum ada pengajuan surat pengantar.</div>';
 
-  if (adaBaru){            // sudah ditampilkan dengan penanda; tandai sebagai dibaca
-    try{ await db.rpc('tandai_notifikasi_dibaca', { p_token: tokenSesi }); muatStatistik(); }catch(e){ console.error(e); }
+  if (adaBaru){            // sudah tampil dengan penanda; tandai sebagai dibaca
+    try{ await db.rpc('tandai_notifikasi_dibaca', { p_token: tokenSesi }); segarkanLonceng(); }catch(e){ console.error(e); }
   }
 }
 
+/* ----- Modal konfirmasi "Persetujuan" (admin) ----- */
 document.addEventListener('click', (e) => {
-  const v = e.target.closest('[data-verif]'); if (!v) return;
-  const id = v.dataset.verif, no = v.dataset.no, jenis = v.dataset.jenis;
-  bukaModalForm('Verifikasi Surat',
-    `<div class="notif-item" style="box-shadow:none;background:#f8fafc;margin-bottom:12px"><div class="notif-no">${esc(no)}</div><div class="notif-jenis">${esc(jenis)}</div></div>` +
-    fld('Link Arsip Surat (opsional)', '<input name="link_arsip" type="url" placeholder="https://..." inputmode="url">') +
-    '<div class="notif-ket" style="margin-bottom:6px">Setelah diverifikasi, pemohon akan menerima notifikasi di lonceng.</div>',
-    async (fd) => {
-      const r = await kirimRpc('verifikasi_surat', { id, link_arsip: val(fd, 'link_arsip') });
-      if (r.ok) renderNotifSurat($('isiSubform'));
-      return r;
-    }, 'Verifikasi');
+  const b = e.target.closest('[data-setuju]'); if (!b) return;
+  const id = b.dataset.setuju, no = b.dataset.no, jenis = b.dataset.jenis, nama = b.dataset.nama;
+  bukaModalForm('Persetujuan Surat',
+    `<div class="notif-item" style="box-shadow:none;background:#f8fafc;margin-bottom:12px">
+       <div class="notif-no">${esc(no)}</div><div class="notif-jenis">${esc(jenis)}</div>
+       <div class="notif-ket">Pemohon: ${esc(nama)}</div></div>
+     <div class="notif-ket" style="font-size:.78rem;color:var(--teks)">Setujui pengajuan ini? Surat akan dibuat otomatis dari template, disimpan sebagai PDF di Google Drive, lalu pemohon diberi tahu lewat lonceng.</div>`,
+    async () => {
+      if (!URL_PERSETUJUAN) return { ok:false, pesan:'Layanan pembuat surat belum dihubungkan. Isi URL_PERSETUJUAN di index.html dengan URL web app Apps Script.' };
+      try{
+        const resp = await fetch(URL_PERSETUJUAN, {
+          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ aksi:'setujui', token: tokenSesi, id }) });
+        const r = await resp.json();
+        if (r && r.ok){ renderNotifSurat($('isiSubform')); segarkanLonceng(); }
+        return r;
+      }catch(err){ console.error(err); return { ok:false, pesan:'Tidak dapat menghubungi layanan pembuat surat. Coba lagi.' }; }
+    }, 'Disetujui');
 });
 
 mulai();
