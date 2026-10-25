@@ -282,6 +282,29 @@
   .md-surat .ket b{color:#d97706;font-weight:600}
   .md-status{font-size:.62rem;font-weight:600;border-radius:999px;padding:2px 9px;background:#e3ecfb;color:var(--biru);white-space:nowrap}
 
+
+  /* ---- Form Surat Pengantar & Notifikasi ---- */
+  .mf-field label i{color:var(--biru);width:16px;text-align:center;margin-right:6px}
+  .pesan-ok{background:#e8f8ef;color:#0f7a43;border-radius:12px;padding:10px 12px;font-size:.78rem;margin-top:12px;word-break:break-word}
+  .pesan-err{background:#fdecec;color:#b42318;border-radius:12px;padding:10px 12px;font-size:.78rem;margin-top:12px}
+  .peringatan-nik{color:#b42318;font-size:.72rem;margin-top:4px}
+  .md-tombol:disabled{background:#94a3b8;cursor:not-allowed}
+  .notif-judul{font-size:.86rem;font-weight:600;color:var(--biru-tua);margin:4px 2px 10px}
+  .notif-item{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:0 6px 16px rgba(11,42,111,.08)}
+  .notif-item.baru{border-left:4px solid #e53935}
+  .notif-atas{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .notif-no{font-size:.86rem;font-weight:600;color:var(--biru-tua);word-break:break-all}
+  .notif-jenis{font-size:.78rem;color:var(--teks);margin-top:2px}
+  .notif-ket{font-size:.7rem;color:var(--abu);margin-top:3px;line-height:1.5}
+  .notif-ket b{color:#d97706;font-weight:600}
+  .notif-alert{color:#e53935;font-size:.95rem;animation:denyut 1.4s ease-in-out infinite}
+  .badge-baru{background:#e53935;color:#fff;font-size:.6rem;font-weight:600;border-radius:999px;padding:2px 8px}
+  .notif-aksi{display:flex;gap:8px;margin-top:10px}
+  .notif-aksi .md-link{flex:1;text-align:center;padding:8px 10px}
+  .md-link.hijau{background:#16a34a;color:#fff}
+  details.notif-rinci{margin-top:8px}
+  details.notif-rinci summary{cursor:pointer;font-size:.72rem;color:var(--biru);font-weight:600}
+
   /* ---- Korespondensi: daftar tombol ---- */
   .daftar-menu{display:flex;flex-direction:column;gap:10px}
   .menu-baris{display:flex;align-items:center;gap:14px;width:100%;border:0;background:#fff;border-radius:var(--radius);
@@ -608,6 +631,7 @@ function tampilkanLogin(){
   $('login').style.display = 'flex';
 }
 function tampilkanUtama(profil){
+  profilSaya = profil;
   pasangRiwayat();
   aturMenuPengguna(profil);
   $('login').style.display = 'none';
@@ -728,13 +752,18 @@ async function muatStatistik(){
     $('angkaWafat').textContent = fmt(data.jumlah_wafat);
     $('alertInfo').classList.toggle('tampil', Number(data.info_aktif) > 0);
     /* Lonceng: pengajuan surat pengantar yang menunggu verifikasi (hanya Admin/Pengurus; server mengirim 0 untuk lainnya) */
+    adminSurat = !!data.admin_surat;
     suratMenunggu = Number(data.surat_menunggu) || 0;
+    notifSuratUser = Number(data.notif_surat_user) || 0;
+    const jmlNotif = adminSurat ? suratMenunggu : notifSuratUser;
     const badge = $('badgeNotif');
-    badge.textContent = suratMenunggu > 9 ? '9+' : String(suratMenunggu);
-    badge.classList.toggle('tampil', suratMenunggu > 0);
-    $('btnLonceng').classList.toggle('berbunyi', suratMenunggu > 0);
-    $('btnLonceng').setAttribute('aria-label', suratMenunggu > 0
-      ? suratMenunggu + ' pengajuan surat pengantar menunggu verifikasi' : 'Verifikasi surat pengantar');
+    badge.textContent = jmlNotif > 9 ? '9+' : String(jmlNotif);
+    badge.classList.toggle('tampil', jmlNotif > 0);
+    $('btnLonceng').classList.toggle('berbunyi', jmlNotif > 0);
+    $('btnLonceng').setAttribute('aria-label', jmlNotif > 0
+      ? (adminSurat ? jmlNotif + ' pengajuan surat pengantar menunggu verifikasi'
+                    : jmlNotif + ' surat pengantar baru diverifikasi')
+      : 'Notifikasi surat pengantar');
     gambarChart(data.laki_laki, data.perempuan);
     aturPolling();
   }catch(err){
@@ -762,7 +791,7 @@ function gambarChart(l, p){
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
   surat:         { judul:'Pengajuan Surat Pengantar' },
-  verifikasi:    { judul:'Verifikasi Surat Pengantar' },
+  verifikasi:    { judul:'Notifikasi Surat' },
   arsip:         { judul:'Arsip & Aset' },
   info:          { judul:'Info Aktual' },
   mydata:        { judul:'MyData' },
@@ -796,12 +825,9 @@ function bukaSubform(kunci){
       </div>
       <div class="kosong" style="margin-top:20px">Rincian statistik lainnya akan ditambahkan.</div>`;
   } else if (kunci === 'verifikasi'){
-    isi.innerHTML = suratMenunggu > 0
-      ? `<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>
-         <b>${fmt(suratMenunggu)}</b> pengajuan surat pengantar menunggu verifikasi.<br>
-         <small>Daftar dan verifikasi dengan nomor surat sedang disiapkan.</small></div>`
-      : `<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>
-         Tidak ada pengajuan yang menunggu verifikasi.</div>`;
+    renderNotifSurat(isi);
+  } else if (kunci === 'surat'){
+    renderFormSurat(isi);
   } else if (kunci === 'korespondensi'){
     renderKorespondensi(isi);
   } else if (kunci === 'info'){
@@ -1213,7 +1239,7 @@ async function renderMyData(isi){
     const tgl = keDate(x.tanggal);
     const link = /^https?:\/\//i.test(x.link || '') ? `<a class="md-link" href="${esc(x.link)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka</a>` : '';
     return `<div class="md-surat"><div class="judul"><span>${esc(x.jenis)}</span>${x.status ? `<span class="md-status">${esc(x.status)}</span>` : ''}</div>
-      <div class="ket">${tgl ? tglIndo(x.tanggal) + ' · <b>' + durasiDari(tgl) + '</b>' : '-'}</div>${link ? `<div style="margin-top:6px">${link}</div>` : ''}</div>`;
+      <div class="ket">${x.no_surat ? esc(x.no_surat) + '<br>' : ''}${tgl ? tglIndoDT(x.tanggal) + ' · <b>' + durasiDari(tgl) + '</b>' : '-'}</div>${link ? `<div style="margin-top:6px">${link}</div>` : ''}</div>`;
   }).join('') : '<div class="kosong" style="margin:8px 0 4px">Belum ada pengajuan surat pengantar.</div>';
 
   isi.innerHTML = `
@@ -1280,6 +1306,220 @@ function formTambahKeluarga(){
       return r;
     }, 'Simpan');
 }
+
+/* =====================================================================
+   SURAT PENGANTAR (penyimpanan di Supabase) + NOTIFIKASI LONCENG
+   ===================================================================== */
+let profilSaya = null, adminSurat = false, notifSuratUser = 0, nikSurat = '';
+
+function tglIndoDT(s, denganJam){
+  const d = keDate(s); if (!d) return '-';
+  let t = d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+  if (denganJam && String(s).length > 10) t += ', ' + d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' }).replace(':','.');
+  return t;
+}
+
+const JENIS_SURAT = [
+  ['sk_umum','Surat Keterangan Umum'], ['sk_akan_menikah','Surat Keterangan Akan Menikah'],
+  ['sk_bercerai','Surat Keterangan Telah Bercerai'], ['sk_kelahiran','Surat Keterangan Kelahiran'],
+  ['sk_kematian','Surat Keterangan Kematian'], ['sk_usaha','Surat Keterangan Usaha'],
+  ['sk_izin_acara','Surat Keterangan Izin Acara/Kegiatan'], ['sk_pindah_domisili','Surat Keterangan Pindah Domisili']
+];
+const fs = (label, ikon, html) => `<div class="mf-field"><label><i class="fa-solid ${ikon}"></i>${label}</label>${html}</div>`;
+const inp = (nama, tipe, ph) => `<input name="${nama}" type="${tipe}" ${ph ? `placeholder="${ph}"` : ''} required>`;
+const opsiManual = (nama, manual, daftar, ph) =>
+  `<select name="${nama}" data-manual="${manual}" required><option value="">-- Pilih --</option>${daftar.map(o => `<option value="${o}">${o}</option>`).join('')}<option value="Lainnya">Lainnya...</option></select>
+   <input name="${manual}" id="${manual}" type="text" placeholder="${ph}" hidden style="margin-top:8px">`;
+
+function isianSurat(jenis){
+  switch (jenis){
+    case 'sk_umum':
+      return fs('Keterangan', 'fa-list-check', opsiManual('opsi_keterangan', 'manual_keterangan',
+        ['Keterangan Tidak Mampu','Keterangan Belum Menikah','Keterangan Belum Bekerja','Keterangan Tidak Memiliki Rumah'], 'Tuliskan keterangan lainnya...'));
+    case 'sk_akan_menikah':
+      return `<div class="pesan-ok" style="background:#e0f2fe;color:#0369a1;margin:0 0 12px"><i class="fa-solid fa-heart" style="color:#e11d48"></i> <b>Pernyataan:</b> Anda akan mengajukan surat keterangan akan menikah.</div>`;
+    case 'sk_bercerai':
+      return fs('Nama Mantan Istri/Suami', 'fa-user-minus', inp('nama_mantan','text','Masukkan nama mantan pasangan')) +
+             fs('No. SK Pengadilan', 'fa-gavel', inp('no_sk_pengadilan','text','Nomor Keputusan Pengadilan Agama')) +
+             fs('Tanggal Putusan', 'fa-calendar-check', inp('tgl_putusan','date'));
+    case 'sk_kelahiran':
+      return fs('Nama Bayi', 'fa-baby', inp('nama_bayi','text','Nama lengkap bayi')) +
+             fs('Jenis Kelamin Bayi', 'fa-venus-mars', '<select name="jk_bayi" required><option value="">-- Pilih Jenis Kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select>') +
+             fs('NIK (Ayah/Ibu)', 'fa-id-card-clip', inp('nik_orangtua','text','NIK Orang Tua')) +
+             fs('Tanggal Lahir', 'fa-calendar-day', inp('tgl_lahir','date')) +
+             fs('Jam Lahir', 'fa-clock', inp('jam_lahir','time')) +
+             fs('Tempat Lahir', 'fa-hospital', inp('tempat_lahir','text','Contoh: Rumah Sakit / Bidan / Rumah'));
+    case 'sk_kematian':
+      return fs('NIK (Yang Wafat)', 'fa-user-xmark', inp('nik_wafat','text','NIK Almarhum/Almarhumah')) +
+             fs('Tanggal Wafat', 'fa-calendar-xmark', inp('tgl_wafat','date')) +
+             fs('Tempat Wafat', 'fa-location-dot', inp('tempat_wafat','text','Lokasi meninggal dunia')) +
+             fs('Penyebab Wafat', 'fa-notes-medical', opsiManual('penyebab_wafat', 'manual_penyebab', ['Usia','Sakit','Kecelakaan'], 'Tuliskan penyebab lainnya...'));
+    case 'sk_usaha':
+      return fs('Nama Usaha', 'fa-shop', inp('nama_usaha','text','Nama Toko/Usaha Anda')) +
+             fs('Jenis Usaha', 'fa-store', opsiManual('jenis_usaha', 'manual_usaha', ['Kios Sembako','Agen Gas','Apotek'], 'Tuliskan jenis usaha lainnya...')) +
+             fs('Alamat Usaha', 'fa-map-location-dot', '<textarea name="alamat_usaha" rows="3" placeholder="Alamat lokasi usaha beroperasi" required></textarea>');
+    case 'sk_izin_acara':
+      return fs('Tanggal Mulai Acara', 'fa-calendar-plus', inp('tgl_mulai','date')) +
+             fs('Tanggal Selesai Acara', 'fa-calendar-minus', inp('tgl_selesai','date')) +
+             fs('Estimasi Jumlah Tamu', 'fa-users', '<input name="jumlah_tamu" type="number" min="0" inputmode="numeric" placeholder="Jumlah perkiraan undangan/tamu" required>');
+    case 'sk_pindah_domisili':
+      return fs('Pilihan Pindah', 'fa-truck-ramp-box', '<select name="opsi_pindah" required><option value="">-- Pilih Status Pindah --</option><option value="Masuk">Masuk (Datang ke RT 09)</option><option value="Keluar">Keluar (Pindah dari RT 09)</option></select>') +
+             '<div id="pindahAlamat"></div>';
+    default: return '';
+  }
+}
+function isianPindah(status){
+  if (status === 'Masuk') return fs('Alamat Asal', 'fa-house-chimney-arrow-right', '<textarea name="alamat_asal" rows="3" placeholder="Alamat domisili sebelumnya" required></textarea>');
+  if (status === 'Keluar') return fs('Alamat Tujuan', 'fa-house-circle-xmark', '<textarea name="alamat_tujuan" rows="3" placeholder="Alamat lengkap domisili baru" required></textarea>');
+  return '';
+}
+
+async function pastikanNik(){
+  if (profilSaya && profilSaya.nik) return String(profilSaya.nik);
+  try{
+    const { data } = await db.rpc('get_mydata', { p_token: tokenSesi });
+    if (data && data.ok){ profilSaya = Object.assign({}, profilSaya, { nik: data.profil.nik, nama: data.profil.nama }); return String(data.profil.nik || ''); }
+  }catch(e){ console.error(e); }
+  return '';
+}
+
+async function renderFormSurat(isi){
+  const versi = versiSubform;
+  nikSurat = '';
+  isi.innerHTML = `<div class="kartu-stat">
+    <form id="formSurat" autocomplete="off" novalidate>
+      <div class="md-id" style="margin:0 0 14px"><small><i class="fa-solid fa-id-card"></i> NIK Pemohon (Otomatis)</small>
+        <div class="baris"><span class="nilai" id="nikSuratTampil" data-nilai="" data-tampil="0">Memuat...</span>
+          <button type="button" class="md-mata" data-mata aria-label="Tampilkan NIK"><i class="fa-solid fa-eye"></i></button></div>
+        <div class="peringatan-nik" id="peringatanNik" hidden><i class="fa-solid fa-circle-exclamation"></i> NIK tidak terdeteksi! Pengajuan tidak dapat dikirim.</div>
+      </div>
+      ${fs('Jenis Surat Pengantar', 'fa-file-signature',
+        '<select name="jenis_surat" required><option value="">-- Pilih Jenis Surat --</option>' +
+        JENIS_SURAT.map((j, i) => `<option value="${j[0]}">${i + 1}. ${j[1]}</option>`).join('') + '</select>')}
+      <div id="isianSurat"></div>
+      <button type="submit" class="md-tombol" id="btnKirimSurat" disabled><i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan</button>
+      <div id="pesanSurat"></div>
+    </form></div>`;
+
+  const form = $('formSurat');
+  const validasi = () => { $('btnKirimSurat').disabled = !(nikSurat && form.checkValidity()); };
+  form.addEventListener('input', validasi);
+  form.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.name === 'jenis_surat'){ $('isianSurat').innerHTML = isianSurat(t.value); }
+    else if (t.name === 'opsi_pindah'){ $('pindahAlamat').innerHTML = isianPindah(t.value); }
+    else if (t.dataset && t.dataset.manual){
+      const m = $(t.dataset.manual), pakai = t.value === 'Lainnya';
+      m.hidden = !pakai; m.required = pakai; if (!pakai) m.value = '';
+    }
+    validasi();
+  });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('btnKirimSurat'), pesan = $('pesanSurat');
+    btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+    const obj = {}; new FormData(form).forEach((v, k) => { obj[k] = v; });
+    const r = await kirimRpc('ajukan_surat', obj);
+    if (r.ok){
+      pesan.innerHTML = `<div class="pesan-ok"><i class="fa-solid fa-circle-check"></i> ${esc(r.pesan)}</div>`;
+      form.reset(); $('isianSurat').innerHTML = '';
+      muatStatistik();
+    } else {
+      pesan.innerHTML = `<div class="pesan-err"><i class="fa-solid fa-circle-exclamation"></i> ${esc(r.pesan || 'Terjadi kesalahan pada sistem.')}</div>`;
+    }
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Pengajuan';
+    validasi();
+  });
+
+  const nik = await pastikanNik();
+  if (versi !== versiSubform) return;
+  nikSurat = nik;
+  const n = $('nikSuratTampil');
+  n.dataset.nilai = nik; n.dataset.tampil = '0';
+  n.textContent = nik ? '*'.repeat(nik.length) : '-';
+  $('peringatanNik').hidden = !!nik;
+  validasi();
+}
+
+/* ---------- Lonceng: admin = verifikasi, user = riwayat terverifikasi ---------- */
+const LABEL_DATA = {
+  keterangan:'Keterangan', pernyataan_menikah:'Pernyataan', nama_mantan:'Nama Mantan Pasangan', no_sk_pengadilan:'No. SK Pengadilan',
+  tgl_putusan:'Tanggal Putusan', nama_bayi:'Nama Bayi', jk_bayi:'Jenis Kelamin Bayi', nik_orangtua:'NIK Orang Tua',
+  tgl_lahir:'Tanggal Lahir', jam_lahir:'Jam Lahir', tempat_lahir:'Tempat Lahir', nik_wafat:'NIK yang Wafat',
+  tgl_wafat:'Tanggal Wafat', tempat_wafat:'Tempat Wafat', penyebab_wafat:'Penyebab Wafat', nama_usaha:'Nama Usaha',
+  jenis_usaha:'Jenis Usaha', alamat_usaha:'Alamat Usaha', tgl_mulai:'Tanggal Mulai', tgl_selesai:'Tanggal Selesai',
+  jumlah_tamu:'Jumlah Tamu', opsi_pindah:'Pilihan Pindah', alamat_pindah:'Alamat'
+};
+const linkAman = (u) => /^https?:\/\//i.test(u || '') ? u : '';
+
+async function renderNotifSurat(isi){
+  const versi = versiSubform;
+  isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat notifikasi...</div>';
+  let d = null, gagal = '';
+  try{
+    const { data, error } = await db.rpc('daftar_notifikasi_surat', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) gagal = data.pesan || 'Gagal memuat notifikasi.'; else d = data;
+  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat notifikasi. Periksa koneksi Anda.'; }
+  if (versi !== versiSubform) return;
+  if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
+
+  if (d.mode === 'admin'){
+    $('judulSubform').textContent = 'Verifikasi Surat';
+    const rinci = (data) => Object.keys(data || {}).map(k => {
+      let v = data[k]; if (k.startsWith('tgl_')) v = tglIndo(v);
+      return `<div class="md-baris"><span>${esc(LABEL_DATA[k] || k)}</span><span>${esc(v)}</span></div>`; }).join('');
+    const menunggu = (d.menunggu || []).map(x => {
+      const dt = keDate(x.diajukan_pada), link = linkAman(x.link_persetujuan);
+      return `<div class="notif-item">
+        <div class="notif-no">${esc(x.no_surat)}</div>
+        <div class="notif-jenis">${esc(x.jenis_label)}</div>
+        <div class="notif-ket">${esc(namaTanpaGelar(x.nama))} · NIK ${esc(x.nik)}<br>${tglIndoDT(x.diajukan_pada, true)}${dt ? ' · <b>' + durasiDari(dt) + '</b>' : ''}</div>
+        <details class="notif-rinci"><summary>Rincian pengajuan</summary>${rinci(x.data) || '<div class="md-baris"><span>-</span><span></span></div>'}</details>
+        <div class="notif-aksi">
+          ${link ? `<a class="md-link" href="${esc(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-clipboard-check"></i> Form Persetujuan</a>` : ''}
+          <button type="button" class="md-link hijau" data-verif="${esc(x.id)}" data-no="${esc(x.no_surat)}" data-jenis="${esc(x.jenis_label)}"><i class="fa-solid fa-check"></i> Verifikasi</button>
+        </div></div>`; }).join('');
+    const selesai = (d.selesai || []).map(x => `<div class="notif-item"><div class="notif-no">${esc(x.no_surat)}</div>
+        <div class="notif-jenis">${esc(x.jenis_label)}</div>
+        <div class="notif-ket">${esc(namaTanpaGelar(x.nama))} · diverifikasi ${tglIndoDT(x.diverifikasi_pada, true)}</div></div>`).join('');
+    isi.innerHTML =
+      `<div class="notif-judul">Menunggu Verifikasi (${fmt((d.menunggu || []).length)})</div>` +
+      (menunggu || '<div class="kosong" style="margin:10px 0 24px"><i class="fa-solid fa-envelope-circle-check"></i>Tidak ada pengajuan yang menunggu verifikasi.</div>') +
+      (selesai ? `<div class="notif-judul" style="margin-top:16px">Terakhir Diverifikasi</div>${selesai}` : '');
+    return;
+  }
+
+  $('judulSubform').textContent = 'Riwayat Surat Pengantar';
+  const items = d.items || [];
+  const adaBaru = items.some(x => x.belum_dibaca);
+  isi.innerHTML = items.length ? items.map(x => {
+    const dt = keDate(x.diverifikasi_pada), link = linkAman(x.link);
+    return `<div class="notif-item ${x.belum_dibaca ? 'baru' : ''}">
+      <div class="notif-atas"><div><div class="notif-no">${esc(x.no_surat)}</div><div class="notif-jenis">${esc(x.jenis_label)}</div></div>
+        ${x.belum_dibaca ? '<span><i class="fa-solid fa-circle-exclamation notif-alert"></i> <span class="badge-baru">Baru</span></span>' : ''}</div>
+      <div class="notif-ket"><i class="fa-solid fa-circle-check" style="color:#16a34a"></i> Diverifikasi ${tglIndoDT(x.diverifikasi_pada, true)}${dt ? ' · <b>' + durasiDari(dt) + '</b>' : ''}</div>
+      ${link ? `<div style="margin-top:8px"><a class="md-link" href="${esc(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Arsip</a></div>` : ''}</div>`;
+  }).join('') : '<div class="kosong"><i class="fa-solid fa-envelope-circle-check"></i>Belum ada pengajuan surat pengantar yang diverifikasi.</div>';
+
+  if (adaBaru){            // sudah ditampilkan dengan penanda; tandai sebagai dibaca
+    try{ await db.rpc('tandai_notifikasi_dibaca', { p_token: tokenSesi }); muatStatistik(); }catch(e){ console.error(e); }
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const v = e.target.closest('[data-verif]'); if (!v) return;
+  const id = v.dataset.verif, no = v.dataset.no, jenis = v.dataset.jenis;
+  bukaModalForm('Verifikasi Surat',
+    `<div class="notif-item" style="box-shadow:none;background:#f8fafc;margin-bottom:12px"><div class="notif-no">${esc(no)}</div><div class="notif-jenis">${esc(jenis)}</div></div>` +
+    fld('Link Arsip Surat (opsional)', '<input name="link_arsip" type="url" placeholder="https://..." inputmode="url">') +
+    '<div class="notif-ket" style="margin-bottom:6px">Setelah diverifikasi, pemohon akan menerima notifikasi di lonceng.</div>',
+    async (fd) => {
+      const r = await kirimRpc('verifikasi_surat', { id, link_arsip: val(fd, 'link_arsip') });
+      if (r.ok) renderNotifSurat($('isiSubform'));
+      return r;
+    }, 'Verifikasi');
+});
 
 mulai();
 </script>
