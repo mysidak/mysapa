@@ -269,7 +269,7 @@
   table.md-tabel{width:100%;border-collapse:collapse;font-size:.72rem}
   .md-tabel th{background:#eef3fb;color:var(--biru-tua);text-align:left;padding:7px 8px;font-weight:600;white-space:nowrap}
   .md-tabel td{padding:7px 8px;border-top:1px solid #eef2f7;vertical-align:top}
-  .md-tabel tr.saya td{background:#fff4e0}
+  .md-saya{color:#16a34a;margin-left:6px;font-size:.85rem;vertical-align:middle}
   .md-badge-saya{display:inline-block;background:#ff8a1f;color:#fff;border-radius:999px;font-size:.58rem;padding:1px 7px;margin-left:5px;font-weight:600;vertical-align:middle}
   .md-tombol{width:100%;margin-top:12px;border:0;border-radius:12px;padding:11px;font:inherit;font-size:.82rem;font-weight:600;
     color:#fff;background:linear-gradient(135deg,#1558c9,#2f86ec);cursor:pointer}
@@ -1199,7 +1199,7 @@ async function renderMyData(isi){
     baris('Status dalam Keluarga', nilai(p.hubungan)) + baris('Status Politik', nilai(p.status_pemilu));
 
   const anggota = (k.anggota || []).map(a => `<tr class="${a.saya ? 'saya' : ''}">
-      <td>${esc(namaTanpaGelar(a.nama))}${a.saya ? '<span class="md-badge-saya">Anda</span>' : ''}</td>
+      <td>${esc(namaTanpaGelar(a.nama))}${a.saya ? '<i class="fa-solid fa-circle-check md-saya" title="Anda" aria-label="Anda"></i>' : ''}</td>
       <td>${nilai(a.usia)}</td><td>${nilai(a.pekerjaan)}</td><td>${nilai(a.hubungan)}</td></tr>`).join('');
   const keluarga =
     baris('Email', nilai(k.email)) + baris('Alamat', nilai(k.alamat)) +
@@ -1226,6 +1226,13 @@ async function renderMyData(isi){
     ${seksi('keluarga', 'Data Keluarga', keluarga, false)}
     ${seksi('surat', 'Arsip Surat Pengantar', arsip, true)}`;
 }
+
+/* Akordeon: membuka satu seksi menciutkan seksi lainnya */
+document.addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (!d.matches || !d.matches('details.md-seksi') || !d.open) return;
+  d.parentElement.querySelectorAll('details.md-seksi').forEach(o => { if (o !== d) o.open = false; });
+}, true);
 
 document.addEventListener('click', (e) => {
   const mata = e.target.closest('[data-mata]');
