@@ -164,17 +164,17 @@
   /* Infografis menyatu dengan latar header (tanpa kotak/latar sendiri) */
   .infografis{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center;margin-top:16px}
   .kolom-chart{display:flex;flex-direction:column;align-items:center}
-  .kolom-chart .wadah{position:relative;width:128px;height:128px}
+  .kolom-chart .wadah{position:relative;width:116px;height:116px}
   .pusat-donut{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-size:1.3rem;color:rgba(255,255,255,.75);pointer-events:none}
-  .legenda{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin-top:8px;font-size:.72rem;
+    font-size:1.175rem;color:rgba(255,255,255,.75);pointer-events:none}
+  .legenda{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:6px;font-size:.595rem;
     color:rgba(255,255,255,.92);white-space:nowrap}
   .legenda i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
-  .kolom-angka{display:flex;flex-direction:column;justify-content:center;gap:9px}
-  .hs-baris{display:flex;align-items:baseline;justify-content:space-between;font-size:.78rem;color:rgba(255,255,255,.9);
-    border-bottom:1px dashed rgba(255,255,255,.35);padding-bottom:6px}
-  .hs-baris b{font-size:1.1rem;color:#fff}
-  .btn-selengkapnya{border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:8px;font:inherit;font-size:.76rem;
+  .kolom-angka{display:flex;flex-direction:column;justify-content:center;gap:5px}
+  .hs-baris{display:flex;align-items:baseline;justify-content:space-between;font-size:.655rem;color:rgba(255,255,255,.9);
+    border-bottom:1px dashed rgba(255,255,255,.35);padding-bottom:3px}
+  .hs-baris b{font-size:.975rem;color:#fff}
+  .btn-selengkapnya{border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:6px;font:inherit;font-size:.635rem;
     font-weight:600;color:#fff;cursor:pointer;background:rgba(255,255,255,.16)}
   .btn-selengkapnya:active{background:rgba(255,255,255,.28)}
 
@@ -184,20 +184,20 @@
   .baris-angka b{font-size:1.05rem;color:var(--biru-tua)}
 
   .isi{padding:16px 16px 24px}
-  .judul-seksi{font-size:.92rem;font-weight:600;color:var(--biru-tua);margin:18px 2px 10px}
+  .judul-seksi{font-size:.92rem;font-weight:600;color:var(--biru-tua);margin:14px 2px 10px}
 
   .kartu-surat{
-    display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--radius);color:#fff;
-    background:linear-gradient(135deg,#047857,#10b981);box-shadow:0 12px 26px rgba(4,120,87,.32);margin-top:6px;
+    display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--radius);color:#fff;
+    background:linear-gradient(135deg,#047857,#10b981);box-shadow:0 12px 26px rgba(4,120,87,.32);margin-top:2px;
     position:relative;overflow:hidden;
   }
   .kartu-surat::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;
     background:rgba(255,255,255,.18)}
-  .kartu-surat .ikon-besar{flex:none;width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.25);
-    display:flex;align-items:center;justify-content:center;font-size:1.5rem}
-  .kartu-surat h3{font-size:.98rem;font-weight:600}
-  .kartu-surat p{font-size:.72rem;opacity:.92;margin:2px 0 9px}
-  .kartu-surat button{border:0;border-radius:10px;padding:8px 14px;font:inherit;font-size:.78rem;font-weight:600;
+  .kartu-surat .ikon-besar{flex:none;width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;font-size:1.375rem}
+  .kartu-surat h3{font-size:.855rem;font-weight:600}
+  .kartu-surat p{font-size:.595rem;opacity:.92;margin:2px 0 7px}
+  .kartu-surat button{border:0;border-radius:10px;padding:7px 12px;font:inherit;font-size:.655rem;font-weight:600;
     background:#fff;color:#047857;cursor:pointer;position:relative;z-index:1}
 
   .grid-fitur{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 2px}
@@ -233,7 +233,7 @@
   .fitur[hidden]{display:none}
 
   /* ---- Standar Pelayanan (carousel gambar) ---- */
-  .sp-geser{--sp-intip:41px;--sp-jarak:10px;--sp-tepi:16px;position:relative;margin:0 calc(var(--sp-tepi) * -1);padding:0 var(--sp-tepi);scroll-padding:0 var(--sp-tepi);display:flex;gap:var(--sp-jarak);overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  .sp-geser{--sp-intip:45px;--sp-jarak:12px;--sp-tepi:16px;position:relative;margin:0 calc(var(--sp-tepi) * -1);padding:0 var(--sp-tepi);scroll-padding:0 var(--sp-tepi);display:flex;gap:var(--sp-jarak);overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     scrollbar-width:none}
   .sp-geser::-webkit-scrollbar{display:none}
   .sp-slide{flex:0 0 calc(100% - var(--sp-intip) - var(--sp-jarak));scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;
