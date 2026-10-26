@@ -81,9 +81,9 @@
   }
   .logo-pusat img{max-width:100%;max-height:100%;object-fit:contain;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));animation:muncul .9s ease both}
-  .teks-selamat{ /* jarak 12px di atas logo: tepi bawah teks = tepi atas logo - 24px */
+  .teks-selamat{ /* jarak 24px di atas logo: tepi bawah teks = tepi atas logo - 24px */
     position:absolute;left:0;right:0;
-    bottom:calc(50% + 100px + 12px);
+    bottom:calc(50% + 100px + 24px);
     text-align:center;color:#fff;font-size:1.6rem;font-weight:600;letter-spacing:.5px;
     text-shadow:0 2px 12px rgba(0,0,0,.25);animation:muncul .9s .15s ease both;
   }
@@ -103,9 +103,10 @@
     -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
     box-shadow:0 24px 60px rgba(4,18,60,.45);color:#fff;
   }
-  .kotak-login .logo-kecil{display:block;width:100px;height:100px;object-fit:contain;margin:0 auto 10px}
+  .kotak-login .logo-kecil{display:block;width:96px;height:96px;object-fit:contain;margin:0 auto -2px}   /* dirapatkan 12px dari sebelumnya (10px -> -2px) */
   .kotak-login h1{font-size:1.05rem;text-align:center;font-weight:600;line-height:1.35}
-  .kotak-login p.sub{text-align:center;font-size:.78rem;opacity:.85;margin:4px 0 20px}
+  .kotak-login p.sub{display:flex;align-items:center;gap:10px;justify-content:center;text-align:center;font-size:.78rem;opacity:.85;margin:4px 0 20px}
+  .kotak-login p.sub::before,.kotak-login p.sub::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.45)}
   .field{position:relative;margin-bottom:14px}
   .field label{display:block;font-size:.75rem;margin-bottom:5px;opacity:.9}
   .field .ikon{position:absolute;left:14px;bottom:13px;color:var(--biru);font-size:.95rem}
@@ -420,7 +421,7 @@
     </div>
     <div class="teks-selamat">Selamat Datang</div>
     <div class="logo-pusat">
-      <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792972591/Logo_My_SAPA_dengan_Swoosh_Biru_aiucfx.webp" alt="Logo MySapa">
+      <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792800203/Logo_My_SAPA_Biru_Oranye_jrtabx.webp" alt="Logo MySapa">
     </div>
     <div class="footer-biru">Powered by Anto Design Concept &copy; 2026</div>
   </section>
@@ -432,7 +433,7 @@
       <i class="bentuk b5"></i><i class="bentuk b6"></i><i class="bentuk b7"></i>
     </div>
     <form class="kotak-login" id="formLogin" autocomplete="off" novalidate>
-      <img class="logo-kecil" src="https://res.cloudinary.com/q7sznixw/image/upload/v1792972591/Logo_My_SAPA_dengan_Swoosh_Biru_aiucfx.webp" alt="Logo MySapa">
+      <img class="logo-kecil" src="https://res.cloudinary.com/q7sznixw/image/upload/v1792800203/Logo_My_SAPA_Biru_Oranye_jrtabx.webp" alt="Logo MySapa">
       <h1>Sistem Informasi dan<br>Pelayanan Administrasi</h1>
       <p class="sub">Silakan Login untuk masuk</p>
 
@@ -1322,29 +1323,37 @@ const opsiManual = (nama, manual, daftar, ph) =>
   `<select name="${nama}" data-manual="${manual}" required><option value="">-- Pilih --</option>${daftar.map(o => `<option value="${o}">${o}</option>`).join('')}<option value="Lainnya">Lainnya...</option></select>
    <input name="${manual}" id="${manual}" type="text" placeholder="${ph}" hidden style="margin-top:8px">`;
 
+const inpNik = (nama, ph) => `<input name="${nama}" type="text" inputmode="numeric" maxlength="16" placeholder="${ph}" required>`;
+const pilihJk = (nama) => `<select name="${nama}" required><option value="">-- Pilih Jenis Kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select>`;
 function isianSurat(jenis){
   switch (jenis){
     case 'sk_umum':
-      return fs('Keterangan', 'fa-list-check', opsiManual('opsi_keterangan', 'manual_keterangan',
-        ['Keterangan Tidak Mampu','Keterangan Belum Menikah','Keterangan Belum Bekerja','Keterangan Tidak Memiliki Rumah'], 'Tuliskan keterangan lainnya...'));
+      return fs('Keperluan', 'fa-list-check', opsiManual('opsi_keperluan', 'manual_keperluan',
+        ['Keterangan Tidak Mampu','Keterangan Belum Menikah','Keterangan Belum Bekerja','Keterangan Tidak Memiliki Rumah'], 'Tuliskan keperluan lainnya...'));
     case 'sk_akan_menikah':
-      return `<div class="pesan-ok" style="background:#e0f2fe;color:#0369a1;margin:0 0 12px"><i class="fa-solid fa-heart" style="color:#e11d48"></i> <b>Pernyataan:</b> Anda akan mengajukan surat keterangan akan menikah.</div>`;
+      return '';   // tanpa isian tambahan; agama diambil dari data pemohon
     case 'sk_bercerai':
       return fs('Nama Mantan Istri/Suami', 'fa-user-minus', inp('nama_mantan','text','Masukkan nama mantan pasangan')) +
-             fs('No. SK Pengadilan', 'fa-gavel', inp('no_sk_pengadilan','text','Nomor Keputusan Pengadilan Agama')) +
-             fs('Tanggal Putusan', 'fa-calendar-check', inp('tgl_putusan','date'));
+             fs('Tanggal Putusan', 'fa-calendar-check', inp('tgl_putusan','date')) +
+             fs('No. SK Pengadilan', 'fa-gavel', inp('no_sk_pengadilan','text','Nomor Keputusan Pengadilan Agama'));
     case 'sk_kelahiran':
-      return fs('Nama Bayi', 'fa-baby', inp('nama_bayi','text','Nama lengkap bayi')) +
-             fs('Jenis Kelamin Bayi', 'fa-venus-mars', '<select name="jk_bayi" required><option value="">-- Pilih Jenis Kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select>') +
-             fs('NIK (Ayah/Ibu)', 'fa-id-card-clip', inp('nik_orangtua','text','NIK Orang Tua')) +
-             fs('Tanggal Lahir', 'fa-calendar-day', inp('tgl_lahir','date')) +
+      return fs('NIK Ibu', 'fa-id-card-clip', inpNik('nik_ibu','16 digit NIK Ibu')) +
+             fs('Nama Ibu', 'fa-person-dress', inp('nama_ibu','text','Nama lengkap ibu')) +
+             fs('Nama Bayi', 'fa-baby', inp('nama_bayi','text','Nama lengkap bayi')) +
+             fs('Jenis Kelamin Bayi', 'fa-venus-mars', pilihJk('jk_bayi')) +
+             fs('Tanggal Lahir Bayi', 'fa-calendar-day', inp('lahir_bayi','date')) +
              fs('Jam Lahir', 'fa-clock', inp('jam_lahir','time')) +
-             fs('Tempat Lahir', 'fa-hospital', inp('tempat_lahir','text','Contoh: Rumah Sakit / Bidan / Rumah'));
+             fs('Tempat Lahir', 'fa-hospital', inp('t4_lahir','text','Contoh: Rumah Sakit / Bidan / Rumah'));
     case 'sk_kematian':
-      return fs('NIK (Yang Wafat)', 'fa-user-xmark', inp('nik_wafat','text','NIK Almarhum/Almarhumah')) +
+      return fs('NIK Almarhum/ah', 'fa-user-xmark', inpNik('nik_alm','16 digit NIK Almarhum/Almarhumah')) +
+             fs('Nama Almarhum/ah', 'fa-user', inp('nama_alm','text','Nama lengkap almarhum/almarhumah')) +
+             fs('Jenis Kelamin', 'fa-venus-mars', pilihJk('jk_alm')) +
+             fs('Agama', 'fa-hands-praying', `<select name="agama_alm" required><option value="">-- Pilih Agama --</option>${OPSI.agama.map(o => `<option>${o}</option>`).join('')}</select>`) +
+             fs('Tanggal Lahir', 'fa-cake-candles', inp('tgl_lahir_alm','date')) +
+             fs('Alamat', 'fa-house', '<textarea name="alamat_alm" rows="3" placeholder="Alamat almarhum/almarhumah" required></textarea>') +
              fs('Tanggal Wafat', 'fa-calendar-xmark', inp('tgl_wafat','date')) +
              fs('Tempat Wafat', 'fa-location-dot', inp('tempat_wafat','text','Lokasi meninggal dunia')) +
-             fs('Penyebab Wafat', 'fa-notes-medical', opsiManual('penyebab_wafat', 'manual_penyebab', ['Usia','Sakit','Kecelakaan'], 'Tuliskan penyebab lainnya...'));
+             fs('Sebab Wafat', 'fa-notes-medical', opsiManual('opsi_sebab', 'manual_sebab', ['Usia','Sakit','Kecelakaan'], 'Tuliskan sebab lainnya...'));
     case 'sk_usaha':
       return fs('Nama Usaha', 'fa-shop', inp('nama_usaha','text','Nama Toko/Usaha Anda')) +
              fs('Jenis Usaha', 'fa-store', opsiManual('jenis_usaha', 'manual_usaha', ['Kios Sembako','Agen Gas','Apotek'], 'Tuliskan jenis usaha lainnya...')) +
@@ -1352,7 +1361,7 @@ function isianSurat(jenis){
     case 'sk_izin_acara':
       return fs('Tanggal Mulai Acara', 'fa-calendar-plus', inp('tgl_mulai','date')) +
              fs('Tanggal Selesai Acara', 'fa-calendar-minus', inp('tgl_selesai','date')) +
-             fs('Estimasi Jumlah Tamu', 'fa-users', '<input name="jumlah_tamu" type="number" min="0" inputmode="numeric" placeholder="Jumlah perkiraan undangan/tamu" required>');
+             fs('Estimasi Jumlah Tamu', 'fa-users', '<input name="jml_tamu" type="number" min="0" inputmode="numeric" placeholder="Jumlah perkiraan undangan/tamu" required>');
     case 'sk_pindah_domisili':
       return fs('Pilihan Pindah', 'fa-truck-ramp-box', '<select name="opsi_pindah" required><option value="">-- Pilih Status Pindah --</option><option value="Masuk">Masuk (Datang ke RT 09)</option><option value="Keluar">Keluar (Pindah dari RT 09)</option></select>') +
              '<div id="pindahAlamat"></div>';
@@ -1434,13 +1443,19 @@ async function renderFormSurat(isi){
 
 /* ---------- Lonceng: admin = verifikasi, user = riwayat terverifikasi ---------- */
 const LABEL_DATA = {
-  keterangan:'Keterangan', pernyataan_menikah:'Pernyataan', nama_mantan:'Nama Mantan Pasangan', no_sk_pengadilan:'No. SK Pengadilan',
-  tgl_putusan:'Tanggal Putusan', nama_bayi:'Nama Bayi', jk_bayi:'Jenis Kelamin Bayi', nik_orangtua:'NIK Orang Tua',
-  tgl_lahir:'Tanggal Lahir', jam_lahir:'Jam Lahir', tempat_lahir:'Tempat Lahir', nik_wafat:'NIK yang Wafat',
-  tgl_wafat:'Tanggal Wafat', tempat_wafat:'Tempat Wafat', penyebab_wafat:'Penyebab Wafat', nama_usaha:'Nama Usaha',
-  jenis_usaha:'Jenis Usaha', alamat_usaha:'Alamat Usaha', tgl_mulai:'Tanggal Mulai', tgl_selesai:'Tanggal Selesai',
-  jumlah_tamu:'Jumlah Tamu', opsi_pindah:'Pilihan Pindah', alamat_pindah:'Alamat'
+  jenis_kelamin:'Jenis Kelamin', tempat_lahir:'Tempat Lahir', tgl_lahir:'Tanggal Lahir', status_nikah:'Status Nikah',
+  pekerjaan:'Pekerjaan', alamat:'Alamat', keperluan:'Keperluan', agama:'Agama',
+  nama_mantan:'Nama Mantan Pasangan', tgl_putusan:'Tanggal Putusan', no_sk_pengadilan:'No. SK Pengadilan',
+  nik_ibu:'NIK Ibu', nama_ibu:'Nama Ibu', nama_bayi:'Nama Bayi', jk_bayi:'Jenis Kelamin Bayi',
+  lahir_bayi:'Tanggal Lahir Bayi', jam_lahir:'Jam Lahir', t4_lahir:'Tempat Lahir Bayi',
+  nik_alm:'NIK Almarhum/ah', nama_alm:'Nama Almarhum/ah', jk_alm:'Jenis Kelamin Almarhum/ah', agama_alm:'Agama Almarhum/ah',
+  tgl_lahir_alm:'Tanggal Lahir Almarhum/ah', alamat_alm:'Alamat Almarhum/ah', tgl_wafat:'Tanggal Wafat',
+  usia_alm:'Usia Almarhum/ah', tempat_wafat:'Tempat Wafat', sebab_wafat:'Sebab Wafat',
+  nama_usaha:'Nama Usaha', jenis_usaha:'Jenis Usaha', alamat_usaha:'Alamat Usaha',
+  tgl_mulai:'Tanggal Mulai', tgl_selesai:'Tanggal Selesai', jml_tamu:'Jumlah Tamu',
+  opsi_pindah:'Pilihan Pindah', alamat_pindah:'Alamat'
 };
+const ORDER_DATA = Object.keys(LABEL_DATA);
 const linkAman = (u) => /^https?:\/\//i.test(u || '') ? u : '';
 
 /* ----- Status pengajuan ----- */
@@ -1453,7 +1468,7 @@ const tautanArsip = (u) => linkAman(u)
   ? `<a class="md-link" href="${esc(linkAman(u))}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> Arsip Surat (PDF)</a>` : '';
 
 /* URL web app Apps Script "Persetujuan.gs" (Deploy > Web app > salin URL berakhiran /exec) */
-const URL_PERSETUJUAN = 'https://script.google.com/macros/s/AKfycbw6YkF7nqexpXBLspxbNiXS4hqyLgmv1rlMKjVDwQRAUsHt2SZorQyDmIIs8wKA963k7Q/exec';
+const URL_PERSETUJUAN = '';
 
 /* ----- Lonceng: badge + penyegaran otomatis ----- */
 function aturLonceng(data){
@@ -1496,9 +1511,10 @@ async function renderNotifSurat(isi){
 
   if (d.mode === 'admin'){
     $('judulSubform').textContent = 'Persetujuan Surat';
-    const rinci = (data) => Object.keys(data || {}).map(k => {
-      let v = data[k]; if (k.startsWith('tgl_')) v = tglIndo(v);
-      return `<div class="md-baris"><span>${esc(LABEL_DATA[k] || k)}</span><span>${esc(v)}</span></div>`; }).join('');
+    const rinci = (data) => ORDER_DATA.filter(k => data && data[k] !== undefined && data[k] !== null).map(k => {
+      let v = data[k];
+      if (/^tgl_|^lahir_bayi$/.test(k)) v = tglIndo(v); else if (k === 'jam_lahir') v = String(v).slice(0, 5);
+      return `<div class="md-baris"><span>${esc(LABEL_DATA[k])}</span><span>${esc(v)}</span></div>`; }).join('');
     const menunggu = (d.menunggu || []).map(x => {
       const dt = keDate(x.diajukan_pada);
       return `<div class="notif-item">
