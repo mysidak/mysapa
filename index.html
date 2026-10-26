@@ -970,15 +970,15 @@ function renderKorespondensi(isi){
     `<button class="menu-baris" ${jenis === 'sub' ? 'data-admsub' : 'data-kores'}="${kunci}"><span class="mi ${c}"><i class="fa-solid ${ikon}"></i></span>
        <span><b>${judul}</b><small>${ket}</small></span><i class="fa-solid fa-chevron-right panah"></i></button>`;
   isi.innerHTML = `<div class="daftar-menu">
-    ${baris('masuk','c1','fa-inbox','Surat Masuk','Catat surat yang diterima & arsipkan berkasnya')}
-    ${baris('keluar','c4','fa-paper-plane','Surat Keluar','Buat surat keluar (nomor otomatis)')}
-    ${baris('undangan','c2','fa-calendar-check','Undangan','Buat undangan rapat / kegiatan (nomor otomatis)')}
-    ${baris('notula','c3','fa-file-pen','Notula','Catat hasil rapat dari undangan')}
-    ${baris('pengaduan','c11','fa-comment-dots','Pengaduan','Kelola pengaduan warga','sub')}
-    ${baris('inventaris','c8','fa-boxes-stacked','Inventaris','Data inventaris & aset RT','sub')}
-    ${baris('laporan','c9','fa-file-lines','Laporan','Laporan kegiatan RT','sub')}
-    ${baris('database','c5','fa-database','Database','Database penduduk','sub')}
-    ${baris('pendataan','c10','fa-clipboard-list','Pendataan','Pendataan warga','sub')}
+    ${baris('masuk','c1','fa-inbox','Surat Masuk','Pengarsipan surat yang diterima')}
+    ${baris('keluar','c4','fa-paper-plane','Surat Keluar','Pembuatan surat keluar')}
+    ${baris('undangan','c2','fa-calendar-check','Undangan','Pembuatan undangan kegiatan RT')}
+    ${baris('notula','c3','fa-file-pen','Notula','Pencatatan proses dan hasil rapat warga')}
+    ${baris('pengaduan','c11','fa-comment-dots','Pengaduan','Pencatatan pengaduan warga','sub')}
+    ${baris('inventaris','c8','fa-boxes-stacked','Inventaris','Pendataan inventaris & aset RT','sub')}
+    ${baris('laporan','c9','fa-file-lines','Laporan','Laporan kegiatan dan kondisi wilayah RT','sub')}
+    ${baris('database','c5','fa-database','Database','Database warga','sub')}
+    ${baris('pendataan','c10','fa-clipboard-list','Pendataan','Pendataan warga baru','sub')}
   </div>`;
 }
 document.addEventListener('click', (e) => {
