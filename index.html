@@ -230,6 +230,17 @@
   .c10{background:linear-gradient(135deg,#16a34a,#4ade80);--sh:#16a34a}
   .c11{background:linear-gradient(135deg,#dc2626,#f97316);--sh:#dc2626}
   .fitur[hidden]{display:none}
+
+  /* ---- Standar Pelayanan (carousel gambar) ---- */
+  .sp-geser{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;border-radius:var(--radius);box-shadow:0 8px 20px rgba(11,42,111,.12);background:#fff}
+  .sp-geser::-webkit-scrollbar{display:none}
+  .sp-slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;background:#fff}
+  .sp-slide img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+  .sp-titik{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:10px}
+  .sp-titik button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:#c5d2ea;cursor:pointer;
+    transition:width .25s ease, background .25s ease}
+  .sp-titik button.aktif{width:22px;background:var(--biru)}
   .c12{background:linear-gradient(135deg,#d97706,#fbbf24);--sh:#d97706}
   .c13{background:linear-gradient(135deg,#4f46e5,#818cf8);--sh:#4f46e5}
 
@@ -507,6 +518,16 @@
           <button data-buka="surat">Ajukan Sekarang</button>
         </div>
       </div>
+
+      <div class="judul-seksi">Standar Pelayanan</div>
+      <div class="sp-geser" id="spGeser" role="region" aria-label="Standar Pelayanan" tabindex="0">
+        <div class="sp-slide"><img src="https://res.cloudinary.com/q7sznixw/image/upload/v1790743671/Hak_Akses_11zon_ntzjys.webp" alt="Standar Pelayanan 1: Hak Akses" draggable="false"></div>
+        <div class="sp-slide"><img src="https://res.cloudinary.com/q7sznixw/image/upload/v1790743670/SP_11zon_edea6t.webp" alt="Standar Pelayanan 2: Surat Pengantar" draggable="false" loading="lazy"></div>
+        <div class="sp-slide"><img src="https://res.cloudinary.com/q7sznixw/image/upload/v1790743670/Isidata_11zon_ebsznl.webp" alt="Standar Pelayanan 3: Isi Data" draggable="false" loading="lazy"></div>
+        <div class="sp-slide"><img src="https://res.cloudinary.com/q7sznixw/image/upload/v1790743670/menunggu_11zon_suinoj.webp" alt="Standar Pelayanan 4: Menunggu" draggable="false" loading="lazy"></div>
+        <div class="sp-slide"><img src="https://res.cloudinary.com/q7sznixw/image/upload/v1790743670/Persetujuan_11zon_cnun4e.webp" alt="Standar Pelayanan 5: Persetujuan" draggable="false" loading="lazy"></div>
+      </div>
+      <div class="sp-titik" id="spTitik" role="tablist" aria-label="Navigasi Standar Pelayanan"></div>
 
       <div class="judul-seksi">Fitur Utama</div>
       <div class="grid-fitur">
@@ -1575,6 +1596,36 @@ document.addEventListener('click', (e) => {
       }catch(err){ console.error(err); return { ok:false, pesan:'Tidak dapat menghubungi layanan pembuat surat. Coba lagi.' }; }
     }, 'Disetujui');
 });
+
+/* =====================================================================
+   STANDAR PELAYANAN: carousel geser kanan + titik navigasi
+   ===================================================================== */
+(function(){
+  const geser = $('spGeser'), wadah = $('spTitik');
+  if (!geser || !wadah) return;
+  const slide = geser.querySelectorAll('.sp-slide');
+  slide.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('aria-label', 'Gambar ' + (i + 1) + ' dari ' + slide.length);
+    b.addEventListener('click', () => geser.scrollTo({ left: i * geser.clientWidth, behavior: 'smooth' }));
+    wadah.appendChild(b);
+  });
+  const titik = wadah.querySelectorAll('button');
+  let aktif = -1;
+  function tandai(){
+    const i = Math.max(0, Math.min(slide.length - 1, Math.round(geser.scrollLeft / (geser.clientWidth || 1))));
+    if (i === aktif) return;
+    aktif = i;
+    titik.forEach((t, k) => { t.classList.toggle('aktif', k === i); t.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+  }
+  geser.addEventListener('scroll', tandai, { passive: true });
+  window.addEventListener('resize', () => geser.scrollTo({ left: Math.max(0, aktif) * geser.clientWidth }));
+  geser.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') geser.scrollBy({ left: geser.clientWidth, behavior: 'smooth' });
+    else if (e.key === 'ArrowLeft') geser.scrollBy({ left: -geser.clientWidth, behavior: 'smooth' });
+  });
+  tandai();
+})();
 
 mulai();
 </script>
