@@ -232,10 +232,11 @@
   .fitur[hidden]{display:none}
 
   /* ---- Standar Pelayanan (carousel gambar) ---- */
-  .sp-geser{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scrollbar-width:none;border-radius:var(--radius);box-shadow:0 8px 20px rgba(11,42,111,.12);background:#fff}
+  .sp-geser{--sp-intip:16px;--sp-jarak:6px;display:flex;gap:var(--sp-jarak);overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none}
   .sp-geser::-webkit-scrollbar{display:none}
-  .sp-slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;background:#fff}
+  .sp-slide{flex:0 0 calc(100% - var(--sp-intip) - var(--sp-jarak));scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;
+    background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 16px rgba(11,42,111,.12)}
   .sp-slide img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
   .sp-titik{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:10px}
   .sp-titik button{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:#c5d2ea;cursor:pointer;
@@ -1607,22 +1608,24 @@ document.addEventListener('click', (e) => {
   slide.forEach((_, i) => {
     const b = document.createElement('button');
     b.type = 'button'; b.setAttribute('aria-label', 'Gambar ' + (i + 1) + ' dari ' + slide.length);
-    b.addEventListener('click', () => geser.scrollTo({ left: i * geser.clientWidth, behavior: 'smooth' }));
+    b.addEventListener('click', () => geser.scrollTo({ left: i * langkah(), behavior: 'smooth' }));
     wadah.appendChild(b);
   });
   const titik = wadah.querySelectorAll('button');
   let aktif = -1;
+  function langkah(){ return slide.length > 1 ? slide[1].offsetLeft - slide[0].offsetLeft : geser.clientWidth; }
   function tandai(){
-    const i = Math.max(0, Math.min(slide.length - 1, Math.round(geser.scrollLeft / (geser.clientWidth || 1))));
+    const habis = geser.scrollLeft >= geser.scrollWidth - geser.clientWidth - 2;
+    const i = habis ? slide.length - 1 : Math.max(0, Math.min(slide.length - 1, Math.round(geser.scrollLeft / (langkah() || 1))));
     if (i === aktif) return;
     aktif = i;
     titik.forEach((t, k) => { t.classList.toggle('aktif', k === i); t.setAttribute('aria-current', k === i ? 'true' : 'false'); });
   }
   geser.addEventListener('scroll', tandai, { passive: true });
-  window.addEventListener('resize', () => geser.scrollTo({ left: Math.max(0, aktif) * geser.clientWidth }));
+  window.addEventListener('resize', () => geser.scrollTo({ left: Math.max(0, aktif) * langkah() }));
   geser.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') geser.scrollBy({ left: geser.clientWidth, behavior: 'smooth' });
-    else if (e.key === 'ArrowLeft') geser.scrollBy({ left: -geser.clientWidth, behavior: 'smooth' });
+    if (e.key === 'ArrowRight') geser.scrollBy({ left: langkah(), behavior: 'smooth' });
+    else if (e.key === 'ArrowLeft') geser.scrollBy({ left: -langkah(), behavior: 'smooth' });
   });
   tandai();
 })();
