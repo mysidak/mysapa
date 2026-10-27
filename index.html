@@ -402,6 +402,17 @@
   .kosong{margin-top:40px;text-align:center;color:var(--abu);font-size:.85rem}
   .kosong i{font-size:2.4rem;color:var(--biru-muda);margin-bottom:10px;display:block}
   .kartu-stat{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 6px 16px rgba(11,42,111,.08)}
+  .kartu-stat h3.st-judul{font-size:.86rem;font-weight:600;color:var(--biru-tua);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .kartu-stat h3.st-judul i{color:var(--biru)}
+  .st-donut{display:flex;align-items:center;justify-content:space-around;gap:12px}
+  .st-donut .wadah{position:relative;width:130px;height:130px;flex:none}
+  .st-donut .pusat-donut{color:var(--biru-muda)}
+  .st-legenda{display:flex;flex-direction:column;gap:6px;font-size:.78rem;color:var(--abu)}
+  .st-legenda i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+  .st-legenda b{color:var(--biru-tua);margin-left:4px}
+  .st-bar{position:relative;width:100%;height:220px}
+  .st-bar.tinggi{height:250px}
+  .st-ket{margin-top:10px;font-size:.66rem;color:var(--abu);line-height:1.5}
   .kartu-stat .baris-angka:last-child{border:0}
 
   /* Modal konfirmasi keluar */
@@ -809,6 +820,106 @@ function gambarChart(l, p){
   });
 }
 
+
+/* ---------- Subform Data Statistik (4 kartu chart) ---------- */
+let chartStat = [];
+const pluginNilai = {
+  id: 'nilaiDiAtasBatang',
+  afterDatasetsDraw(c){
+    const g = c.ctx; g.save();
+    g.font = '600 11px Poppins, system-ui, sans-serif'; g.fillStyle = '#0b2a6f'; g.textBaseline = 'middle';
+    const horiz = c.options.indexAxis === 'y';
+    c.data.datasets.forEach((ds, i) => c.getDatasetMeta(i).data.forEach((bar, j) => {
+      const v = ds.data[j]; if (v === null || v === undefined) return;
+      if (horiz){ g.textAlign = 'left'; g.fillText(fmt(v), bar.x + 6, bar.y); }
+      else { g.textAlign = 'center'; g.textBaseline = 'bottom'; g.fillText(fmt(v), bar.x, bar.y - 4); }
+    }));
+    g.restore();
+  }
+};
+function opsiBar(horiz, legenda){
+  return { responsive:true, maintainAspectRatio:false, indexAxis: horiz ? 'y' : 'x',
+    layout:{ padding:{ top: horiz ? 0 : 16, right: horiz ? 34 : 0 } },
+    plugins:{ legend:{ display: !!legenda, position:'bottom', labels:{ boxWidth:10, boxHeight:10, usePointStyle:true, font:{ size:11 } } } },
+    scales:{
+      x:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:'#64748b', font:{ size:10 } }, beginAtZero:true, ...(horiz ? { display:false } : {}) },
+      y:{ grid:{ color:'#eef2f7' }, border:{ display:false }, ticks:{ color:'#64748b', font:{ size:10 }, precision:0 }, beginAtZero:true, ...(horiz ? { grid:{ display:false } } : {}) }
+    } };
+}
+async function renderStatistik(isi){
+  const versi = versiSubform;
+  chartStat.forEach(c => c.destroy()); chartStat = [];
+  const L = statistik.laki_laki || 0, P = statistik.perempuan || 0;
+  isi.innerHTML = `
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-venus-mars"></i> Komposisi Jenis Kelamin</h3>
+      <div class="st-donut">
+        <div class="wadah"><canvas id="stDonut"></canvas><div class="pusat-donut"><i class="fa-solid fa-users"></i></div></div>
+        <div class="st-legenda">
+          <span><i style="background:#1558c9"></i>Laki-laki<b>${fmt(L)}</b></span>
+          <span><i style="background:#ff8a1f"></i>Perempuan<b>${fmt(P)}</b></span>
+          <span style="margin-top:4px">Jumlah KK<b>${fmt(statistik.jumlah_kk)}</b></span>
+          <span>Jumlah Jiwa<b>${fmt(statistik.jumlah_jiwa)}</b></span>
+          <span>Jumlah Wafat<b>${fmt(statistik.jumlah_wafat)}</b></span>
+        </div>
+      </div>
+    </div>
+    <div id="stRincian"><div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat rincian...</div></div>`;
+  const kosong = (L + P) === 0;
+  chartStat.push(new Chart($('stDonut'), { type:'doughnut',
+    data:{ labels:['Laki-laki','Perempuan'], datasets:[{ data: kosong ? [1] : [L,P],
+      backgroundColor: kosong ? ['#e2e8f0'] : ['#1558c9','#ff8a1f'], borderWidth:0,
+      spacing: kosong ? 0 : 3, borderRadius: kosong ? 0 : 6, hoverOffset:4 }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{display:false}, tooltip:{ enabled:!kosong } } } }));
+
+  let d = null, gagal = '';
+  try{
+    const { data, error } = await db.rpc('get_statistik_detail', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) gagal = data.pesan || 'Gagal memuat rincian statistik.'; else d = data;
+  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat rincian statistik. Periksa koneksi Anda.'; }
+  if (versi !== versiSubform) return;
+  const wadah = $('stRincian'); if (!wadah) return;
+  if (gagal){ wadah.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
+
+  wadah.innerHTML = `
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-house-user"></i> Status Warga: Jumlah KK dan Jiwa</h3>
+      <div class="st-bar"><canvas id="stStatus"></canvas></div>
+      <div class="st-ket">WAT = Warga Asli Tetap · WAP = Warga Asli Pendatang · WDT = Warga Domisili Tetap · WDS = Warga Domisili Sementara</div>
+    </div>
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-child-reaching"></i> Jumlah Jiwa menurut Usia</h3>
+      <div class="st-bar"><canvas id="stUsia"></canvas></div>
+    </div>
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-graduation-cap"></i> Pendidikan Terakhir</h3>
+      <div class="st-bar tinggi"><canvas id="stPendidikan"></canvas></div>
+    </div>`;
+
+  const st = d.status || {};
+  const kunciSt = ['WAT','WAP','WDT','WDS'];
+  chartStat.push(new Chart($('stStatus'), { type:'bar',
+    data:{ labels:kunciSt, datasets:[
+      { label:'Jumlah KK',   data:kunciSt.map(k => (st[k]||{}).kk   || 0), backgroundColor:'#1558c9', borderRadius:6, maxBarThickness:34 },
+      { label:'Jumlah Jiwa', data:kunciSt.map(k => (st[k]||{}).jiwa || 0), backgroundColor:'#ff8a1f', borderRadius:6, maxBarThickness:34 } ] },
+    options:opsiBar(false, true), plugins:[pluginNilai] }));
+
+  const u = d.usia || {};
+  chartStat.push(new Chart($('stUsia'), { type:'bar',
+    data:{ labels:[['Prasekolah','(<6)'],['Sekolah','(6-18)'],['Prakerja','(18-25)'],['Kerja','(25-60)'],['Lansia','(>60)']],
+      datasets:[{ label:'Jiwa', data:[u.prasekolah||0, u.sekolah||0, u.prakerja||0, u.kerja||0, u.lansia||0],
+        backgroundColor:['#4aa3ff','#1558c9','#0b2a6f','#ff8a1f','#10b981'], borderRadius:6, maxBarThickness:40 }] },
+    options:opsiBar(false, false), plugins:[pluginNilai] }));
+
+  const pd = d.pendidikan || {};
+  chartStat.push(new Chart($('stPendidikan'), { type:'bar',
+    data:{ labels:['SD','SMP','SMA','Diploma','Sarjana','Pascasarjana'],
+      datasets:[{ label:'Jiwa', data:[pd.sd||0, pd.smp||0, pd.sma||0, pd.diploma||0, pd.sarjana||0, pd.pascasarjana||0],
+        backgroundColor:'#1558c9', borderRadius:6, maxBarThickness:22 }] },
+    options:opsiBar(true, false), plugins:[pluginNilai] }));
+}
+
 /* ---------- Subform (kerangka) ---------- */
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
@@ -839,15 +950,7 @@ function bukaSubform(kunci){
   const isi = $('isiSubform');
 
   if (kunci === 'statistik' && statistik){
-    isi.innerHTML = `
-      <div class="kartu-stat">
-        <div class="baris-angka">Jumlah KK <b>${fmt(statistik.jumlah_kk)}</b></div>
-        <div class="baris-angka">Jumlah Jiwa <b>${fmt(statistik.jumlah_jiwa)}</b></div>
-        <div class="baris-angka">Laki-laki <b>${fmt(statistik.laki_laki)}</b></div>
-        <div class="baris-angka">Perempuan <b>${fmt(statistik.perempuan)}</b></div>
-        <div class="baris-angka">Jumlah Wafat <b>${fmt(statistik.jumlah_wafat)}</b></div>
-      </div>
-      <div class="kosong" style="margin-top:20px">Rincian statistik lainnya akan ditambahkan.</div>`;
+    renderStatistik(isi);
   } else if (kunci === 'verifikasi'){
     renderNotifSurat(isi);
   } else if (kunci === 'surat'){
