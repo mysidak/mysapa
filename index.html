@@ -629,6 +629,69 @@
   .pr-lightbox.tampil{opacity:1;visibility:visible;transition:opacity .2s ease,visibility 0s}
   .pr-lightbox img{max-width:100%;max-height:90%;border-radius:14px;object-fit:contain;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
   .pr-lightbox .pr-lb-tutup{position:absolute;top:calc(16px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+  /* ---- Polling (subform) ---- */
+  .pl-q{background:#eff6ff;border:1px solid #dbeafe;border-radius:15px;padding:14px;font-size:.88rem;font-weight:600;line-height:1.5;color:var(--teks);margin-bottom:14px;word-break:break-word;white-space:pre-line}
+  .pl-info{text-align:center;margin-bottom:14px;padding:10px 12px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0}
+  .pl-info .batas{font-size:.74rem;color:var(--abu);margin-bottom:4px}
+  .pl-info .sisa{font-size:.8rem;font-weight:600;color:var(--biru)}
+  .pl-info .sisa span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;letter-spacing:1px}
+  .pl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .pl-pilih{border:0;border-radius:14px;padding:13px 6px;color:#fff;font:inherit;font-size:.78rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:.2s}
+  .pl-pilih i{font-size:1.5rem}
+  .pl-pilih:active:not(:disabled){transform:scale(.96)}
+  .pl-pilih:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.6)}
+  .pl-setuju{background:#16a34a}.pl-tidak{background:#dc2626}.pl-abstain{background:#eab308}
+  .pl-keluarga{background:#fefce8;border:1px solid #fde68a;color:#854d0e;border-radius:13px;padding:12px;font-size:.78rem;line-height:1.5;text-align:center;margin-bottom:14px}
+  .pl-judul-hasil{text-align:center;font-size:.84rem;font-weight:700;color:var(--biru-tua);margin-bottom:10px}
+  .pl-pie-wrap{display:flex;justify-content:center;margin:4px 0 16px}
+  .pl-pie{width:180px;height:180px;border-radius:50%;position:relative;background:#e2e8f0}
+  .pl-pie::after{content:"";position:absolute;inset:41px;background:#fff;border-radius:50%}
+  .pl-legenda{display:grid;gap:7px}
+  .pl-legenda-baris{display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:#475569}
+  .pl-legenda-baris span{display:flex;align-items:center;gap:7px}
+  .pl-titik{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .pl-total{text-align:center;font-size:.7rem;color:var(--abu);margin-top:10px}
+  .pl-kosong{text-align:center;padding:18px 8px;color:var(--abu);font-size:.8rem}
+  .pl-cek{display:flex;flex-wrap:wrap;gap:10px}
+  .pl-cek label{flex:1 1 140px;display:flex;align-items:center;gap:8px;padding:11px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;font-size:.76rem;font-weight:600;color:#334155;cursor:pointer}
+  .pl-cek input{width:17px;height:17px;accent-color:#1558c9}
+  .pl-cek input:disabled + span{opacity:.5}
+  .pl-cat{font-size:.68rem;color:var(--abu);line-height:1.45;margin-top:8px}
+  .pl-hitung{text-align:right;font-size:.64rem;color:#94a3b8;margin-top:4px}
+  .pl-aksi{display:flex;gap:9px;margin-top:16px}
+  .pl-aksi button{flex:1;border:0;border-radius:12px;padding:12px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+  .pl-aksi .sekunder{background:#eef3fb;color:var(--abu)}
+  .pl-aksi .utama{background:linear-gradient(135deg,#1558c9,#2f86ec);color:#fff}
+  .pl-aksi button:disabled{opacity:.6}
+
+  /* ---- Ucapan ulang tahun ---- */
+  .bday-backdrop{position:absolute;inset:0;z-index:95;display:none;align-items:center;justify-content:center;padding:18px;overflow:hidden;
+    background:radial-gradient(circle at 50% 40%,rgba(30,64,175,.78),rgba(15,23,42,.88));-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .bday-backdrop.show{display:flex}
+  .bday-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .bday-piece{position:absolute;top:-24px;opacity:0;animation:bdayFall linear infinite}
+  @keyframes bdayFall{0%{transform:translate3d(0,-24px,0) rotate(0deg);opacity:1}100%{transform:translate3d(var(--dx),108vh,0) rotate(var(--rot));opacity:1}}
+  .bday-balloon{position:absolute;bottom:-140px;width:46px;height:58px;border-radius:50% 50% 48% 48%;opacity:.92;animation:bdayRise ease-in infinite}
+  .bday-balloon::before{content:"";position:absolute;top:10px;left:10px;width:9px;height:15px;border-radius:50%;background:rgba(255,255,255,.45);transform:rotate(20deg)}
+  .bday-balloon::after{content:"";position:absolute;top:100%;left:50%;width:1.5px;height:56px;background:rgba(255,255,255,.6)}
+  @keyframes bdayRise{0%{transform:translate3d(0,0,0) rotate(-4deg)}50%{transform:translate3d(var(--sway),-60vh,0) rotate(5deg)}100%{transform:translate3d(0,-125vh,0) rotate(-4deg)}}
+  .bday-spark{position:absolute;color:#fde047;animation:bdayTwinkle ease-in-out infinite}
+  @keyframes bdayTwinkle{0%,100%{transform:scale(.3) rotate(0deg);opacity:.2}50%{transform:scale(1.1) rotate(90deg);opacity:1}}
+  .bday-card{position:relative;width:100%;max-width:400px;background:linear-gradient(160deg,#fff 0%,#eff6ff 100%);border-radius:28px;padding:30px 24px 24px;text-align:center;
+    box-shadow:0 24px 70px rgba(0,0,0,.45);border:3px solid #fde047;animation:bdayPop .7s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes bdayPop{0%{transform:scale(.4) translateY(40px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+  .bday-cake{width:92px;height:92px;margin:-72px auto 12px;border-radius:50%;background:linear-gradient(135deg,#f43f5e,#f59e0b);color:#fff;font-size:42px;
+    display:flex;align-items:center;justify-content:center;border:5px solid #fff;box-shadow:0 10px 28px rgba(244,63,94,.5);animation:bdayBounce 1.3s ease-in-out infinite}
+  @keyframes bdayBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.07)}}
+  .bday-title{font-size:24px;font-weight:800;line-height:1.25;background:linear-gradient(90deg,#e11d48,#f59e0b,#2563eb,#e11d48);background-size:250% 100%;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:bdayShine 3s linear infinite}
+  @keyframes bdayShine{0%{background-position:0 0}100%{background-position:250% 0}}
+  .bday-name{margin-top:10px;font-size:17px;font-weight:800;color:#0f172a;word-break:break-word}
+  .bday-age{display:inline-block;margin-top:8px;padding:5px 16px;border-radius:50px;background:#fef3c7;color:#b45309;font-size:12.5px;font-weight:800}
+  .bday-msg{margin-top:14px;font-size:13px;line-height:1.6;color:#475569}
+  .bday-btn{width:100%;margin-top:20px;padding:13px;border:0;border-radius:14px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font:inherit;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,.4)}
+  @media (prefers-reduced-motion:reduce){.bday-piece,.bday-balloon,.bday-spark,.bday-cake,.bday-title{animation:none}.bday-piece,.bday-balloon,.bday-spark{display:none}}
 </style>
 </head>
 <body>
@@ -791,6 +854,18 @@
       </form>
     </div>
   </div>
+  <!-- Ucapan ulang tahun -->
+  <div class="bday-backdrop" id="birthdayModal" aria-hidden="true">
+    <div class="bday-fx" id="birthdayFx"></div>
+    <div class="bday-card" role="dialog" aria-modal="true" aria-labelledby="bdayTitle">
+      <div class="bday-cake"><i class="fa-solid fa-cake-candles"></i></div>
+      <div id="bdayTitle" class="bday-title">Selamat Ulang Tahun!</div>
+      <div id="bdayName" class="bday-name"></div>
+      <div id="bdayAge" class="bday-age" style="display:none"></div>
+      <div class="bday-msg">Semoga panjang umur, sehat selalu, dan dilimpahi kebahagiaan serta kesuksesan.<br>Salam hangat dari seluruh warga RT 09 Bonggoeya. 🎉</div>
+      <button class="bday-btn" type="button" id="bdayTutup"><i class="fa-solid fa-gift"></i> Terima Kasih</button>
+    </div>
+  </div>
   <!-- Lightbox peta (Profil RT) -->
   <div class="pr-lightbox" id="prLightbox" aria-hidden="true">
     <button type="button" class="pr-lb-tutup" id="prLbTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
@@ -871,6 +946,7 @@ function aturMenuPengguna(profil){
 /* ---------- Alur layar ---------- */
 function tampilkanLogin(){
   resetLapisan();
+  pollingStatus = null; clearInterval(pollingTimer); tutupUlangTahun();
   aturMenuPengguna(null);
   aturLonceng({});
   aturInfoBaru(false);
@@ -890,6 +966,7 @@ function tampilkanUtama(profil){
   $('namaUser').textContent = namaTanpaGelar(profil.nama);
   perbaruiSapaan();
   muatStatistik();
+  cekUlangTahun(profil);
 }
 function perbaruiSapaan(){
   $('teksSapaan').textContent = ucapanWaktu();
@@ -1006,6 +1083,7 @@ async function muatStatistik(){
     aturLonceng(data);
     gambarChart(data.laki_laki, data.perempuan);
     aturPolling();
+    muatPollingStatus();
   }catch(err){
     console.error(err); toast('Gagal memuat statistik.');
   }
@@ -2448,34 +2526,257 @@ function konfirmasiKetidakhadiran(aksi){
 }
 
 /* =====================================================================
-   POLLING (dibuka admin)
+   POLLING — data di Supabase (tabel polling & polling_suara)
+   Admin  : mengelola polling (deskripsi, batas waktu, ceklis Polling / Hasil)
+   Warga  : memberi pendapat (satu suara per keluarga/NKK) dan melihat hasil bila dibuka admin
    ===================================================================== */
-function pollingAktifUntukSaya(){ return aksesPenuh || !!(statistik && statistik.polling_aktif); }
+let pollingStatus = null, pollingTimer = null, pollingAdminId = '';
+
+function pollingAktifUntukSaya(){
+  if (aksesPenuh) return true;                     // admin selalu melihat menu Polling
+  const s = pollingStatus;
+  return !!(s && s.ada && s.poll && (s.poll.polling_aktif || s.poll.hasil_aktif));
+}
 function aturPolling(){
   const b = $('btnPolling'); if (!b) return;
   const on = pollingAktifUntukSaya();
-  b.hidden = !on;                                   // disembunyikan sampai admin mengaktifkan polling (admin selalu melihatnya)
+  b.hidden = !on;                                  // tersembunyi sampai admin membuka polling / hasil
   b.classList.remove('nonaktif'); b.disabled = false; b.setAttribute('aria-disabled', 'false');
 }
-function renderPolling(isi){
-  const saklar = aksesPenuh ? `<div class="kartu-stat"><label class="baris-saklar">
-      <span><b>Aktifkan Polling</b><small>Pengguna lain baru bisa membuka menu Polling saat saklar ini aktif.</small></span>
-      <span class="saklar"><input type="checkbox" id="sakPolling" ${statistik && statistik.polling_aktif ? 'checked' : ''}><i></i></span>
-    </label></div>` : '';
-  isi.innerHTML = saklar + `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>Subform <b>Polling</b> sedang disiapkan.</div>`;
-  const sak = $('sakPolling'); if (!sak) return;
-  sak.addEventListener('change', async () => {
-    const mau = sak.checked; sak.disabled = true;
-    try{
-      const { data, error } = await db.rpc('set_polling', { p_token: tokenSesi, p_aktif: mau });
-      if (error) throw error;
-      if (!data.ok) throw new Error(data.pesan || 'Gagal');
-      if (statistik) statistik.polling_aktif = !!data.polling_aktif;
-      aturPolling();
-      toast(mau ? 'Polling diaktifkan.' : 'Polling dinonaktifkan.');
-    }catch(e){ console.error(e); sak.checked = !mau; toast('Gagal mengubah status polling.'); }
-    finally{ sak.disabled = false; }
+async function muatPollingStatus(){                // senyap
+  if (!tokenSesi) return;
+  try{
+    const { data, error } = await db.rpc('polling_status', { p_token: tokenSesi });
+    if (!error && data && data.ok){ pollingStatus = data; aturPolling(); }
+  }catch(e){ /* diabaikan */ }
+}
+
+const plTglWaktu = (v) => { const d = new Date(v); return isNaN(d) ? '-' :
+  d.toLocaleString('id-ID', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }).replace(/\./g, '.'); };
+function plKeInput(v){                             // ISO -> nilai input datetime-local (waktu lokal)
+  const d = new Date(v); if (isNaN(d)) return '';
+  const p = n => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function plLegenda(label, n, total, warna){
+  const persen = total ? (n / total * 100) : 0;
+  return `<div class="pl-legenda-baris"><span><i class="pl-titik" style="background:${warna}"></i>${label}</span><b>${fmt(n)} (${persen.toFixed(1).replace('.', ',')}%)</b></div>`;
+}
+function plHasil(c){
+  c = c || {};
+  const s = Number(c.Setuju || 0), t = Number(c['Tidak Setuju'] || 0), a = Number(c.Abstain || 0), tot = s + t + a;
+  const p1 = tot ? s / tot * 100 : 0, p2 = tot ? (s + t) / tot * 100 : 0;
+  const pie = tot ? `conic-gradient(#22c55e 0% ${p1}%, #ef4444 ${p1}% ${p2}%, #94a3b8 ${p2}% 100%)` : '#e2e8f0';
+  return `<div class="pl-judul-hasil">Hasil Polling</div>
+    <div class="pl-pie-wrap"><div class="pl-pie" style="background:${pie}"></div></div>
+    <div class="pl-legenda">${plLegenda('Setuju', s, tot, '#22c55e')}${plLegenda('Tidak Setuju', t, tot, '#ef4444')}${plLegenda('Abstain', a, tot, '#94a3b8')}</div>
+    <div class="pl-total">Total pendapat (per keluarga): ${fmt(tot)}</div>`;
+}
+
+async function renderPolling(isi){
+  const versi = versiSubform;
+  clearInterval(pollingTimer); pollingTimer = null;
+  if (!isi.querySelector('.pl-ada'))
+    isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat polling...</div>';
+  let d = null, gagal = '';
+  try{
+    const { data, error } = await db.rpc(aksesPenuh ? 'polling_admin_get' : 'polling_status', { p_token: tokenSesi });
+    if (error) throw error;
+    if (!data.ok) gagal = data.pesan || 'Gagal memuat polling.'; else d = data;
+  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat polling. Periksa koneksi Anda.'; }
+  if (versi !== versiSubform) return;
+  if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
+  if (!aksesPenuh){ pollingStatus = d; aturPolling(); }
+  if (aksesPenuh) renderPollingAdmin(isi, d, versi); else renderPollingWarga(isi, d, versi);
+}
+
+/* ---------- Admin ---------- */
+function renderPollingAdmin(isi, d, versi){
+  const p = d.ada ? d.poll : null;
+  pollingAdminId = p ? p.id : '';
+  isi.innerHTML = `<div class="pl-ada">
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-square-poll-vertical"></i> Kelola Polling</h3>
+      <form id="plForm" autocomplete="off" novalidate>
+        <div class="mf-field"><label>Deskripsi / Pertanyaan Polling <b>*</b></label>
+          <textarea id="plDesk" maxlength="1000" placeholder="Tuliskan pertanyaan atau deskripsi polling..." style="min-height:120px"></textarea>
+          <div class="pl-hitung"><span id="plCnt">0</span>/1000 karakter</div></div>
+        <div class="mf-field"><label>Batas Waktu Polling <b>*</b></label><input id="plBatas" type="datetime-local"></div>
+        <div class="pl-cek">
+          <label><input id="plAktif" type="checkbox"><span>Polling</span></label>
+          <label><input id="plHasil" type="checkbox"><span>Hasil</span></label>
+        </div>
+        <div class="pl-cat">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga.</div>
+        <div class="pl-aksi">
+          <button type="button" class="sekunder" id="plBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
+          <button type="submit" class="utama" id="plSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+        <div id="plPesan"></div>
+      </form>
+    </div>
+    ${p ? `<div class="kartu-stat" id="plKartuHasil"><div class="pl-judul-hasil" style="margin-bottom:4px">Hasil Sementara</div>${plHasil(d.counts)}</div>` : ''}
+  </div>`;
+
+  const kontrol = () => {
+    const b = $('plBatas').value, a = $('plAktif'), h = $('plHasil');
+    const sah = !!b && new Date(b).getTime() > Date.now();
+    a.disabled = !sah || h.checked;
+    if (!sah || h.checked) a.checked = false;
+  };
+  const hitung = () => { $('plCnt').textContent = $('plDesk').value.length; };
+  if (p){
+    $('plDesk').value = p.deskripsi || '';
+    $('plBatas').value = plKeInput(p.batas_waktu);
+    $('plAktif').checked = !!p.polling_aktif;
+    $('plHasil').checked = !!p.hasil_aktif;
+  }
+  hitung();
+  const aktifAwal = $('plAktif').checked; kontrol(); if (aktifAwal && !$('plAktif').disabled) $('plAktif').checked = true;
+
+  $('plDesk').addEventListener('input', hitung);
+  $('plBatas').addEventListener('change', kontrol);
+  $('plAktif').addEventListener('change', kontrol);
+  $('plHasil').addEventListener('change', kontrol);
+  $('plBaru').addEventListener('click', () => {
+    pollingAdminId = '';
+    $('plDesk').value = ''; $('plBatas').value = ''; $('plAktif').checked = false; $('plHasil').checked = false;
+    $('plPesan').innerHTML = ''; const k = $('plKartuHasil'); if (k) k.remove();
+    hitung(); kontrol(); $('plDesk').focus();
   });
+  $('plForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pesan = $('plPesan'), tmb = $('plSimpan');
+    const desk = $('plDesk').value.trim(), batas = $('plBatas').value;
+    const galat = (t) => { pesan.innerHTML = `<div class="pesan-err"><i class="fa-solid fa-circle-exclamation"></i> ${esc(t)}</div>`; };
+    if (!desk) return galat('Deskripsi / pertanyaan wajib diisi.');
+    if (!batas) return galat('Batas waktu wajib ditentukan.');
+    tmb.disabled = true; const awal = tmb.innerHTML; tmb.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+    const r = await kirimRpc('polling_simpan', {
+      id: pollingAdminId, deskripsi: desk, batas_waktu: new Date(batas).toISOString(),
+      polling_aktif: $('plAktif').checked, hasil_aktif: $('plHasil').checked });
+    tmb.disabled = false; tmb.innerHTML = awal;
+    if (versi !== versiSubform) return;
+    if (r.ok){
+      pollingAdminId = r.id || pollingAdminId;
+      toast(r.pesan || 'Data polling telah disimpan.');
+      muatPollingStatus();
+      renderPolling($('isiSubform'));
+    } else galat(r.pesan || 'Polling gagal disimpan.');
+  });
+}
+
+/* ---------- Warga ---------- */
+function pilihPolling(label, kelas, ikon, nonaktif){
+  return `<button type="button" class="pl-pilih ${kelas}" data-plpilih="${label}" ${nonaktif ? 'disabled' : ''}><i class="fa-solid ${ikon}"></i><span>${label}</span></button>`;
+}
+function renderPollingWarga(isi, d, versi){
+  if (!d.ada || !d.poll){ isi.innerHTML = '<div class="pl-ada"><div class="pl-kosong"><i class="fa-solid fa-square-poll-vertical" style="font-size:2rem;color:var(--biru-muda);display:block;margin-bottom:8px"></i>Belum ada polling.</div></div>'; return; }
+  const p = d.poll;
+  let html = `<div class="pl-ada"><div class="kartu-stat"><div class="pl-q">${esc(p.deskripsi)}</div>`;
+  if (p.batas_waktu){
+    html += `<div class="pl-info"><div class="batas"><i class="fa-regular fa-clock"></i> Batas Waktu: ${esc(plTglWaktu(p.batas_waktu))}</div>` +
+      (p.polling_aktif ? `<div class="sisa"><i class="fa-solid fa-hourglass-half"></i> Sisa Waktu: <span id="plSisa">00:00:00</span></div>` : '') + '</div>';
+  }
+  const tombol = (nonaktif) => `<div class="pl-grid">${pilihPolling('Setuju', 'pl-setuju', 'fa-thumbs-up', nonaktif)}${pilihPolling('Tidak Setuju', 'pl-tidak', 'fa-thumbs-down', nonaktif)}${pilihPolling('Abstain', 'pl-abstain', 'fa-minus', nonaktif)}</div>`;
+  if (p.hasil_aktif){
+    html += plHasil(d.counts);
+  } else if (d.family_response){
+    html += `<div class="pl-keluarga">Keluarga Anda telah memberikan pendapatnya yaitu <b>${esc(d.family_response)}</b> dengan rencana/kebijakan RT.</div>${tombol(true)}`;
+  } else if (p.polling_aktif){
+    html += tombol(false);
+  } else {
+    html += '<div class="pl-kosong">Polling belum dibuka atau sudah berakhir.</div>';
+  }
+  html += '</div></div>';
+  isi.innerHTML = html;
+
+  isi.querySelectorAll('[data-plpilih]').forEach(b => b.addEventListener('click', () => {
+    if (b.disabled) return;
+    const jawab = b.dataset.plpilih;
+    bukaModalForm('Konfirmasi Polling',
+      `<p class="rd-konfirm">Anda <b>${esc(jawab.toUpperCase())}</b> dengan rencana/kebijakan RT?<br>Pendapat tidak dapat diubah setelah disimpan.</p>`,
+      async () => {
+        const r = await kirimRpc('polling_vote', { poll_id: p.id, jawaban: jawab });
+        if (versi === versiSubform){ muatPollingStatus(); renderPolling($('isiSubform')); }
+        return r;
+      }, 'Ya');
+  }));
+
+  if (p.batas_waktu && p.polling_aktif && !p.hasil_aktif){
+    const target = new Date(p.batas_waktu).getTime();
+    const dua2 = n => String(n).padStart(2, '0');
+    const ubah = () => {
+      const el = $('plSisa');
+      if (!el || versi !== versiSubform){ clearInterval(pollingTimer); pollingTimer = null; return; }
+      const sisa = target - Date.now();
+      if (isNaN(target) || sisa <= 0){
+        el.textContent = '00:00:00'; clearInterval(pollingTimer); pollingTimer = null;
+        setTimeout(() => { if (versi === versiSubform){ muatPollingStatus(); renderPolling($('isiSubform')); } }, 800);
+        return;
+      }
+      const t = Math.floor(sisa / 1000);
+      el.textContent = dua2(Math.floor(t / 3600)) + ':' + dua2(Math.floor(t % 3600 / 60)) + ':' + dua2(t % 60);
+    };
+    ubah(); pollingTimer = setInterval(ubah, 1000);
+  }
+}
+
+/* =====================================================================
+   UCAPAN ULANG TAHUN — tampil sekali per hari pada hari ulang tahun pengguna
+   ===================================================================== */
+function parseTglLahir(v){
+  if (!v) return null;
+  const s = String(v).trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return { y:+m[1], m:+m[2], d:+m[3] };
+  m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+  if (m) return { y:+m[3], m:+m[2], d:+m[1] };
+  const dt = new Date(s); return isNaN(dt) ? null : { y:dt.getFullYear(), m:dt.getMonth() + 1, d:dt.getDate() };
+}
+async function cekUlangTahun(profil){
+  let tgl = profil && (profil.tgl_lahir || profil.tanggal_lahir);
+  let nama = profil && profil.nama;
+  if (!tgl && tokenSesi){
+    try{
+      const { data } = await db.rpc('get_mydata', { p_token: tokenSesi });
+      if (data && data.ok){ tgl = data.profil.tgl_lahir; nama = nama || data.profil.nama; }
+    }catch(e){ /* senyap */ }
+  }
+  const bd = parseTglLahir(tgl); if (!bd) return;
+  const now = new Date();
+  if (bd.d !== now.getDate() || bd.m !== now.getMonth() + 1) return;
+  if (!$('utama').classList.contains('tampil')) return;           // sudah keluar
+  const kunci = 'mysapa_ultah_' + ((profil && (profil.nik || profil.nama)) || '') + '_' + hariIni();
+  try{ if (localStorage.getItem(kunci)) return; localStorage.setItem(kunci, '1'); }catch(e){}
+  tampilUlangTahun(namaTanpaGelar(nama), now.getFullYear() - bd.y);
+}
+function tampilUlangTahun(nama, usia){
+  $('bdayName').textContent = nama;
+  const u = $('bdayAge');
+  if (usia > 0 && usia < 130){ u.textContent = 'Usia ke-' + usia + ' tahun'; u.style.display = 'inline-block'; } else u.style.display = 'none';
+  bangunEfekUlangTahun();
+  const m = $('birthdayModal'); m.classList.add('show'); m.setAttribute('aria-hidden', 'false');
+}
+function tutupUlangTahun(){
+  const m = $('birthdayModal'); m.classList.remove('show'); m.setAttribute('aria-hidden', 'true');
+  $('birthdayFx').innerHTML = '';
+}
+$('bdayTutup').addEventListener('click', tutupUlangTahun);
+function bangunEfekUlangTahun(){
+  const warna = ['#f43f5e','#f59e0b','#22c55e','#3b82f6','#a855f7','#eab308','#06b6d4','#ec4899'];
+  const r = (a, b) => a + Math.random() * (b - a);
+  let x = '';
+  for (let i = 0; i < 80; i++){
+    const w = r(6, 11), t = Math.random() < .5 ? w : r(12, 18), bulat = Math.random() < .3 ? 'border-radius:50%;' : '';
+    x += `<span class="bday-piece" style="left:${r(0,100).toFixed(1)}%;width:${w.toFixed(0)}px;height:${t.toFixed(0)}px;${bulat}background:${warna[i % warna.length]};--dx:${r(-90,90).toFixed(0)}px;--rot:${r(360,1080).toFixed(0)}deg;animation-duration:${r(3.2,6.5).toFixed(2)}s;animation-delay:${r(0,4).toFixed(2)}s"></span>`;
+  }
+  for (let i = 0; i < 8; i++){
+    x += `<span class="bday-balloon" style="left:${(4 + i * 12.5 + r(-3,3)).toFixed(1)}%;background:${warna[(i + 2) % warna.length]};--sway:${r(-35,35).toFixed(0)}px;animation-duration:${r(6,10).toFixed(1)}s;animation-delay:${r(0,3.5).toFixed(1)}s"></span>`;
+  }
+  for (let i = 0; i < 14; i++){
+    x += `<i class="fa-solid fa-star bday-spark" style="left:${r(3,95).toFixed(1)}%;top:${r(4,90).toFixed(1)}%;font-size:${r(10,22).toFixed(0)}px;animation-duration:${r(1.2,2.6).toFixed(2)}s;animation-delay:${r(0,2).toFixed(2)}s"></i>`;
+  }
+  $('birthdayFx').innerHTML = x;
 }
 
 /* =====================================================================
@@ -2810,7 +3111,7 @@ async function segarkanLonceng(){        // senyap: tanpa toast bila gagal
   sedangSegarkan = true;
   try{
     const { data, error } = await db.rpc('get_statistik', { p_token: tokenSesi });
-    if (!error && data && data.ok){ statistik = data; aturLonceng(data); aturPolling(); cekInfoBaru(); }
+    if (!error && data && data.ok){ statistik = data; aturLonceng(data); aturPolling(); cekInfoBaru(); muatPollingStatus(); }
   }catch(e){ /* diabaikan */ }
   finally{ sedangSegarkan = false; }
 }
