@@ -349,6 +349,50 @@
   .agenda-baris{display:flex;gap:8px;font-size:.72rem;color:var(--abu);line-height:1.5}
   .agenda-baris span:first-child{flex:none;width:98px}
   .agenda-baris span:last-child{color:var(--teks);word-break:break-word}
+  .agenda-status.bertugas{background:#d98a00}.agenda-status.atl,.agenda-status.telat{background:#ea580c}
+  .agenda-status.nonpresensi{background:#475569}.agenda-status.menunggu{background:#94a3b8}
+  /* ---- Absensi Ronda ---- */
+  .rd-waktu{display:flex;align-items:center;justify-content:center;gap:8px;margin:2px auto 14px;width:max-content;max-width:100%;
+    background:#fff;border-radius:999px;padding:7px 16px;font-size:.76rem;color:var(--abu);box-shadow:0 4px 12px rgba(11,42,111,.08)}
+  .rd-waktu i{color:var(--biru-muda)}
+  .rd-waktu b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;color:var(--oranye)}
+  .rd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .rd-btn{border:0;border-radius:16px;color:#fff;padding:14px 6px;min-height:112px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:6px;font:inherit;cursor:pointer;box-shadow:0 8px 14px -8px rgba(0,0,0,.35);transition:transform .15s}
+  .rd-btn:active:not(:disabled){transform:scale(.96)}
+  .rd-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+  .rd-btn .ik-b{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:1rem}
+  .rd-btn b{font-size:.8rem;font-weight:600;line-height:1.15;text-align:center}
+  .rd-btn small{font-size:.62rem;opacity:.92;text-align:center}
+  .rd-pulang{background:linear-gradient(135deg,#e11d48,#fb7185)}
+  .rd-catat{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
+  .rd-masuk{background:linear-gradient(135deg,#059669,#34d399)}
+  .rd-alpa{background:linear-gradient(135deg,#dc2626,#f87171)}
+  .rd-nonp{background:linear-gradient(135deg,#475569,#94a3b8)}
+  .rd-izin{background:linear-gradient(135deg,#4f46e5,#818cf8)}
+  .rd-grid.kecil .rd-btn{min-height:84px;padding:10px 6px}
+  .rd-info{margin-top:10px;font-size:.72rem;color:#b45309;background:#fff7ed;border-radius:10px;padding:8px 10px;display:flex;gap:7px;align-items:flex-start}
+  .rd-info[hidden]{display:none}
+  .rd-pilih-label{font-size:.72rem;color:var(--abu);margin-bottom:6px}
+  .rd-chipset{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .rd-pilih{border:1.5px solid #cbd5e1;background:#fff;border-radius:999px;padding:6px 13px;font:inherit;font-size:.76rem;color:var(--teks);cursor:pointer}
+  .rd-pilih.on{background:var(--biru);border-color:var(--biru);color:#fff}
+  .rd-judul-baris{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .rd-judul-baris h3{margin:0!important}
+  .rd-rel{font-size:.7rem;color:#94a3b8}
+  .rd-petugas{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f1f6ff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+  .rd-petugas b{font-size:.86rem;color:var(--teks)}
+  .rd-petugas small{display:flex;gap:10px;font-size:.74rem;color:var(--abu);margin-top:3px}
+  .rd-petugas small i{margin-right:3px}
+  .rd-sub{font-size:.84rem;font-weight:600;color:var(--biru-tua);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+  .rd-sub i{color:#f59e0b}
+  .rd-cat{border-top:1px dashed #e2e8f0;padding:9px 0}
+  .rd-cat:first-child{border-top:0;padding-top:0}
+  .rd-cat b{font-size:.78rem;color:var(--teks)}
+  .rd-cat span{font-size:.7rem;color:var(--abu);margin-left:6px}
+  .rd-cat p{font-size:.78rem;color:var(--teks);margin-top:2px;word-break:break-word}
+  .rd-kosong{font-size:.76rem;color:#94a3b8;font-style:italic}
+  .rd-konfirm{font-size:.86rem;line-height:1.55;color:var(--teks);padding:6px 0 10px}
   .agenda-status{display:inline-block;font-size:.64rem;font-weight:600;border-radius:999px;padding:2px 9px;color:#fff;background:#64748b}
   .agenda-status.hadir{background:#16a34a}.agenda-status.izin{background:#d98a00}.agenda-status.sakit{background:#7c3aed}.agenda-status.alpa{background:#dc2626}
   .agenda-kosong{font-size:.76rem;color:var(--abu);padding:4px 0 2px}
@@ -1817,6 +1861,8 @@ function bukaSubform(kunci){
     renderInfoAktual(isi);
   } else if (kunci === 'mydata'){
     renderMyData(isi);
+  } else if (kunci === 'absensironda'){
+    renderAbsensiRonda(isi);
   } else if (kunci === 'polling'){
     renderPolling(isi);
   } else if (kunci === 'programkerja'){
@@ -2128,7 +2174,6 @@ function durasiHari(iso){
   const hari = Math.round((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - a) / 86400000);
   return hari <= 0 ? 'Hari ini' : hari === 1 ? 'Kemarin' : hari + ' hari lalu';
 }
-const KELAS_HADIR = { 'hadir':'hadir', 'izin':'izin', 'sakit':'sakit', 'alpa':'alpa', 'alpha':'alpa', 'tidak hadir':'alpa' };
 async function renderInfoAktual(isi){
   const versi = versiSubform;
   isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat info...</div>';
@@ -2159,7 +2204,7 @@ async function renderInfoAktual(isi){
         <div class="agenda-baris"><span>Tanggal</span><span>${tglIndo(r.tanggal)}</span></div>
         <div class="agenda-baris"><span>Jam Masuk</span><span>${r.jam_masuk ? jamIndo(r.jam_masuk) : '-'}</span></div>
         <div class="agenda-baris"><span>Jam Pulang</span><span>${r.jam_pulang ? jamIndo(r.jam_pulang) : '-'}</span></div>
-        <div class="agenda-baris"><span>Status Kehadiran</span><span><span class="agenda-status ${KELAS_HADIR[String(r.status || '').toLowerCase()] || ''}">${esc(r.status || '-')}</span></span></div>
+        <div class="agenda-baris"><span>Status Kehadiran</span><span>${badgeStatusRonda(statusRondaInfo(r))}</span></div>
         <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(r.tanggal, r.dibuat_pada)}</div>
       </div>`).join('') : kosong(d.galat.ronda, 'Belum ada absensi ronda.');
 
@@ -2198,6 +2243,209 @@ window.addEventListener('popstate', () => {
   history.pushState({ s: 1 }, '');         // sedang di menu utama: tahan di halaman, tanyakan dulu
   keluar();
 });
+
+/* =====================================================================
+   ABSENSI RONDA (subform) — data di Supabase tabel ronda_malam
+   Petugas (Maliki, Abd. Rauf Samad): Absen Masuk 00.00–00.30, Absen Pulang 04.00–05.00, Catatan Khusus saat bertugas.
+   Admin (Zhul Harmanto): Alpa / Non Presensi / Izin untuk petugas pilihan, 00.00–06.00.
+   Jam memakai WITA dari server; hak akses dan jendela waktu diperiksa ulang di server.
+   ===================================================================== */
+const PETUGAS_RONDA = ['Maliki', 'Abd. Rauf Samad'];
+let rondaData = null, rondaPeran = null, rondaSelisih = 0, rondaTimer = null, rondaPoll = null, rondaMenitTerakhir = -1;
+const rondaTarget = new Set();
+
+function waktuRonda(){                                   // jam WITA (UTC+8) dari jam server
+  const t = new Date(Date.now() + rondaSelisih + 8 * 3600 * 1000);
+  const j = t.getUTCHours(), m = t.getUTCMinutes(), d = t.getUTCSeconds();
+  return { j, m, d, menit: j * 60 + m, tanggal: t.toISOString().slice(0, 10), obj: t };
+}
+const dua = n => String(n).padStart(2, '0');
+
+function hitungStatusRonda(it, menit){
+  const st = it.status;
+  if (['Izin', 'Alpa', 'Non Presensi'].includes(st)) return st;
+  const m = !!it.masuk, p = !!it.pulang;
+  if (m && p) return 'Hadir';
+  if (m) return menit > 300 ? 'ATL' : 'sedang bertugas';
+  if (p) return 'Telat';
+  return menit > 30 ? '?' : 'menunggu';
+}
+/* Status untuk kartu Info Aktual: catatan tanggal lampau dianggap sudah lewat jam ronda */
+function statusRondaInfo(r){
+  const w = waktuRonda();
+  return hitungStatusRonda({ masuk: r.jam_masuk, pulang: r.jam_pulang, status: r.status }, r.tanggal === w.tanggal ? w.menit : 9999);
+}
+const STATUS_RONDA = {
+  'sedang bertugas': ['bertugas', 'Bertugas'], 'Hadir': ['hadir', 'Hadir'], 'ATL': ['atl', 'ATL'], 'Telat': ['telat', 'Telat'],
+  'Izin': ['izin', 'Izin'], 'Alpa': ['alpa', 'Alpa'], 'Non Presensi': ['nonpresensi', 'Non Presensi']
+};
+function badgeStatusRonda(st){
+  const [kelas, label] = STATUS_RONDA[st] || ['menunggu', 'Menunggu'];
+  return `<span class="agenda-status ${kelas}">${label}</span>`;
+}
+function relatifRonda(menit){                            // lama waktu sejak 04.30
+  const d = menit - (4 * 60 + 30);
+  if (d < 0) return '';
+  if (d === 0) return 'Baru saja';
+  const h = Math.floor(d / 60), m = d % 60;
+  return h === 0 ? m + ' menit' : m === 0 ? h + ' jam' : h + ' jam ' + m + ' menit';
+}
+
+function stopRonda(){ clearInterval(rondaTimer); clearInterval(rondaPoll); rondaTimer = rondaPoll = null; }
+
+function renderAbsensiRonda(isi){
+  stopRonda();
+  const versi = versiSubform;
+  rondaData = null; rondaPeran = null; rondaMenitTerakhir = -1; rondaTarget.clear();
+  isi.innerHTML = `<div id="rdRoot">
+    <div class="rd-waktu"><i class="fa-regular fa-clock"></i><span id="rdTgl"></span><b id="rdJam"></b></div>
+
+    <div class="kartu-stat" id="rdKartuHadir" hidden>
+      <h3 class="st-judul"><i class="fa-solid fa-fingerprint" style="color:#059669"></i> Absen Kehadiran</h3>
+      <div class="rd-grid">
+        <button type="button" class="rd-btn rd-pulang" id="rdPulang" data-rd="Absen Pulang" disabled>
+          <span class="ik-b"><i class="fa-solid fa-right-from-bracket"></i></span><b>Absen Pulang</b><small>04.00 – 05.00</small></button>
+        <button type="button" class="rd-btn rd-catat" id="rdCatat" data-rd="Catatan" disabled>
+          <span class="ik-b"><i class="fa-solid fa-clipboard-list"></i></span><b>Catatan Khusus</b><small>Saat bertugas</small></button>
+        <button type="button" class="rd-btn rd-masuk" id="rdMasuk" data-rd="Absen Masuk" disabled>
+          <span class="ik-b"><i class="fa-solid fa-right-to-bracket"></i></span><b>Absen Masuk</b><small>00.00 – 00.30</small></button>
+      </div>
+      <div class="rd-info" id="rdInfoHadir" hidden><i class="fa-regular fa-clock"></i><span>Absen berlaku mulai jam 00.00 s.d 05.00 WITA</span></div>
+    </div>
+
+    <div class="kartu-stat" id="rdKartuAdmin" hidden>
+      <h3 class="st-judul"><i class="fa-solid fa-user-shield" style="color:#7c3aed"></i> Absen Ketidakhadiran</h3>
+      <div class="rd-pilih-label">Pilih petugas yang dikenai status:</div>
+      <div class="rd-chipset" id="rdChips">${PETUGAS_RONDA.map(n => `<button type="button" class="rd-pilih" data-target="${esc(n)}">${esc(n)}</button>`).join('')}</div>
+      <div class="rd-grid kecil">
+        <button type="button" class="rd-btn rd-alpa" data-rdadm="Alpa" disabled><span class="ik-b"><i class="fa-solid fa-user-xmark"></i></span><b>Alpa</b></button>
+        <button type="button" class="rd-btn rd-nonp" data-rdadm="Non Presensi" disabled><span class="ik-b"><i class="fa-solid fa-circle-minus"></i></span><b>Non Presensi</b></button>
+        <button type="button" class="rd-btn rd-izin" data-rdadm="Izin" disabled><span class="ik-b"><i class="fa-solid fa-file-signature"></i></span><b>Izin</b></button>
+      </div>
+      <div class="rd-info" id="rdInfoAdmin" hidden><i class="fa-regular fa-clock"></i><span>Ketidakhadiran dapat diisi pukul 00.00 s.d 06.00 WITA</span></div>
+    </div>
+
+    <div class="kartu-stat">
+      <div class="rd-judul-baris"><h3 class="st-judul"><i class="fa-solid fa-circle-info"></i> Informasi Kehadiran</h3><span class="rd-rel" id="rdRel"></span></div>
+      <div id="rdInfo"><div class="rd-kosong"><i class="fa-solid fa-spinner fa-spin"></i> Memuat data...</div></div>
+      <div class="rd-sub"><i class="fa-solid fa-book-open"></i> Catatan Khusus</div>
+      <div id="rdCatatan"><div class="rd-kosong">Memuat...</div></div>
+    </div>
+  </div>`;
+
+  $('rdRoot').addEventListener('click', (e) => {
+    const chip = e.target.closest('[data-target]');
+    if (chip){
+      const n = chip.dataset.target;
+      rondaTarget.has(n) ? rondaTarget.delete(n) : rondaTarget.add(n);
+      chip.classList.toggle('on', rondaTarget.has(n));
+      aturTombolRonda(waktuRonda());
+      return;
+    }
+    const b = e.target.closest('button[data-rd],button[data-rdadm]');
+    if (!b || b.disabled) return;
+    if (b.dataset.rd === 'Catatan') return bukaCatatanRonda();
+    if (b.dataset.rd) return konfirmasiAbsenRonda(b.dataset.rd);
+    return konfirmasiKetidakhadiran(b.dataset.rdadm);
+  });
+
+  const tick = () => {
+    if (versi !== versiSubform || !$('rdJam')){ stopRonda(); return; }
+    const w = waktuRonda();
+    $('rdJam').textContent = `${dua(w.j)}:${dua(w.m)}:${dua(w.d)}`;
+    $('rdTgl').textContent = w.obj.toLocaleDateString('id-ID', { weekday:'short', day:'numeric', month:'short', year:'numeric', timeZone:'UTC' });
+    if (rondaData){
+      if (w.menit !== rondaMenitTerakhir){ rondaMenitTerakhir = w.menit; gambarInfoRonda(w); }
+      aturTombolRonda(w);
+    }
+  };
+  tick(); rondaTimer = setInterval(tick, 1000);
+  muatRonda(versi, true);
+  rondaPoll = setInterval(() => { if (versi !== versiSubform){ stopRonda(); return; } if (!document.hidden) muatRonda(versi, false); }, 10000);
+}
+
+async function muatRonda(versi, pertama){
+  const galat = (pesan) => { if (pertama && versi === versiSubform && $('rdInfo')){
+    $('rdInfo').innerHTML = `<div class="rd-kosong">${esc(pesan)}</div>`; $('rdCatatan').innerHTML = ''; } };
+  try{
+    const { data, error } = await db.rpc('get_ronda_hari_ini', { p_token: tokenSesi });
+    if (error) throw error;
+    if (versi !== versiSubform) return;
+    if (!data || !data.ok) return galat((data && data.pesan) || 'Gagal memuat data ronda.');
+    if (Number(data.epoch_ms)) rondaSelisih = Number(data.epoch_ms) - Date.now();
+    rondaData = data; rondaPeran = data.peran || {};
+    $('rdKartuHadir').hidden = !rondaPeran.petugas;
+    $('rdKartuAdmin').hidden = !rondaPeran.admin;
+    const w = waktuRonda(); rondaMenitTerakhir = w.menit;
+    gambarInfoRonda(w); aturTombolRonda(w);
+  }catch(e){ console.error(e); galat('Tidak dapat memuat data. Periksa koneksi Anda.'); }
+}
+
+function aturTombolRonda(w){
+  if (!rondaData || !$('rdRoot')) return;
+  if (rondaPeran.petugas){
+    const it = rondaData.attendance[rondaPeran.petugas] || {};
+    const sudahMasuk = !!it.masuk, sudahPulang = !!it.pulang;
+    $('rdMasuk').disabled  = !(w.menit <= 30 && !sudahMasuk);
+    $('rdPulang').disabled = !(sudahMasuk && !sudahPulang && w.menit >= 240 && w.menit <= 300);
+    $('rdCatat').disabled  = !(sudahMasuk && !sudahPulang && w.menit < 300);
+    $('rdInfoHadir').hidden = w.menit <= 300;
+  }
+  if (rondaPeran.admin){
+    const buka = w.menit <= 360;
+    document.querySelectorAll('[data-rdadm]').forEach(b => { b.disabled = !(buka && rondaTarget.size > 0); });
+    $('rdInfoAdmin').hidden = buka;
+  }
+}
+
+function gambarInfoRonda(w){
+  if (!rondaData || !$('rdInfo')) return;
+  if (w.j === 23){
+    $('rdInfo').innerHTML = `<div class="rd-kosong" style="text-align:center;padding:14px 0"><i class="fa-solid fa-moon" style="display:block;font-size:1.3rem;margin-bottom:4px"></i>Informasi ronda menunggu hari berikutnya.</div>`;
+    $('rdCatatan').innerHTML = `<div class="rd-kosong">Data telah direset jam 23.00 WITA.</div>`;
+    $('rdRel').textContent = '';
+    return;
+  }
+  $('rdInfo').innerHTML = PETUGAS_RONDA.map(nama => {
+    const it = rondaData.attendance[nama] || {};
+    const st = hitungStatusRonda({ masuk: it.masuk, pulang: it.pulang, status: it.status }, w.menit);
+    return `<div class="rd-petugas"><div><b>${esc(nama)}</b>
+        <small><span><i class="fa-solid fa-right-to-bracket" style="color:#059669"></i>${it.masuk ? jamIndo(it.masuk) : '-'}</span>
+        <span><i class="fa-solid fa-right-from-bracket" style="color:#e11d48"></i>${it.pulang ? jamIndo(it.pulang) : '-'}</span></small></div>
+      ${badgeStatusRonda(st)}</div>`;
+  }).join('');
+  $('rdRel').textContent = relatifRonda(w.menit);
+  const notes = rondaData.notes || [];
+  $('rdCatatan').innerHTML = notes.length
+    ? notes.map(n => `<div class="rd-cat"><b>${esc(namaTanpaGelar(n.nama))}</b><span><i class="fa-regular fa-clock"></i> ${esc(jamIndo(n.waktu))}</span><p>${esc(n.catatan)}</p></div>`).join('')
+    : `<div class="rd-kosong">Tidak ada catatan kejadian/keadaan hari ini.</div>`;
+}
+
+async function simpanRonda(p){
+  const h = await kirimRpc('simpan_absensi_ronda', p);
+  if (h && h.ok) muatRonda(versiSubform, false);
+  return h;
+}
+function konfirmasiAbsenRonda(aksi){
+  const w = waktuRonda();
+  bukaModalForm(aksi, `<p class="rd-konfirm">Catat <b>${esc(aksi)}</b> sekarang pukul <b>${dua(w.j)}.${dua(w.m)} WITA</b>?<br>Data tidak dapat diubah setelah disimpan.</p>`,
+    () => simpanRonda({ aksi }), 'Ya, Simpan');
+}
+function bukaCatatanRonda(){
+  bukaModalForm('Catatan Khusus',
+    fld('Kejadian / keadaan saat bertugas', '<textarea name="catatan" maxlength="500" placeholder="Tuliskan catatan kejadian..."></textarea>', true),
+    (fd) => {
+      const catatan = val(fd, 'catatan');
+      if (!catatan) return { ok:false, pesan:'Catatan tidak boleh kosong.' };
+      return simpanRonda({ aksi:'Catatan Kejadian', catatan });
+    });
+}
+function konfirmasiKetidakhadiran(aksi){
+  const target = PETUGAS_RONDA.filter(n => rondaTarget.has(n));
+  if (!target.length){ toast('Pilih petugas terlebih dahulu.'); return; }
+  bukaModalForm(aksi, `<p class="rd-konfirm">Terapkan status <b>${esc(aksi)}</b> untuk <b>${target.map(esc).join(', ')}</b>?</p>`,
+    () => simpanRonda({ aksi, target }), 'Ya, Terapkan');
+}
 
 /* =====================================================================
    POLLING (dibuka admin)
