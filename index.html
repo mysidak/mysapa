@@ -489,6 +489,40 @@
   .pk .misi-card-item.active .misi-icon-badge{background: var(--bri-blue); color: white;}
   .pk .misi-card-item.active .toggle-arrow{transform: rotate(180deg); background: var(--bri-blue); color: white;}
   .pk .misi-card-item.active .misi-card-body{max-height: 800px; border-top-color: var(--border-color);}
+  /* ===== Subform Bantuan (dibatasi di .bt; tanpa Bootstrap) ===== */
+  .bt{color:#334155}
+  .bt *{box-sizing:border-box;font-family:inherit}
+  .bt h2{margin:0;font-size:inherit}
+  .bt p{margin:0}
+  .bt ol{margin:0 0 .5rem}
+  .bt .accordion-button{display:flex;align-items:center;width:100%;text-align:left;border:0;cursor:pointer;position:relative}
+  .bt .accordion-button span{flex:1}
+  .bt .accordion-button::after{content:"\f078";font-family:"Font Awesome 6 Free";font-weight:900;margin-left:auto;font-size:12px;color:#64748b;transition:transform .25s}
+  .bt .accordion-button:not(.collapsed)::after{transform:rotate(180deg)}
+  .bt .accordion-collapse{display:none}
+  .bt .accordion-collapse.show{display:block}
+  .bt .mb-0{margin-bottom:0}.bt .mb-1{margin-bottom:.25rem}.bt .mb-2{margin-bottom:.5rem}
+  .bt .mt-2{margin-top:.5rem}.bt .mt-3{margin-top:1rem}.bt .me-1{margin-right:.25rem}.bt .ps-3{padding-left:1rem}
+  .bt .text-muted{color:#6c757d}.bt .text-success{color:#198754}.bt .fst-italic{font-style:italic}.bt small{font-size:.875em}
+  .bt .search-card{background: #ffffff; border-radius: 20px; height: 48px; padding: 0 18px; box-shadow: 0 8px 24px rgba(0, 51, 102, 0.08); border: 1px solid #e2e8f0; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;}
+  .bt .search-card i{color: #00529c; font-size: 19px;}
+  .bt .search-card input{border: none; outline: none; width: 100%; height: 100%; background: transparent; font-size: 15px; font-weight: 500; color: #1e293b;}
+  .bt .custom-accordion .accordion-item{background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px !important; margin-bottom: 16px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03); overflow: hidden; transition: all 0.25s ease;}
+  .bt .custom-accordion .accordion-item:hover{border-color: #bfdbfe; box-shadow: 0 8px 24px rgba(0, 51, 102, 0.08);}
+  .bt .custom-accordion .accordion-button{background-color: #ffffff; color: #0f172a; font-weight: 700; font-size: 13.5px; padding: 14px 16px; border: none; box-shadow: none !important; gap: 10px;}
+  .bt .custom-accordion .accordion-button:not(.collapsed){background-color: #f8fafc; color: #00529c; border-bottom: 1px solid #f1f5f9;}
+  .bt .faq-icon-box{width: 36px; height: 36px; min-width: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px;}
+  .bt .icon-blue{background-color: #e0f2fe; color: #0284c7;}
+  .bt .icon-green{background-color: #dcfce7; color: #16a34a;}
+  .bt .icon-purple{background-color: #f3e8ff; color: #9333ea;}
+  .bt .icon-amber{background-color: #fef3c7; color: #d97706;}
+  .bt .icon-rose{background-color: #ffe4e6; color: #e11d48;}
+  .bt .icon-indigo{background-color: #e0e7ff; color: #4f46e5;}
+  .bt .icon-teal{background-color: #ccfbf1; color: #0d9488;}
+  .bt .icon-emerald{background-color: #d1fae5; color: #059669;}
+  .bt .custom-accordion .accordion-body{padding: 16px 18px 20px 18px; font-size: 13px; line-height: 1.65; color: #475569;}
+  .bt .recommendation-card{background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; color: #0369a1;}
+  .bt .contact-badge{display: inline-flex; align-items: center; gap: 8px; background-color: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; margin: 6px 6px 6px 0;}
 </style>
 </head>
 <body>
@@ -1344,6 +1378,208 @@ function renderProgramKerja(isi){
   hitung();
 }
 
+
+/* ---------- Subform Bantuan (FAQ) ---------- */
+function renderBantuan(isi){
+  isi.innerHTML = `<div class="bt" id="btRoot">
+<!-- Container Pertanyaan (Accordion) -->
+  
+
+    <!-- Pencarian Cepat -->
+    <div class="search-card">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="btCari" placeholder="Cari pertanyaan atau kata kunci...">
+    </div>
+
+    <!-- Accordion FAQ -->
+    <div class="accordion custom-accordion" id="btAkordeon">
+
+      <!-- Pertanyaan 1 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" aria-expanded="true">
+            <div class="faq-icon-box icon-blue">
+              <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <span>1. Apa itu MySAPA?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            <strong>MySAPA</strong> atau <strong>Sistem Informasi dan Pelayanan Administrasi</strong> adalah aplikasi yang digunakan untuk mendukung pelayanan administrasi RT secara digital, seperti pendataan warga, pelayanan surat pengantar, manajemen arsip, pelaporan, dan penyampaian informasi terkait kependudukan, kewilayahan, kepengurusan, dan lainnya.
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 2 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-green">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <span>2. Siapa saja yang dapat menggunakan MySAPA?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            MySAPA dapat digunakan oleh pengurus dan seluruh warga RT 09 yang telah <strong>TERDAFTAR</strong> dalam sistem.
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 3 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-purple">
+              <i class="fa-solid fa-id-card"></i>
+            </div>
+            <span>3. Bagaimana memastikan terdaftar dalam sistem?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <ol class="mb-0 ps-3">
+              <li class="mb-2">Pada halaman Login, masukkan <strong>No. HP terdaftar</strong> dan <strong>Kata Sandi (NIK)</strong> Anda, lalu tekan tombol masuk.</li>
+              <li>No. HP dan NIK akan diverifikasi oleh sistem, dan jika keduanya sesuai dengan data yang terdaftar maka Anda akan dibawa ke Dashboard utama. Hak akses layanan dan informasi akan diperoleh pada dashboard utama ini, kecuali menu Admin (khusus pengurus RT).</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 4 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-amber">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <span>4. Gagal masuk (No. HP atau NIK tidak sesuai), apa yang dilakukan?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            Periksa kembali No. HP dan NIK yang Anda masukkan. No. HP harus sama dengan nomor yang tersimpan pada data keluarga Anda. Jika salah memasukkan sebanyak 5 kali, akses dikunci sementara selama 15 menit. Atau hubungi Admin (Pengurus RT) untuk mendapatkan link Pendaftaran data keluarga (NKK) dan data diri (NIK).<br>
+            Silakan isi data pada link yang diberikan dan pastikan seluruh data dalam Kartu Keluarga telah terisi dengan <strong>Benar</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 5 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-rose">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <span>5. Saya telah terdaftar, apa yang bisa saya lakukan?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            Pada dashboard utama, ada beberapa pilihan informasi yang dapat anda lihat (klik) terkait data pribadi dan keluarga, jumlah warga, keadaan wilayah, arsip dan inventaris, dan sebagainya termasuk pengajuan Surat Pengantar RT yang mungkin anda butuhkan yaitu dengan Klik tombol <strong><mark>Ajukan Sekarang</mark></strong>
+            <div class="recommendation-card">
+              <i class="fa-solid fa-lightbulb me-1"></i> <strong>PENTING DIKETAHUI:</strong><br>
+              MySAPA kami rancang dengan tujuan untuk <strong>tertib administrasi,</strong> pemenuhan kebutuhan <strong>informasi</strong> warga, dan kemudahan dalam pengajuan <strong>Surat Pengantar RT</strong> karena semuanya dapat dilakukan menggunakan HP secara online (kapan dan dimana saja).<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 6 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-indigo">
+              <i class="fa-solid fa-file-signature"></i>
+            </div>
+            <span>6. Bagaimana bermohon Surat Pengantar RT?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <ol class="ps-3 mb-2">
+              <li class="mb-1">Pada dashboard utama, klik tombol <strong>Ajukan Sekarang</strong> kemudian pilih jenis Surat Pengantar RT yang dibutuhkan;</li>
+              <li>Lakukan pengisian dan pengiriman data dengan benar.</li>
+            </ol>
+            Selanjutnya, menunggu persetujuan RT. Status pengajuan dapat dipantau pada menu <strong>Data Pengajuan</strong>.<br>
+            Jika permohonan diterima (disetujui) maka Surat Pengantar RT dalam bentuk file PDF dapat dibuka melalui tautan arsip pada menu <strong>Data Pengajuan</strong> dan pada <strong>MyData</strong> (bagian Arsip Surat Pengantar).<br>
+            Silakan diprint Surat Pengantar tersebut untuk dibawa ke Kelurahan atau instansi terkait sebagai bagian dari persyaratan administrasi.
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 7 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-teal">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span>7. Apakah MySAPA aman dan gratis?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            Data dalam MySAPA disimpan secara digital pada basis data dengan pengaturan akses yang dibatasi, sedangkan berkas Surat Pengantar (PDF) disimpan di Google Drive. Selain itu, informasi data pribadi dan keluarga hanya dapat diakses dengan masuk menggunakan No. HP dan NIK untuk keperluan pelayanan administrasi, sehingga kerahasiaannya tetap dijaga.<br><br>
+            Layanan MySAPA tidak dipungut biaya <strong>(GRATIS)</strong>.<br>
+            <small class="text-muted">Kecuali jika ada kewenangan yang diberikan Lurah kepada RT, misalnya warga WAJIB melunasi PBB pada tahun berjalan, pembayaran retribusi sampah untuk PAD, dan lain sebagainya.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pertanyaan 8 -->
+      <div class="accordion-item faq-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" aria-expanded="false">
+            <div class="faq-icon-box icon-emerald">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <span>8. Siapa yang dapat dihubungi jika ada kendala?</span>
+          </button>
+        </h2>
+        <div class="accordion-collapse collapse">
+          <div class="accordion-body">
+            Jika ada kendala atau ditemukan kesalahan data pribadi, maka dapat menghubungi Admin melalui chat WhatsApp:<br>
+            <div class="mt-2">
+              <span class="contact-badge"><i class="fa-brands fa-whatsapp text-success"></i> 1. Ketua RT</span>
+              <span class="contact-badge"><i class="fa-brands fa-whatsapp text-success"></i> 2. Sekretaris RT</span>
+              <p style="font-size: 11px; color: #64748b; margin: 6px 0 0;">
+                NB: Nomor WA bisa dilihat di grup RT.</p>
+            </div>
+            <p class="mt-3 mb-0 text-muted fst-italic"><small>Terimakasih atas dukungannya, semoga aplikasi ini memberi manfaat dan kemudahan yang berarti pada sistem pelayanan administrasi dan keterbukaan informasi di tingkat RT.</small></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+  const root = $('btRoot');
+  root.addEventListener('click', (e) => {
+    const tombol = e.target.closest('.accordion-button');
+    if (!tombol) return;
+    const item = tombol.closest('.accordion-item');
+    const buka = tombol.classList.contains('collapsed');      // sedang tertutup -> akan dibuka
+    root.querySelectorAll('.accordion-item').forEach(it => {  // hanya satu terbuka
+      it.querySelector('.accordion-button').classList.add('collapsed');
+      it.querySelector('.accordion-button').setAttribute('aria-expanded', 'false');
+      it.querySelector('.accordion-collapse').classList.remove('show');
+    });
+    if (buka){
+      tombol.classList.remove('collapsed');
+      tombol.setAttribute('aria-expanded', 'true');
+      item.querySelector('.accordion-collapse').classList.add('show');
+    }
+  });
+  $('btCari').addEventListener('input', () => {
+    const kata = $('btCari').value.trim().toLowerCase();
+    root.querySelectorAll('.faq-item').forEach(it => {
+      it.style.display = it.textContent.toLowerCase().includes(kata) ? '' : 'none';
+    });
+  });
+}
+
 /* ---------- Subform (kerangka) ---------- */
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
@@ -1389,6 +1625,8 @@ function bukaSubform(kunci){
     renderPolling(isi);
   } else if (kunci === 'programkerja'){
     renderProgramKerja(isi);
+  } else if (kunci === 'bantuan'){
+    renderBantuan(isi);
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
