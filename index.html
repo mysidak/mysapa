@@ -154,7 +154,7 @@
   .badge-notif{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--oranye);
     color:#fff;font-size:.65rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid #1558c9;line-height:1}
   .badge-notif.tampil{display:flex}
-  .btn-ikon.berbunyi i,.fitur.berbunyi .lingkaran i{animation:goyang 1.8s ease-in-out infinite;transform-origin:50% 0}
+  .btn-ikon.berbunyi i,.fitur.berbunyi .lingkaran i,.fitur.berbunyi .lingkaran svg{animation:goyang 1.8s ease-in-out infinite;transform-origin:50% 0}
   .fitur .badge-notif{top:2px;right:8px;border-color:var(--bg)}
   .fitur .lingkaran i.fa-bell{font-size:1.45rem;position:relative;z-index:1}
   @keyframes goyang{0%,55%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-12deg)}30%{transform:rotate(8deg)}40%{transform:rotate(-6deg)}50%{transform:rotate(3deg)}}
@@ -248,6 +248,7 @@
   .c12{background:linear-gradient(135deg,#d97706,#fbbf24);--sh:#d97706}
   .c14{background:linear-gradient(135deg,#0891b2,#22d3ee);--sh:#0891b2}
   .c13{background:linear-gradient(135deg,#4f46e5,#818cf8);--sh:#4f46e5}
+  .c15{background:linear-gradient(135deg,#334155,#64748b);--sh:#334155}
 
 
   /* ---- Polling nonaktif ---- */
@@ -348,6 +349,9 @@
   .agenda-baris{display:flex;gap:8px;font-size:.72rem;color:var(--abu);line-height:1.5}
   .agenda-baris span:first-child{flex:none;width:98px}
   .agenda-baris span:last-child{color:var(--teks);word-break:break-word}
+  .agenda-status{display:inline-block;font-size:.64rem;font-weight:600;border-radius:999px;padding:2px 9px;color:#fff;background:#64748b}
+  .agenda-status.hadir{background:#16a34a}.agenda-status.izin{background:#d98a00}.agenda-status.sakit{background:#7c3aed}.agenda-status.alpa{background:#dc2626}
+  .agenda-kosong{font-size:.76rem;color:var(--abu);padding:4px 0 2px}
   .agenda-durasi{margin-top:5px;font-size:.7rem;font-weight:600;color:#d97706}
 
   /* ---- Modal form (lembar dari bawah) ---- */
@@ -681,15 +685,16 @@
       <div class="grid-fitur">
         <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="9" cy="10.8" r="2.2"/><path d="M5.4 16.4c.7-1.6 2-2.4 3.6-2.4s2.9.8 3.6 2.4"/><path d="M15 10h3.5M15 13.5h3"/></svg></span><span class="nama">MyData</span></button>
         <button class="fitur" data-buka="arsip"><span class="lingkaran c1"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="4" width="18" height="4.5" rx="1.3"/><path d="M5 8.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5"/><path d="M10 12.5h4"/></svg></span><span class="nama">Info Arsip &amp; Aset</span></button>
+        <button class="fitur nonaktif" id="btnRonda" data-buka="absensironda" disabled aria-disabled="true"><span class="lingkaran c15"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M9 4.5V3.2h6v1.3"/><path d="m8.5 13 2.4 2.4 4.6-4.9"/></svg></span><span class="nama">Absensi Ronda</span></button>
         <button class="fitur nonaktif" id="btnLonceng" disabled aria-disabled="true" aria-label="Data Pengajuan"><span class="lingkaran c12"><i class="fa-solid fa-bell"></i></span><span class="badge-notif" id="badgeNotif">0</span><span class="nama">Data Pengajuan</span></button>
-        <button class="fitur" data-buka="info">
+        <button class="fitur" id="btnInfo" data-buka="info">
           <i class="fa-solid fa-circle-exclamation alert" id="alertInfo"></i>
           <span class="lingkaran c2"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 9.5h3l8-4v13l-8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/><path d="M7 14.5 8.2 19h2.4"/><path d="M18.2 9.2a4.5 4.5 0 0 1 0 5.6"/></svg></span><span class="nama">Info Aktual</span>
         </button>
         <button class="fitur" data-buka="programkerja"><span class="lingkaran c14"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M8 3v3M16 3v3M8 12.5l2.2 2.2 4-4.4M8 18h8"/></svg></span><span class="nama">Program Kerja</span></button>
         <button class="fitur" data-buka="profilrt"><span class="lingkaran c13"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 20V9.5L12 4l8 5.5V20z"/><path d="M9.5 20v-5h5v5M8.5 11.5h1.2M14.3 11.5h1.2"/></svg></span><span class="nama">Profil RT</span></button>
         <button class="fitur" data-buka="bantuan" data-akses="biasa"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
-        <button class="fitur nonaktif" id="btnPolling" data-buka="polling" disabled aria-disabled="true"><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
+        <button class="fitur" id="btnPolling" data-buka="polling" hidden><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Administrasi</span></button>
       </div>
 
@@ -800,10 +805,20 @@ function namaTanpaGelar(nama){
 /* ---------- Menu khusus: hanya tampil untuk pengguna tertentu ---------- */
 const NAMA_AKSES_PENUH = 'zhul harmanto';          // Korespondensi & Database hanya untuk nama ini
 const MENU_KHUSUS = ['korespondensi', 'database', 'inventaris', 'laporan', 'pendataan'];
-let aksesPenuh = false;
+let aksesPenuh = false, aksesRonda = false;
+const NAMA_AKSES_RONDA = ['abd rauf samad', 'maliki'];     // + Admin (aksesPenuh)
+const normNama = n => String(n || '').toLowerCase().replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim();
+function aturRonda(){
+  const b = $('btnRonda'); if (!b) return;
+  b.classList.toggle('nonaktif', !aksesRonda); b.disabled = !aksesRonda; b.setAttribute('aria-disabled', String(!aksesRonda));
+  b.title = aksesRonda ? '' : 'Khusus petugas ronda dan Admin';
+}
 function aturMenuPengguna(profil){
   const nama = namaTanpaGelar(profil && profil.nama).toLowerCase().replace(/\s+/g, ' ').trim();
   aksesPenuh = nama === NAMA_AKSES_PENUH;
+  const namaPenuh = normNama(profil && profil.nama);
+  aksesRonda = aksesPenuh || NAMA_AKSES_RONDA.includes(namaPenuh) || NAMA_AKSES_RONDA.includes(nama.replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim());
+  aturRonda();
   document.querySelectorAll('[data-akses="khusus"]').forEach(el => { el.hidden = !aksesPenuh; });
   document.querySelectorAll('[data-akses="biasa"]').forEach(el => { el.hidden = aksesPenuh; });   // Bantuan: disembunyikan untuk admin
   aturPolling();
@@ -814,6 +829,7 @@ function tampilkanLogin(){
   resetLapisan();
   aturMenuPengguna(null);
   aturLonceng({});
+  aturInfoBaru(false);
   $('utama').classList.remove('tampil');
   $('inTelp').value = ''; $('inNik').value = '';
   $('inNik').type = 'password';
@@ -941,7 +957,7 @@ async function muatStatistik(){
     $('angkaKK').textContent = fmt(data.jumlah_kk);
     $('angkaJiwa').textContent = fmt(data.jumlah_jiwa);
     $('angkaWafat').textContent = fmt(data.jumlah_wafat);
-    $('alertInfo').classList.toggle('tampil', Number(data.info_aktif) > 0);
+    cekInfoBaru();
     /* Lonceng: pengajuan surat pengantar yang menunggu verifikasi (hanya Admin/Pengurus; server mengirim 0 untuk lainnya) */
     aturLonceng(data);
     gambarChart(data.laki_laki, data.perempuan);
@@ -1765,6 +1781,7 @@ const DAFTAR_SUBFORM = {
   verifikasi:    { judul:'Data Pengajuan' },
   arsip:         { judul:'Info Arsip & Aset' },
   info:          { judul:'Info Aktual' },
+  absensironda:  { judul:'Absensi Ronda' },
   mydata:        { judul:'MyData' },
   polling:       { judul:'Polling' },
   korespondensi: { judul:'Administrasi' },
@@ -1783,6 +1800,7 @@ function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
   if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
   if (kunci === 'polling' && !pollingAktifUntukSaya()){ toast('Polling belum dibuka oleh admin.'); return; }
+  if (kunci === 'absensironda' && !aksesRonda){ toast('Absensi Ronda hanya untuk petugas ronda dan Admin.'); return; }
   versiSubform++;
   $('judulSubform').textContent = s.judul;
   const isi = $('isiSubform');
@@ -2067,32 +2085,97 @@ async function formNotula(){
 
 /* ---------- Info Aktual: kartu Agenda RT ---------- */
 const NAMA_JENIS = { masuk:'Surat Masuk', keluar:'Surat Keluar', undangan:'Undangan' };
+/* Penanda "agenda baru": waktu terakhir pengguna membuka Info Aktual disimpan per pengguna di perangkat */
+const kunciInfoDilihat = () => 'mysapa_info_dilihat_' + ((profilSaya && (profilSaya.nik || profilSaya.nama)) || 'anon');
+function ambilInfoDilihat(){ try{ const v = localStorage.getItem(kunciInfoDilihat()); return v ? Number(v) : 0; }catch(e){ return 0; } }
+function simpanInfoDilihat(ms){ try{ localStorage.setItem(kunciInfoDilihat(), String(ms)); }catch(e){} }
+const ms = v => Date.parse(v) || 0;
+/* Ambil satu data TERBARU saja dari tiap sumber: agenda RT, absensi ronda, pelayanan surat pengantar */
+async function ambilInfoAktual(){
+  const panggil = async (fn) => {
+    try{
+      const { data, error } = await db.rpc(fn, { p_token: tokenSesi });
+      if (error) throw error;
+      if (!data || !data.ok) return { ok:false, pesan:(data && data.pesan) || 'Gagal memuat data.' };
+      return data;
+    }catch(e){ console.error(fn, e); return { ok:false, pesan:'Tidak dapat memuat data.' }; }
+  };
+  const [ag, ro, pl] = await Promise.all([panggil('get_agenda_rt'), panggil('get_info_ronda'), panggil('get_info_pelayanan_surat')]);
+  const agenda = ag.ok ? ((ag.items || []).slice().sort((x, y) => ms(y.dibuat_pada) - ms(x.dibuat_pada))[0] || null) : null;
+  const ronda = ro.ok ? (ro.items || []) : [];
+  const pelayanan = pl.ok ? (pl.item || null) : null;
+  const terbaru = Math.max(agenda ? ms(agenda.dibuat_pada) : 0, ronda.reduce((m, x) => Math.max(m, ms(x.dibuat_pada)), 0), pelayanan ? ms(pelayanan.disetujui_pada) : 0);
+  return { agenda, ronda, pelayanan, terbaru, galat: { agenda: ag.ok ? '' : ag.pesan, ronda: ro.ok ? '' : ro.pesan, pelayanan: pl.ok ? '' : pl.pesan } };
+}
+function aturInfoBaru(ada){
+  const b = $('btnInfo'); if (!b) return;
+  $('alertInfo').classList.toggle('tampil', !!ada);
+  b.classList.toggle('berbunyi', !!ada);
+  b.setAttribute('aria-label', ada ? 'Info Aktual, ada agenda baru' : 'Info Aktual');
+}
+async function cekInfoBaru(){
+  if (!tokenSesi) return;
+  try{
+    const d = await ambilInfoAktual();
+    const batas = ambilInfoDilihat() || (Date.now() - 7 * 24 * 3600 * 1000);   // pertama kali: hanya info 7 hari terakhir yang dianggap baru
+    aturInfoBaru(d.terbaru > batas);
+  }catch(e){ /* senyap */ }
+}
+/* Durasi dalam hari untuk kartu pelayanan: "Hari ini", "Kemarin", "N hari lalu" */
+function durasiHari(iso){
+  const d = keDate(iso); if (!d) return '';
+  const a = new Date(d.getFullYear(), d.getMonth(), d.getDate()), n = new Date();
+  const hari = Math.round((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - a) / 86400000);
+  return hari <= 0 ? 'Hari ini' : hari === 1 ? 'Kemarin' : hari + ' hari lalu';
+}
+const KELAS_HADIR = { 'hadir':'hadir', 'izin':'izin', 'sakit':'sakit', 'alpa':'alpa', 'alpha':'alpa', 'tidak hadir':'alpa' };
 async function renderInfoAktual(isi){
   const versi = versiSubform;
   isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat info...</div>';
-  let items = [], gagal = '';
-  try{
-    const { data, error } = await db.rpc('get_agenda_rt', { p_token: tokenSesi });
-    if (error) throw error;
-    if (!data.ok) gagal = data.pesan || 'Gagal memuat agenda.'; else items = data.items || [];
-  }catch(e){ console.error(e); gagal = 'Tidak dapat memuat agenda. Periksa koneksi Anda.'; }
+  const d = await ambilInfoAktual();
   if (versi !== versiSubform) return;          // subform sudah ditutup / diganti
+  if (d.terbaru) simpanInfoDilihat(Math.max(d.terbaru, ambilInfoDilihat()));
+  aturInfoBaru(false);
 
-  const kartu = gagal
-    ? `<div class="kosong" style="margin:10px 0">${esc(gagal)}</div>`
-    : !items.length
-      ? '<div class="kosong" style="margin:10px 0">Belum ada agenda.</div>'
-      : items.map(it => `
-        <div class="agenda-item">
-          <span class="agenda-jenis ${esc(it.jenis)}">${NAMA_JENIS[it.jenis] || ''}</span>
-          <div class="agenda-perihal">${esc(it.perihal)}</div>
-          <div class="agenda-baris"><span>No. Surat</span><span>${esc(it.nomor)}</span></div>
-          <div class="agenda-baris"><span>Tgl Surat</span><span>${tglIndo(it.tgl_surat)}</span></div>
-          <div class="agenda-baris"><span>Tgl Pelaksanaan</span><span>${it.tgl_pelaksanaan
-            ? tglIndo(it.tgl_pelaksanaan) + (it.jam_pelaksanaan ? ', ' + jamIndo(it.jam_pelaksanaan) : '') : '-'}</span></div>
-          <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(it.tgl_surat, it.dibuat_pada)}</div>
-        </div>`).join('');
-  isi.innerHTML = `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-calendar-days"></i> Agenda RT</h3>${kartu}</div>`;
+  const kosong = (gagal, teks) => `<div class="agenda-kosong">${esc(gagal || teks)}</div>`;
+
+  /* 1) Agenda RT: hanya satu yang terbaru */
+  const a = d.agenda;
+  const kartuAgenda = a ? `
+      <div class="agenda-item">
+        <span class="agenda-jenis ${esc(a.jenis)}">${NAMA_JENIS[a.jenis] || ''}</span>
+        <div class="agenda-perihal">${esc(a.perihal)}</div>
+        <div class="agenda-baris"><span>No. Surat</span><span>${esc(a.nomor)}</span></div>
+        <div class="agenda-baris"><span>Tgl Surat</span><span>${tglIndo(a.tgl_surat)}</span></div>
+        <div class="agenda-baris"><span>Tgl Pelaksanaan</span><span>${a.tgl_pelaksanaan
+          ? tglIndo(a.tgl_pelaksanaan) + (a.jam_pelaksanaan ? ', ' + jamIndo(a.jam_pelaksanaan) : '') : '-'}</span></div>
+        <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(a.tgl_surat, a.dibuat_pada)}</div>
+      </div>` : kosong(d.galat.agenda, 'Belum ada agenda.');
+
+  /* 2) Absensi Ronda: semua petugas pada ronda terbaru, masing-masing dengan rincian kehadirannya */
+  const kartuRonda = d.ronda.length ? d.ronda.map(r => `
+      <div class="agenda-item">
+        <div class="agenda-perihal">${esc(namaTanpaGelar(r.nama_petugas))}</div>
+        <div class="agenda-baris"><span>Tanggal</span><span>${tglIndo(r.tanggal)}</span></div>
+        <div class="agenda-baris"><span>Jam Masuk</span><span>${r.jam_masuk ? jamIndo(r.jam_masuk) : '-'}</span></div>
+        <div class="agenda-baris"><span>Jam Pulang</span><span>${r.jam_pulang ? jamIndo(r.jam_pulang) : '-'}</span></div>
+        <div class="agenda-baris"><span>Status Kehadiran</span><span><span class="agenda-status ${KELAS_HADIR[String(r.status || '').toLowerCase()] || ''}">${esc(r.status || '-')}</span></span></div>
+        <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiLalu(r.tanggal, r.dibuat_pada)}</div>
+      </div>`).join('') : kosong(d.galat.ronda, 'Belum ada absensi ronda.');
+
+  /* 3) Pelayanan surat pengantar: satu surat terakhir disetujui */
+  const p = d.pelayanan;
+  const kartuLayanan = p ? `
+      <div class="agenda-item">
+        <div class="agenda-perihal">${esc(p.jenis_label)}</div>
+        <div class="agenda-baris"><span>Tgl Disetujui</span><span>${tglIndo(p.disetujui_pada)}</span></div>
+        <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiHari(p.disetujui_pada)}</div>
+      </div>` : kosong(d.galat.pelayanan, 'Belum ada surat pengantar yang disetujui.');
+
+  isi.innerHTML =
+    `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-calendar-days"></i> Agenda RT</h3>${kartuAgenda}</div>` +
+    `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-clipboard-user"></i> Absensi Ronda</h3>${kartuRonda}</div>` +
+    `<div class="kartu-stat agenda"><h3><i class="fa-solid fa-envelope-circle-check"></i> Pelayanan Surat Pengantar</h3>${kartuLayanan}</div>`;
 }
 
 /* =====================================================================
@@ -2123,8 +2206,8 @@ function pollingAktifUntukSaya(){ return aksesPenuh || !!(statistik && statistik
 function aturPolling(){
   const b = $('btnPolling'); if (!b) return;
   const on = pollingAktifUntukSaya();
-  b.classList.toggle('nonaktif', !on); b.disabled = !on; b.setAttribute('aria-disabled', String(!on));
-  b.title = on ? '' : 'Polling belum dibuka oleh admin';
+  b.hidden = !on;                                   // disembunyikan sampai admin mengaktifkan polling (admin selalu melihatnya)
+  b.classList.remove('nonaktif'); b.disabled = false; b.setAttribute('aria-disabled', 'false');
 }
 function renderPolling(isi){
   const saklar = aksesPenuh ? `<div class="kartu-stat"><label class="baris-saklar">
@@ -2479,7 +2562,7 @@ async function segarkanLonceng(){        // senyap: tanpa toast bila gagal
   sedangSegarkan = true;
   try{
     const { data, error } = await db.rpc('get_statistik', { p_token: tokenSesi });
-    if (!error && data && data.ok){ statistik = data; aturLonceng(data); aturPolling(); }
+    if (!error && data && data.ok){ statistik = data; aturLonceng(data); aturPolling(); cekInfoBaru(); }
   }catch(e){ /* diabaikan */ }
   finally{ sedangSegarkan = false; }
 }
