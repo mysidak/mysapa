@@ -98,7 +98,7 @@
   /* ============ LOGIN ============ */
   #login{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px}
   .kotak-login{
-    position:relative;width:100%;max-width:380px;padding:30px 24px 24px;border-radius:24px;
+    position:relative;width:100%;max-width:380px;padding:14px 24px 24px;border-radius:24px;
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
     -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
     box-shadow:0 24px 60px rgba(4,18,60,.45);color:#fff;
@@ -392,43 +392,101 @@
   .rd-cat span{font-size:.7rem;color:var(--abu);margin-left:6px}
   .rd-cat p{font-size:.78rem;color:var(--teks);margin-top:2px;word-break:break-word}
   .rd-kosong{font-size:.76rem;color:#94a3b8;font-style:italic}
-  /* ---- Polling ---- */
-  .pl-status{display:inline-flex;align-items:center;gap:6px;font-size:.66rem;font-weight:600;border-radius:999px;padding:3px 10px;color:#fff;background:#94a3b8;white-space:nowrap}
-  .pl-status.buka{background:#16a34a}.pl-status.hasil{background:var(--biru)}.pl-status.tutup{background:#64748b}
-  .pl-tanya{background:#eff6ff;border:1px solid #dbeafe;border-radius:14px;padding:13px 14px;font-size:.88rem;font-weight:600;line-height:1.5;
-    color:var(--teks);margin-bottom:12px;white-space:pre-wrap;word-break:break-word}
-  .pl-info{text-align:center;margin-bottom:12px;padding:10px 12px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0}
-  .pl-batas{font-size:.72rem;color:var(--abu);margin-bottom:3px}
-  .pl-hitung{font-size:.78rem;font-weight:600;color:#0284c7}
-  .pl-hitung span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;letter-spacing:1px}
-  .pl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-  .pl-setuju{background:linear-gradient(135deg,#15803d,#22c55e)}
-  .pl-tidak{background:linear-gradient(135deg,#b91c1c,#ef4444)}
-  .pl-abstain{background:linear-gradient(135deg,#ca8a04,#facc15)}
-  .pl-grid .rd-btn{min-height:96px}
-  .pl-keluarga{background:#fefce8;border:1px solid #fde68a;color:#854d0e;border-radius:13px;padding:12px;font-size:.78rem;line-height:1.5;text-align:center;margin-bottom:12px}
-  .pl-hasil-judul{text-align:center;font-size:.82rem;font-weight:700;color:var(--biru-tua);margin-bottom:10px}
-  .pl-pie-wrap{display:flex;justify-content:center;margin:4px 0 16px}
-  .pl-pie{width:170px;height:170px;border-radius:50%;position:relative;background:#e2e8f0}
-  .pl-pie::after{content:"";position:absolute;inset:39px;background:#fff;border-radius:50%}
-  .pl-legend{display:grid;gap:7px}
-  .pl-leg{display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:#475569}
-  .pl-leg span{display:flex;align-items:center;gap:7px}
-  .pl-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-  .pl-total{text-align:center;font-size:.72rem;color:var(--abu);margin-top:10px}
-  .pl-char{text-align:right;font-size:.66rem;color:#94a3b8;margin-top:3px}
-  .pl-cek-baris{display:flex;flex-wrap:wrap;gap:10px}
-  .pl-cek{flex:1 1 130px;display:flex;align-items:center;gap:8px;padding:11px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;
+  /* ---- Polling (modal) ---- */
+  .poll-latar{position:absolute;inset:0;z-index:72;display:flex;align-items:center;justify-content:center;padding:18px;
+    background:rgba(15,23,42,.58);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    opacity:0;visibility:hidden;transition:opacity .2s ease, visibility 0s linear .2s}
+  .poll-latar.tampil{opacity:1;visibility:visible;transition:opacity .2s ease, visibility 0s}
+  #pollConfirmModal{z-index:74}
+  .poll-kotak{width:100%;max-width:440px;max-height:92%;overflow-y:auto;background:#fff;border-radius:22px;
+    box-shadow:0 20px 60px rgba(15,23,42,.3);padding:20px;transform:translateY(14px) scale(.96);opacity:0;
+    transition:transform .25s cubic-bezier(.34,1.4,.5,1), opacity .2s ease}
+  .poll-latar.tampil .poll-kotak{transform:none;opacity:1}
+  .poll-kepala{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+  .poll-judul{display:flex;align-items:center;gap:10px;font-size:1.02rem;font-weight:700;color:#0f172a}
+  .poll-tutup{width:34px;height:34px;border:0;border-radius:10px;background:#f1f5f9;color:#64748b;cursor:pointer;font-size:.95rem;flex:none}
+  .poll-grup{margin-bottom:15px}
+  .poll-label{display:block;font-size:.74rem;font-weight:600;color:#334155;margin-bottom:7px}
+  .poll-label b{color:#dc2626}
+  .poll-input{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;font:inherit;font-size:.82rem;color:#0f172a;outline:none;background:#f8fafc}
+  textarea.poll-input{min-height:120px;resize:vertical;line-height:1.45}
+  .poll-input:focus{border-color:#0284c7;box-shadow:0 0 0 3px rgba(2,132,199,.12);background:#fff}
+  .poll-char{text-align:right;font-size:.64rem;color:#94a3b8;margin-top:4px}
+  .poll-cek-baris{display:flex;flex-wrap:wrap;gap:10px}
+  .poll-cek{flex:1 1 130px;display:flex;align-items:center;gap:8px;padding:11px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;
     font-size:.78rem;font-weight:600;color:#334155;cursor:pointer}
-  .pl-cek input{width:17px;height:17px;accent-color:var(--biru)}
-  .pl-cek.mati{opacity:.5;cursor:not-allowed}
-  .pl-catatan{font-size:.7rem;color:var(--abu);line-height:1.45;margin-top:8px}
-  .pl-aksi{display:flex;gap:9px;margin-top:16px}
-  .pl-tbl{flex:1;border:0;border-radius:12px;padding:12px;font:inherit;font-size:.78rem;font-weight:600;cursor:pointer}
-  .pl-tbl.utama{background:linear-gradient(135deg,var(--biru),#1d4ed8);color:#fff}
-  .pl-tbl.sekunder{background:#eef3fb;color:#475569}
-  .pl-tbl:disabled{opacity:.6;cursor:wait}
-  .pl-pesan{font-size:.74rem;margin-top:10px;line-height:1.45}
+  .poll-cek input{width:17px;height:17px;accent-color:#2563eb}
+  .poll-cek.mati{opacity:.5;cursor:not-allowed}
+  .poll-catatan{font-size:.68rem;color:#64748b;line-height:1.45;margin-top:8px}
+  .poll-aksi{display:flex;gap:9px;margin-top:18px}
+  .poll-tbl{flex:1;border:0;border-radius:12px;padding:12px;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+  .poll-tbl.utama{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
+  .poll-tbl.sekunder{background:#f1f5f9;color:#475569}
+  .poll-tbl:disabled{opacity:.6;cursor:wait}
+  .poll-pesan{font-size:.74rem;margin-top:10px;line-height:1.45}
+  .poll-status{display:inline-flex;align-items:center;gap:6px;font-size:.64rem;font-weight:600;border-radius:999px;padding:3px 10px;color:#fff;background:#94a3b8;white-space:nowrap}
+  .poll-status.buka{background:#16a34a}.poll-status.hasil{background:#1558c9}.poll-status.tutup{background:#64748b}
+  .poll-rekap-judul{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700;color:#0f172a;margin:20px 0 10px;padding-top:16px;border-top:1px dashed #e2e8f0}
+  .poll-rekap-judul i{color:#2563eb}
+  .poll-tanya{background:#eff6ff;border:1px solid #dbeafe;border-radius:15px;padding:14px;font-size:.88rem;font-weight:600;line-height:1.5;color:#0f172a;margin-bottom:15px;white-space:pre-wrap;word-break:break-word}
+  .poll-info{text-align:center;margin-bottom:15px;padding:10px 12px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0}
+  .poll-batas{font-size:.72rem;color:#64748b;margin-bottom:4px}
+  .poll-hitung{font-size:.8rem;font-weight:700;color:#0284c7}
+  .poll-hitung span{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;letter-spacing:1px}
+  .poll-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .poll-pilih{border:0;border-radius:14px;padding:13px 7px;cursor:pointer;font:inherit;font-weight:700;font-size:.78rem;color:#fff;
+    display:flex;flex-direction:column;align-items:center;gap:7px;transition:all .2s ease}
+  .poll-pilih i{font-size:1.55rem}
+  .poll-pilih.setuju{background:#16a34a}.poll-pilih.tidak{background:#dc2626}.poll-pilih.abstain{background:#eab308}
+  .poll-pilih:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 7px 18px rgba(0,0,0,.2)}
+  .poll-pilih:disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.6)}
+  .poll-keluarga{background:#fefce8;border:1px solid #fde68a;color:#854d0e;border-radius:13px;padding:12px;font-size:.78rem;line-height:1.5;text-align:center;margin-bottom:13px}
+  .poll-kosong{text-align:center;padding:18px 8px;color:#64748b;font-size:.78rem}
+  .poll-hasil-judul{text-align:center;font-size:.82rem;font-weight:700;color:#0f172a;margin-bottom:10px}
+  .poll-pie-wrap{display:flex;justify-content:center;margin:4px 0 16px}
+  .poll-pie{width:170px;height:170px;border-radius:50%;position:relative;background:#e2e8f0}
+  .poll-pie::after{content:"";position:absolute;inset:39px;background:#fff;border-radius:50%}
+  .poll-legend{display:grid;gap:7px}
+  .poll-leg{display:flex;align-items:center;justify-content:space-between;font-size:.74rem;color:#475569}
+  .poll-leg span{display:flex;align-items:center;gap:7px}
+  .poll-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .poll-total{text-align:center;font-size:.72rem;color:#64748b;margin-top:10px}
+  .poll-konfirm-teks{font-size:.92rem;font-weight:700;color:#0f172a;margin:14px 0 22px;line-height:1.55}
+  .poll-konfirm-teks small{display:block;font-weight:400;font-size:.7rem;color:#64748b;margin-top:6px}
+
+  /* ---- Modal ulang tahun ---- */
+  .bday-latar{position:absolute;inset:0;z-index:85;display:flex;align-items:center;justify-content:center;padding:18px;overflow:hidden;
+    background:radial-gradient(circle at 50% 40%, rgba(30,64,175,.78), rgba(15,23,42,.88));
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .3s ease, visibility 0s linear .3s}
+  .bday-latar.tampil{opacity:1;visibility:visible;transition:opacity .3s ease, visibility 0s}
+  .bday-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .bday-piece{position:absolute;top:-24px;opacity:0;animation:bdayFall linear infinite}
+  @keyframes bdayFall{0%{transform:translate3d(0,-24px,0) rotate(0deg);opacity:1}100%{transform:translate3d(var(--dx),108vh,0) rotate(var(--rot));opacity:1}}
+  .bday-balloon{position:absolute;bottom:-140px;width:46px;height:58px;border-radius:50% 50% 48% 48%;opacity:.92;animation:bdayRise ease-in infinite}
+  .bday-balloon::before{content:"";position:absolute;top:10px;left:10px;width:9px;height:15px;border-radius:50%;background:rgba(255,255,255,.45);transform:rotate(20deg)}
+  .bday-balloon::after{content:"";position:absolute;top:100%;left:50%;width:1.5px;height:56px;background:rgba(255,255,255,.6)}
+  @keyframes bdayRise{0%{transform:translate3d(0,0,0) rotate(-4deg)}50%{transform:translate3d(var(--sway),-60vh,0) rotate(5deg)}100%{transform:translate3d(0,-125vh,0) rotate(-4deg)}}
+  .bday-spark{position:absolute;color:#fde047;animation:bdayTwinkle ease-in-out infinite}
+  @keyframes bdayTwinkle{0%,100%{transform:scale(.3) rotate(0deg);opacity:.2}50%{transform:scale(1.1) rotate(90deg);opacity:1}}
+  .bday-kartu{position:relative;width:100%;max-width:360px;background:linear-gradient(160deg,#fff 0%,#eff6ff 100%);border-radius:28px;padding:30px 24px 24px;
+    text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.45);border:3px solid #fde047}
+  .bday-latar.tampil .bday-kartu{animation:bdayPop .7s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes bdayPop{0%{transform:scale(.4) translateY(40px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+  .bday-kue{width:92px;height:92px;margin:-72px auto 12px;border-radius:50%;background:linear-gradient(135deg,#f43f5e,#f59e0b);color:#fff;font-size:42px;
+    display:flex;align-items:center;justify-content:center;border:5px solid #fff;box-shadow:0 10px 28px rgba(244,63,94,.5);animation:bdayBounce 1.3s ease-in-out infinite}
+  @keyframes bdayBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.07)}}
+  .bday-judul{font-size:1.5rem;font-weight:800;line-height:1.25;background:linear-gradient(90deg,#e11d48,#f59e0b,#2563eb,#e11d48);background-size:250% 100%;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:bdayShine 3s linear infinite}
+  @keyframes bdayShine{0%{background-position:0% 0}100%{background-position:250% 0}}
+  .bday-nama{margin-top:10px;font-size:1.05rem;font-weight:800;color:#0f172a;word-break:break-word}
+  .bday-usia{display:inline-block;margin-top:8px;padding:5px 16px;border-radius:50px;background:#fef3c7;color:#b45309;font-size:.78rem;font-weight:800}
+  .bday-pesan{margin-top:14px;font-size:.8rem;line-height:1.6;color:#475569}
+  .bday-btn{width:100%;margin-top:20px;padding:13px;border:0;border-radius:14px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;
+    font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,.4)}
+  @media (prefers-reduced-motion:reduce){
+    .bday-piece,.bday-balloon,.bday-spark,.bday-kue,.bday-judul{animation:none}
+    .bday-piece,.bday-balloon,.bday-spark{display:none}
+  }
   .rd-konfirm{font-size:.86rem;line-height:1.55;color:var(--teks);padding:6px 0 10px}
   .agenda-status{display:inline-block;font-size:.64rem;font-weight:600;border-radius:999px;padding:2px 9px;color:#fff;background:#64748b}
   .agenda-status.hadir{background:#16a34a}.agenda-status.izin{background:#d98a00}.agenda-status.sakit{background:#7c3aed}.agenda-status.alpa{background:#dc2626}
@@ -802,6 +860,76 @@
     <div class="subform-isi" id="isiSubform"></div>
   </section>
 
+  <!-- Modal Polling: Kelola Polling (admin), Polling Warga, konfirmasi pendapat -->
+  <div class="poll-latar" id="pollAdminModal" aria-hidden="true">
+    <div class="poll-kotak" role="dialog" aria-modal="true" aria-labelledby="pollAdminJudul">
+      <div class="poll-kepala">
+        <div class="poll-judul" id="pollAdminJudul"><i class="fa-solid fa-square-poll-vertical" style="color:#2563eb"></i> Kelola Polling</div>
+        <span id="pollStatusAdmin"></span>
+        <button class="poll-tutup" type="button" id="pollAdminTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="poll-grup">
+        <label class="poll-label" for="pollDeskripsi">Deskripsi / Pertanyaan Polling <b>*</b></label>
+        <textarea id="pollDeskripsi" class="poll-input" maxlength="1000" placeholder="Tuliskan pertanyaan atau deskripsi polling..."></textarea>
+        <div class="poll-char"><span id="pollChar">0</span>/1000 karakter</div>
+      </div>
+      <div class="poll-grup">
+        <label class="poll-label" for="pollBatas">Batas Waktu Polling (WITA) <b>*</b></label>
+        <input id="pollBatas" class="poll-input" type="datetime-local">
+      </div>
+      <div class="poll-grup">
+        <div class="poll-cek-baris">
+          <label class="poll-cek" id="pollAktifL"><input id="pollAktif" type="checkbox"><span>Polling</span></label>
+          <label class="poll-cek"><input id="pollHasil" type="checkbox"><span>Hasil</span></label>
+        </div>
+        <div class="poll-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga. Pendapat dihitung satu suara per keluarga (NKK).</div>
+      </div>
+      <div class="poll-aksi">
+        <button class="poll-tbl sekunder" type="button" id="pollBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
+        <button class="poll-tbl utama" type="button" id="pollSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+      </div>
+      <div class="poll-pesan" id="pollPesan" hidden></div>
+      <div class="poll-rekap-judul"><i class="fa-solid fa-chart-pie"></i> Rekap Suara</div>
+      <div id="pollRekap"></div>
+    </div>
+  </div>
+
+  <div class="poll-latar" id="pollUserModal" aria-hidden="true">
+    <div class="poll-kotak" role="dialog" aria-modal="true" aria-labelledby="pollUserJudul">
+      <div class="poll-kepala">
+        <div class="poll-judul" id="pollUserJudul"><i class="fa-solid fa-square-poll-vertical" style="color:#2563eb"></i> Polling Warga</div>
+        <button class="poll-tutup" type="button" id="pollUserTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="pollUserIsi"></div>
+    </div>
+  </div>
+
+  <div class="poll-latar" id="pollConfirmModal" aria-hidden="true">
+    <div class="poll-kotak" style="max-width:360px;text-align:center" role="dialog" aria-modal="true" aria-labelledby="pollConfirmJudul">
+      <div class="poll-kepala" style="justify-content:center;margin-bottom:4px">
+        <div class="poll-judul" id="pollConfirmJudul"><i class="fa-solid fa-circle-question" style="color:#2563eb"></i> Konfirmasi Polling</div>
+      </div>
+      <div class="poll-konfirm-teks" id="pollConfirmTeks"></div>
+      <div class="poll-aksi" style="margin-top:0">
+        <button class="poll-tbl sekunder" type="button" id="pollTidak">Tidak</button>
+        <button class="poll-tbl utama" type="button" id="pollYa">Ya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal ulang tahun -->
+  <div class="bday-latar" id="birthdayModal" aria-hidden="true">
+    <div class="bday-fx" id="birthdayFx"></div>
+    <div class="bday-kartu" role="dialog" aria-modal="true" aria-labelledby="bdayJudul">
+      <div class="bday-kue"><i class="fa-solid fa-cake-candles"></i></div>
+      <div class="bday-judul" id="bdayJudul">Selamat Ulang Tahun!</div>
+      <div class="bday-nama" id="bdayNama"></div>
+      <div class="bday-usia" id="bdayUsia" style="display:none"></div>
+      <div class="bday-pesan">Semoga panjang umur, sehat selalu, dan dilimpahi kebahagiaan serta kesuksesan.<br>Salam hangat dari seluruh warga RT 09 Bonggoeya. 🎉</div>
+      <button class="bday-btn" type="button" id="bdayTutup"><i class="fa-solid fa-gift"></i> Terima Kasih</button>
+    </div>
+  </div>
+
   <!-- Modal konfirmasi keluar -->
   <div class="modal-latar" id="modalKeluar" aria-hidden="true">
     <div class="modal-kotak" role="dialog" aria-modal="true" aria-labelledby="mkJudul" aria-describedby="mkIsi">
@@ -929,6 +1057,7 @@ function tampilkanUtama(profil){
   $('namaUser').textContent = namaTanpaGelar(profil.nama);
   perbaruiSapaan();
   muatStatistik();
+  cekUlangTahun();
 }
 function perbaruiSapaan(){
   $('teksSapaan').textContent = ucapanWaktu();
@@ -1882,7 +2011,7 @@ let versiSubform = 0;
 function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
   if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
-  if (kunci === 'polling' && !pollingAktifUntukSaya()){ toast('Polling belum dibuka oleh admin.'); return; }
+  if (kunci === 'polling'){ bukaPolling(); return; }          // polling berbentuk modal, bukan subform
   if (kunci === 'absensironda' && !aksesRonda){ toast('Absensi Ronda hanya untuk petugas ronda dan Admin.'); return; }
   versiSubform++;
   $('judulSubform').textContent = s.judul;
@@ -1902,8 +2031,6 @@ function bukaSubform(kunci){
     renderMyData(isi);
   } else if (kunci === 'absensironda'){
     renderAbsensiRonda(isi);
-  } else if (kunci === 'polling'){
-    renderPolling(isi);
   } else if (kunci === 'programkerja'){
     renderProgramKerja(isi);
   } else if (kunci === 'bantuan'){
@@ -2252,7 +2379,9 @@ async function renderInfoAktual(isi){
   const kartuLayanan = p ? `
       <div class="agenda-item">
         <div class="agenda-perihal">${esc(p.jenis_label)}</div>
-        <div class="agenda-baris"><span>Tgl Disetujui</span><span>${tglIndo(p.disetujui_pada)}</span></div>
+        <div class="agenda-baris"><span>Tgl Pengajuan</span><span>${tglJamWITA(p.diajukan_pada)}</span></div>
+        <div class="agenda-baris"><span>Tgl Disetujui</span><span>${tglJamWITA(p.disetujui_pada)}</span></div>
+        <div class="agenda-baris"><span>Durasi Pelayanan</span><span>${durasiPelayanan(p.diajukan_pada, p.disetujui_pada)}</span></div>
         <div class="agenda-durasi"><i class="fa-regular fa-clock"></i> ${durasiHari(p.disetujui_pada)}</div>
       </div>` : kosong(d.galat.pelayanan, 'Belum ada surat pengantar yang disetujui.');
 
@@ -2274,6 +2403,7 @@ function resetLapisan(){
   $('subform').classList.remove('buka'); $('subform').setAttribute('aria-hidden','true');
   $('modalForm').classList.remove('tampil'); $('modalForm').setAttribute('aria-hidden','true');
   mfSimpanFn = null;
+  tutupSemuaModalPoll(); tutupUltah();
 }
 window.addEventListener('popstate', () => {
   if (!$('utama').classList.contains('tampil')) return;
@@ -2299,6 +2429,25 @@ function waktuRonda(){                                   // jam WITA (UTC+8) dar
   return { j, m, d, menit: j * 60 + m, tanggal: t.toISOString().slice(0, 10), obj: t };
 }
 const dua = n => String(n).padStart(2, '0');
+/* Tanggal + jam dalam WITA, mis. "28 Okt 2026, 08.15" */
+function tglJamWITA(iso){
+  const t = Date.parse(iso); if (isNaN(t)) return '-';
+  const o = { timeZone:'Asia/Makassar' };
+  return new Date(t).toLocaleDateString('id-ID', { ...o, day:'numeric', month:'short', year:'numeric' }) + ', ' +
+         new Date(t).toLocaleTimeString('id-ID', { ...o, hour:'2-digit', minute:'2-digit', hour12:false }).replace(':', '.');
+}
+/* Lama pelayanan = selisih pengajuan -> persetujuan */
+function durasiPelayanan(awal, akhir){
+  const a = Date.parse(awal), b = Date.parse(akhir);
+  if (isNaN(a) || isNaN(b)) return '-';
+  const mnt = Math.max(0, Math.floor((b - a) / 60000));
+  if (mnt < 1) return 'Kurang dari 1 menit';
+  if (mnt < 60) return mnt + ' menit';
+  const jam = Math.floor(mnt / 60), sisaM = mnt % 60;
+  if (jam < 24) return jam + ' jam' + (sisaM ? ' ' + sisaM + ' menit' : '');
+  const hari = Math.floor(jam / 24), sisaJ = jam % 24;
+  return hari + ' hari' + (sisaJ ? ' ' + sisaJ + ' jam' : '');
+}
 
 function hitungStatusRonda(it, menit){
   const st = it.status;
@@ -2487,9 +2636,76 @@ function konfirmasiKetidakhadiran(aksi){
 }
 
 /* =====================================================================
+   ULANG TAHUN — modal ucapan (konfeti, balon, bintang) pada hari ulang tahun warga.
+   Tanggal lahir diambil dari get_mydata. Tampil sekali per hari per akun di perangkat ini.
+   ===================================================================== */
+function parseTglLahir(v){                               // "yyyy-mm-dd", "dd/mm/yyyy", "dd-mm-yyyy", atau string tanggal lain
+  if (!v) return null;
+  const t = String(v).trim();
+  let m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return { y:+m[1], m:+m[2], d:+m[3] };
+  m = t.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+  if (m) return { y:+m[3], m:+m[2], d:+m[1] };
+  const dt = new Date(t);
+  return isNaN(dt.getTime()) ? null : { y:dt.getFullYear(), m:dt.getMonth() + 1, d:dt.getDate() };
+}
+function hariUlangTahun(bd, now){
+  if (bd.d === now.getDate() && bd.m === now.getMonth() + 1) return true;
+  const y = now.getFullYear(), kabisat = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+  return bd.m === 2 && bd.d === 29 && !kabisat && now.getMonth() === 1 && now.getDate() === 28;   // lahir 29 Feb: dirayakan 28 Feb di tahun biasa
+}
+async function cekUlangTahun(){
+  if (!tokenSesi || !profilSaya) return;
+  try{
+    const { data, error } = await db.rpc('get_mydata', { p_token: tokenSesi });
+    if (error || !data || !data.ok || !data.profil) return;
+    const bd = parseTglLahir(data.profil.tgl_lahir), now = new Date();
+    if (!bd || !hariUlangTahun(bd, now)) return;
+    const kunci = 'mysapa_ultah_' + (data.profil.nik || profilSaya.nik || profilSaya.nama) + '_' + now.getFullYear() + dua(now.getMonth() + 1) + dua(now.getDate());
+    try{ if (localStorage.getItem(kunci)) return; localStorage.setItem(kunci, '1'); }catch(e){}
+    if (!$('utama').classList.contains('tampil')) return;           // sudah keluar sebelum data tiba
+    tampilkanUltah(now.getFullYear() - bd.y, data.profil.nama || profilSaya.nama);
+  }catch(e){ /* senyap */ }
+}
+function tampilkanUltah(usia, nama){
+  $('bdayNama').textContent = namaTanpaGelar(nama);
+  const u = $('bdayUsia');
+  if (usia > 0 && usia < 130){ u.textContent = 'Usia ke-' + usia + ' tahun'; u.style.display = 'inline-block'; } else u.style.display = 'none';
+  bangunEfekUltah();
+  const m = $('birthdayModal'); m.classList.add('tampil'); m.setAttribute('aria-hidden', 'false');
+  bukaLapisan(tutupUltah);
+}
+function tutupUltah(){
+  const m = $('birthdayModal'); if (!m) return;
+  m.classList.remove('tampil'); m.setAttribute('aria-hidden', 'true');
+  setTimeout(() => { if (!m.classList.contains('tampil')) $('birthdayFx').innerHTML = ''; }, 350);
+}
+$('bdayTutup').addEventListener('click', () => { if ($('birthdayModal').classList.contains('tampil')) kembaliLapisan(); });
+function bangunEfekUltah(){
+  const warna = ['#f43f5e', '#f59e0b', '#22c55e', '#3b82f6', '#a855f7', '#eab308', '#06b6d4', '#ec4899'];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  let h = '';
+  for (let i = 0; i < 70; i++){                          // confeti jatuh
+    const w = rnd(6, 11), tg = Math.random() < .5 ? w : rnd(12, 18), bulat = Math.random() < .3 ? 'border-radius:50%;' : '';
+    h += `<span class="bday-piece" style="left:${rnd(0, 100).toFixed(1)}%;width:${w.toFixed(0)}px;height:${tg.toFixed(0)}px;${bulat}background:${warna[i % warna.length]};` +
+         `--dx:${rnd(-90, 90).toFixed(0)}px;--rot:${rnd(360, 1080).toFixed(0)}deg;animation-duration:${rnd(3.2, 6.5).toFixed(2)}s;animation-delay:${rnd(0, 4).toFixed(2)}s"></span>`;
+  }
+  for (let i = 0; i < 8; i++){                           // balon naik
+    h += `<span class="bday-balloon" style="left:${(4 + i * 12.5 + rnd(-3, 3)).toFixed(1)}%;background:${warna[(i + 2) % warna.length]};` +
+         `--sway:${rnd(-35, 35).toFixed(0)}px;animation-duration:${rnd(6, 10).toFixed(1)}s;animation-delay:${rnd(0, 3.5).toFixed(1)}s"></span>`;
+  }
+  for (let i = 0; i < 14; i++){                          // kilau bintang
+    h += `<i class="fa-solid fa-star bday-spark" style="left:${rnd(3, 95).toFixed(1)}%;top:${rnd(4, 90).toFixed(1)}%;font-size:${rnd(10, 22).toFixed(0)}px;` +
+         `animation-duration:${rnd(1.2, 2.6).toFixed(2)}s;animation-delay:${rnd(0, 2).toFixed(2)}s"></i>`;
+  }
+  $('birthdayFx').innerHTML = h;
+}
+
+/* =====================================================================
    POLLING (dibuka admin)
    ===================================================================== */
-/* Status polling dari server: polling terbaru (admin melihat semua, warga hanya yang terbuka / hasilnya ditampilkan) */
+/* Polling berbentuk modal (pola aplikasi lama): admin mengelola lewat "Kelola Polling", warga memilih lewat "Polling Warga" + konfirmasi.
+   Data di Supabase (09_polling.sql). Admin melihat polling terbaru apa adanya; warga hanya bila terbuka atau hasilnya ditampilkan. */
 const sekarangPoll = () => Date.now() + pollSelisih;
 const keInputWita = (iso) => { const t = Date.parse(iso); return isNaN(t) ? '' : new Date(t + 8 * 3600 * 1000).toISOString().slice(0, 16); };
 const epochDariInput = (v) => v ? Date.parse(v + ':00+08:00') : NaN;     // isian datetime-local dibaca sebagai WITA
@@ -2507,7 +2723,12 @@ function aturPolling(){
 async function ambilPolling(){
   try{
     const { data, error } = await db.rpc('get_polling_status', { p_token: tokenSesi });
-    if (error) throw error;
+    if (error){
+      const msg = String(error.message || '');
+      if (error.code === 'PGRST202' || /could not find the function/i.test(msg))
+        return { ok:false, pesan:'Fungsi polling belum terpasang di Supabase. Jalankan 09_polling.sql terlebih dahulu.' };
+      return { ok:false, pesan:'Polling gagal dimuat: ' + (msg || 'kesalahan server') };
+    }
     if (!data || !data.ok) return { ok:false, pesan:(data && data.pesan) || 'Gagal memuat polling.' };
     if (Number(data.epoch_ms)) pollSelisih = Number(data.epoch_ms) - Date.now();
     pollStatus = data; aturPolling();
@@ -2515,178 +2736,183 @@ async function ambilPolling(){
   }catch(e){ console.error(e); return { ok:false, pesan:'Tidak dapat memuat polling. Periksa koneksi Anda.' }; }
 }
 async function muatStatusPolling(){ if (tokenSesi) await ambilPolling(); }
-function stopPolling(){ clearInterval(plTimer); clearInterval(plPoll); plTimer = plPoll = null; }
 
+/* ---------- Modal: buka / tutup (terhubung ke tombol back HP) ---------- */
+const MODAL_POLL = ['pollAdminModal', 'pollUserModal', 'pollConfirmModal'];
+let pollTutupBerantai = false, pollPilihan = '';
+function hentikanHitungPoll(){ clearInterval(plTimer); plTimer = null; }
+function bukaModalPoll(id){
+  const el = $(id); el.classList.add('tampil'); el.setAttribute('aria-hidden', 'false');
+  el.scrollTop = 0; const k = el.querySelector('.poll-kotak'); if (k) k.scrollTop = 0;
+  bukaLapisan(() => tutupModalPoll(id));
+}
+function tutupModalPoll(id){
+  const el = $(id); if (!el) return;
+  el.classList.remove('tampil'); el.setAttribute('aria-hidden', 'true');
+  if (id === 'pollUserModal') hentikanHitungPoll();
+  if (id === 'pollConfirmModal' && pollTutupBerantai){ pollTutupBerantai = false; setTimeout(kembaliLapisan, 0); }   // setelah memilih: tutup juga modal Polling Warga
+}
+function tutupSemuaModalPoll(){
+  MODAL_POLL.forEach(id => { const el = $(id); if (el){ el.classList.remove('tampil'); el.setAttribute('aria-hidden', 'true'); } });
+  hentikanHitungPoll(); pollTutupBerantai = false;
+}
+MODAL_POLL.forEach(id => $(id).addEventListener('click', e => { if (e.target === e.currentTarget) kembaliLapisan(); }));
+$('pollAdminTutup').addEventListener('click', kembaliLapisan);
+$('pollUserTutup').addEventListener('click', kembaliLapisan);
+$('pollTidak').addEventListener('click', kembaliLapisan);
+
+/* ---------- Diagram hasil ---------- */
 const WARNA_POLL = { 'Setuju':'#22c55e', 'Tidak Setuju':'#ef4444', 'Abstain':'#94a3b8' };
 function hasilPolling(suara, judul){
   const a = Number(suara && suara['Setuju'] || 0), t = Number(suara && suara['Tidak Setuju'] || 0), b = Number(suara && suara['Abstain'] || 0);
   const total = a + t + b, dasar = total || 1;
   const p1 = a / dasar * 100, p2 = (a + t) / dasar * 100;
   const pie = total ? `conic-gradient(#22c55e 0% ${p1}%, #ef4444 ${p1}% ${p2}%, #94a3b8 ${p2}% 100%)` : '#e2e8f0';
-  const baris = (label, n) => `<div class="pl-leg"><span><i class="pl-dot" style="background:${WARNA_POLL[label]}"></i>${label}</span><b>${fmt(n)} (${(total ? n / total * 100 : 0).toFixed(1).replace('.', ',')}%)</b></div>`;
-  return `${judul ? `<div class="pl-hasil-judul">${judul}</div>` : ''}<div class="pl-pie-wrap"><div class="pl-pie" style="background:${pie}"></div></div>
-    <div class="pl-legend">${baris('Setuju', a)}${baris('Tidak Setuju', t)}${baris('Abstain', b)}</div>
-    <div class="pl-total">Total pendapat (per keluarga): ${fmt(total)}</div>`;
+  const baris = (label, n) => `<div class="poll-leg"><span><i class="poll-dot" style="background:${WARNA_POLL[label]}"></i>${label}</span><b>${fmt(n)} (${(total ? n / total * 100 : 0).toFixed(1).replace('.', ',')}%)</b></div>`;
+  return `${judul ? `<div class="poll-hasil-judul">${judul}</div>` : ''}<div class="poll-pie-wrap"><div class="poll-pie" style="background:${pie}"></div></div>
+    <div class="poll-legend">${baris('Setuju', a)}${baris('Tidak Setuju', t)}${baris('Abstain', b)}</div>
+    <div class="poll-total">Total pendapat (per keluarga): ${fmt(total)}</div>`;
 }
 
-async function renderPolling(isi){
-  stopPolling();
-  const versi = versiSubform;
-  isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat polling...</div>';
+/* ---------- Klik tombol Polling di menu ---------- */
+async function bukaPolling(){
+  if (!tokenSesi) return;
+  if (aksesPenuh) return bukaPollingAdmin();
   const d = await ambilPolling();
-  if (versi !== versiSubform) return;
-  if (!d.ok){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(d.pesan)}</div>`; return; }
-  if (aksesPenuh) gambarPollingAdmin(isi, d, versi); else gambarPollingWarga(isi, d, versi);
-}
-const kunciPoll = (o) => JSON.stringify({ a:o.ada, p:o.poll, s:o.suara, j:o.jawaban_keluarga });
-
-/* ---------- Tampilan warga ---------- */
-function gambarPollingWarga(isi, d, versi){
-  const poll = d.poll;
-  if (!d.ada || !poll){ isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-square-poll-vertical"></i>Polling belum dibuka oleh admin.</div>'; }
-  else {
-    const info = (hitung) => `<div class="pl-info"><div class="pl-batas"><i class="fa-regular fa-clock"></i> Batas Waktu: ${esc(tglWaktuPoll(poll.batas_waktu))}</div>
-      ${hitung ? '<div class="pl-hitung"><i class="fa-solid fa-hourglass-half"></i> Sisa Waktu: <span id="plHitung">--:--:--</span></div>' : ''}</div>`;
-    const tombol = (jaw, kelas, ikon, mati) => `<button type="button" class="rd-btn ${kelas}" data-pilih="${jaw}" ${mati ? 'disabled' : ''}><span class="ik-b"><i class="fa-solid ${ikon}"></i></span><b>${jaw}</b></button>`;
-    const grid = (mati) => `<div class="pl-grid">${tombol('Setuju', 'pl-setuju', 'fa-thumbs-up', mati)}${tombol('Tidak Setuju', 'pl-tidak', 'fa-thumbs-down', mati)}${tombol('Abstain', 'pl-abstain', 'fa-minus', mati)}</div>`;
-    let isiKartu = `<div class="pl-tanya">${esc(poll.deskripsi)}</div>`;
-    if (poll.hasil_aktif){
-      isiKartu += info(false) + hasilPolling(d.suara, 'Hasil Polling');
-    } else if (d.jawaban_keluarga){
-      isiKartu += info(poll.terbuka) + `<div class="pl-keluarga">${d.oleh_saya ? 'Pendapat Anda' : 'Keluarga Anda telah memberikan pendapatnya yaitu'} <b>${esc(d.jawaban_keluarga)}</b> ${d.oleh_saya ? 'telah tercatat untuk keluarga Anda' : ''} dengan rencana/kebijakan RT.</div>` + grid(true);
-    } else if (poll.terbuka){
-      isiKartu += info(true) + grid(false);
-    } else {
-      isiKartu += info(false) + '<div class="rd-kosong" style="text-align:center;padding:14px 0">Polling sudah berakhir.</div>';
-    }
-    isi.innerHTML = `<div class="kartu-stat" id="plRoot">${isiKartu}</div>`;
-    isi.querySelectorAll('[data-pilih]').forEach(b => b.addEventListener('click', () => konfirmasiPilihPolling(poll.id, b.dataset.pilih)));
-
-    if (poll.terbuka){                                   // hitung mundur; saat habis, muat ulang status
-      const batas = Date.parse(poll.batas_waktu);
-      const ubah = () => {
-        if (versi !== versiSubform || !$('plHitung')){ stopPolling(); return; }
-        const sisa = batas - sekarangPoll();
-        if (isNaN(batas) || sisa <= 0){ stopPolling(); renderPolling($('isiSubform')); return; }
-        const dt = Math.floor(sisa / 1000);
-        $('plHitung').textContent = `${dua(Math.floor(dt / 3600))}:${dua(Math.floor(dt % 3600 / 60))}:${dua(dt % 60)}`;
-      };
-      ubah(); plTimer = setInterval(ubah, 1000);
-    }
-  }
-  const awal = kunciPoll(d);                              // penyegaran senyap bila admin mengubah polling
-  plPoll = setInterval(async () => {
-    if (versi !== versiSubform){ stopPolling(); return; }
-    if (document.hidden || $('modalForm').classList.contains('tampil')) return;
-    const n = await ambilPolling();
-    if (versi !== versiSubform || !n.ok) return;
-    if (kunciPoll(n) !== awal){ stopPolling(); gambarPollingWarga($('isiSubform'), n, versi); }
-  }, 20000);
-}
-function konfirmasiPilihPolling(pollId, jawaban){
-  bukaModalForm('Konfirmasi Pendapat',
-    `<p class="rd-konfirm">Anda <b>${esc(jawaban.toUpperCase())}</b> dengan rencana/kebijakan RT?<br>Pendapat berlaku untuk satu keluarga (NKK) dan tidak dapat diubah setelah dikirim.</p>`,
-    async () => {
-      const h = await kirimRpc('polling_pilih', { poll_id: pollId, jawaban });
-      if (h && h.ok) renderPolling($('isiSubform'));
-      else if (h && h.sudah) renderPolling($('isiSubform'));
-      return h;
-    }, 'Ya, Kirim');
+  if (!d.ok){ toast(d.pesan); return; }
+  if (!d.ada || !d.poll){ toast('Polling belum dibuka oleh admin.'); return; }
+  gambarPollingUser(d);
+  bukaModalPoll('pollUserModal');
 }
 
-/* ---------- Tampilan admin: kelola polling + rekap suara ---------- */
+/* ---------- Admin: Kelola Polling ---------- */
 function statusPollingAdmin(poll){
-  if (!poll) return '<span class="pl-status">Belum ada polling</span>';
-  if (poll.hasil_aktif) return '<span class="pl-status hasil"><i class="fa-solid fa-chart-pie"></i> Hasil ditampilkan</span>';
-  if (poll.terbuka) return '<span class="pl-status buka"><i class="fa-solid fa-circle"></i> Polling dibuka</span>';
-  if (poll.polling_aktif) return '<span class="pl-status tutup">Polling berakhir</span>';
-  return '<span class="pl-status">Draft</span>';
+  if (!poll) return '<span class="poll-status">Belum ada polling</span>';
+  if (poll.hasil_aktif) return '<span class="poll-status hasil"><i class="fa-solid fa-chart-pie"></i> Hasil ditampilkan</span>';
+  if (poll.terbuka) return '<span class="poll-status buka"><i class="fa-solid fa-circle"></i> Polling dibuka</span>';
+  if (poll.polling_aktif) return '<span class="poll-status tutup">Polling berakhir</span>';
+  return '<span class="poll-status">Draft</span>';
 }
-function isiRekapAdmin(d){
-  $('plStatus').innerHTML = statusPollingAdmin(d.ada ? d.poll : null);
-  $('plRekap').innerHTML = d.ada && d.poll ? hasilPolling(d.suara) : '<div class="rd-kosong" style="text-align:center">Belum ada polling.</div>';
+function isiRekapPoll(d){
+  $('pollStatusAdmin').innerHTML = statusPollingAdmin(d.ada ? d.poll : null);
+  $('pollRekap').innerHTML = d.ada && d.poll ? hasilPolling(d.suara) : '<div class="poll-kosong">Belum ada polling.</div>';
 }
-function aturKontrolPolling(){
-  const valid = epochDariInput($('plBatas').value) >= sekarangPoll();
-  const hasil = $('plHasil').checked, aktif = $('plAktif');
+function aturKontrolPoll(){
+  const valid = epochDariInput($('pollBatas').value) >= sekarangPoll();
+  const hasil = $('pollHasil').checked, aktif = $('pollAktif');
   aktif.disabled = !valid || hasil;
   if (aktif.disabled) aktif.checked = false;
-  $('plAktifL').classList.toggle('mati', aktif.disabled);
+  $('pollAktifL').classList.toggle('mati', aktif.disabled);
 }
-function pesanPolling(teks, galat){
-  const el = $('plPesan'); if (!el) return;
-  el.textContent = teks; el.style.color = galat ? '#b91c1c' : '#15803d'; el.hidden = !teks;
+function pesanPollAdmin(teks, galat){
+  const el = $('pollPesan'); el.textContent = teks || ''; el.style.color = galat ? '#b91c1c' : '#15803d'; el.hidden = !teks;
 }
-function gambarPollingAdmin(isi, d, versi){
-  const poll = d.ada ? d.poll : null;
-  plIdAdmin = poll ? poll.id : '';
-  isi.innerHTML = `<div id="plRoot">
-    <div class="kartu-stat">
-      <div class="rd-judul-baris"><h3 class="st-judul"><i class="fa-solid fa-square-poll-vertical"></i> Kelola Polling</h3><span id="plStatus"></span></div>
-      ${fld('Deskripsi / Pertanyaan Polling', `<textarea id="plDeskripsi" maxlength="1000" placeholder="Tuliskan pertanyaan atau deskripsi polling..."></textarea><div class="pl-char"><span id="plChar">0</span>/1000 karakter</div>`, true)}
-      ${fld('Batas Waktu Polling (WITA)', '<input id="plBatas" type="datetime-local">', true)}
-      <div class="pl-cek-baris">
-        <label class="pl-cek" id="plAktifL"><input id="plAktif" type="checkbox"><span>Polling</span></label>
-        <label class="pl-cek"><input id="plHasil" type="checkbox"><span>Hasil</span></label>
-      </div>
-      <div class="pl-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga. Tombol Polling di menu warga baru muncul setelah salah satunya aktif. Pendapat dihitung satu suara per keluarga (NKK).</div>
-      <div class="pl-aksi">
-        <button type="button" class="pl-tbl sekunder" id="plBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
-        <button type="button" class="pl-tbl utama" id="plSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
-      </div>
-      <div class="pl-pesan" id="plPesan" hidden></div>
-    </div>
-    <div class="kartu-stat">
-      <h3 class="st-judul"><i class="fa-solid fa-chart-pie"></i> Rekap Suara</h3>
-      <div id="plRekap"></div>
-    </div>
-  </div>`;
-  if (poll){
-    $('plDeskripsi').value = poll.deskripsi || '';
-    $('plBatas').value = keInputWita(poll.batas_waktu);
-    $('plAktif').checked = !!poll.polling_aktif; $('plHasil').checked = !!poll.hasil_aktif;
+function kosongkanFormPoll(){
+  plIdAdmin = '';
+  $('pollDeskripsi').value = ''; $('pollBatas').value = ''; $('pollAktif').checked = false; $('pollHasil').checked = false;
+  $('pollChar').textContent = '0'; aturKontrolPoll();
+}
+async function bukaPollingAdmin(){
+  kosongkanFormPoll(); pesanPollAdmin('');
+  $('pollStatusAdmin').innerHTML = ''; $('pollRekap').innerHTML = '<div class="poll-kosong"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</div>';
+  bukaModalPoll('pollAdminModal');
+  const d = await ambilPolling();
+  if (!d.ok){ pesanPollAdmin(d.pesan, true); $('pollRekap').innerHTML = ''; return; }
+  if (d.ada && d.poll){
+    plIdAdmin = d.poll.id;
+    $('pollDeskripsi').value = d.poll.deskripsi || '';
+    $('pollBatas').value = keInputWita(d.poll.batas_waktu);
+    $('pollAktif').checked = !!d.poll.polling_aktif; $('pollHasil').checked = !!d.poll.hasil_aktif;
+    $('pollChar').textContent = $('pollDeskripsi').value.length;
   }
-  $('plChar').textContent = $('plDeskripsi').value.length;
-  isiRekapAdmin(d); aturKontrolPolling();
-
-  $('plDeskripsi').addEventListener('input', () => { $('plChar').textContent = $('plDeskripsi').value.length; });
-  $('plBatas').addEventListener('change', aturKontrolPolling);
-  $('plHasil').addEventListener('change', aturKontrolPolling);
-  $('plBaru').addEventListener('click', () => {
-    plIdAdmin = '';
-    $('plDeskripsi').value = ''; $('plBatas').value = ''; $('plAktif').checked = false; $('plHasil').checked = false;
-    $('plChar').textContent = '0'; $('plStatus').innerHTML = '<span class="pl-status">Polling baru</span>';
-    aturKontrolPolling(); pesanPolling('Polling baru akan menggantikan polling yang sekarang tampil bagi warga setelah disimpan.', false);
-    $('plDeskripsi').focus();
-  });
-  $('plSimpan').addEventListener('click', () => simpanPollingAdmin(versi));
-  plPoll = setInterval(async () => {                      // rekap suara selalu terbaru; isian formulir tidak disentuh
-    if (versi !== versiSubform || !$('plRekap')){ stopPolling(); return; }
-    if (document.hidden) return;
-    const n = await ambilPolling();
-    if (versi === versiSubform && n.ok && $('plRekap') && (n.ada ? n.poll.id : '') === plIdAdmin) isiRekapAdmin(n);
-  }, 15000);
+  isiRekapPoll(d); aturKontrolPoll();
 }
-async function simpanPollingAdmin(versi){
-  const deskripsi = $('plDeskripsi').value.trim(), batas = $('plBatas').value;
-  const aktif = $('plAktif').checked, hasil = $('plHasil').checked;
-  if (!deskripsi) return pesanPolling('Deskripsi / pertanyaan wajib diisi.', true);
-  if (deskripsi.length > 1000) return pesanPolling('Deskripsi maksimal 1000 karakter.', true);
-  if (!batas) return pesanPolling('Batas waktu wajib ditentukan.', true);
-  const btn = $('plSimpan'); btn.disabled = true; pesanPolling('Menyimpan...', false);
+$('pollDeskripsi').addEventListener('input', () => { $('pollChar').textContent = $('pollDeskripsi').value.length; });
+$('pollBatas').addEventListener('change', aturKontrolPoll);
+$('pollHasil').addEventListener('change', aturKontrolPoll);
+$('pollBaru').addEventListener('click', () => {
+  kosongkanFormPoll();
+  $('pollStatusAdmin').innerHTML = '<span class="poll-status">Polling baru</span>';
+  pesanPollAdmin('Polling baru akan menggantikan polling yang sekarang tampil bagi warga setelah disimpan.', false);
+  $('pollDeskripsi').focus();
+});
+$('pollSimpan').addEventListener('click', async () => {
+  const deskripsi = $('pollDeskripsi').value.trim(), batas = $('pollBatas').value;
+  const aktif = $('pollAktif').checked, hasil = $('pollHasil').checked;
+  if (!deskripsi) return pesanPollAdmin('Deskripsi / pertanyaan wajib diisi.', true);
+  if (deskripsi.length > 1000) return pesanPollAdmin('Deskripsi maksimal 1000 karakter.', true);
+  if (!batas) return pesanPollAdmin('Batas waktu wajib ditentukan.', true);
+  const btn = $('pollSimpan'); btn.disabled = true; pesanPollAdmin('Menyimpan...', false);
   const h = await kirimRpc('polling_admin_simpan', { id: plIdAdmin, deskripsi, batas_waktu: batas, polling_aktif: aktif, hasil_aktif: hasil });
-  if (versi !== versiSubform || !$('plSimpan')) return;
   btn.disabled = false;
-  if (!h || !h.ok) return pesanPolling((h && h.pesan) || 'Polling gagal disimpan.', true);
+  if (!h || !h.ok) return pesanPollAdmin((h && h.pesan) || 'Polling gagal disimpan.', true);
   plIdAdmin = h.id || plIdAdmin;
-  pesanPolling(h.pesan || 'Data polling telah disimpan.', false);
-  toast('Data polling telah disimpan.');
+  pesanPollAdmin(h.pesan || 'Data polling telah disimpan.', false);
   const n = await ambilPolling();
-  if (versi === versiSubform && n.ok && $('plRekap')){
-    if (n.ada && n.poll) $('plAktif').checked = !!n.poll.polling_aktif;
-    isiRekapAdmin(n); aturKontrolPolling();
+  if (n.ok){ if (n.ada && n.poll) $('pollAktif').checked = !!n.poll.polling_aktif; isiRekapPoll(n); aturKontrolPoll(); }
+  setTimeout(() => { if ($('pollAdminModal').classList.contains('tampil')) kembaliLapisan(); }, 1200);
+});
+
+/* ---------- Warga: Polling Warga ---------- */
+function gambarPollingUser(d){
+  const poll = d.poll, isi = $('pollUserIsi');
+  hentikanHitungPoll();
+  const info = (hitung) => `<div class="poll-info"><div class="poll-batas"><i class="fa-regular fa-clock"></i> Batas Waktu: ${esc(tglWaktuPoll(poll.batas_waktu))}</div>
+    ${hitung ? '<div class="poll-hitung"><i class="fa-solid fa-hourglass-half"></i> Sisa Waktu: <span id="pollHitung">--:--:--</span></div>' : ''}</div>`;
+  const tombol = (jaw, kelas, ikon, mati) => `<button type="button" class="poll-pilih ${kelas}" data-pilih="${jaw}" ${mati ? 'disabled' : ''}><i class="fa-solid ${ikon}"></i><span>${jaw}</span></button>`;
+  const grid = (mati) => `<div class="poll-grid">${tombol('Setuju', 'setuju', 'fa-thumbs-up', mati)}${tombol('Tidak Setuju', 'tidak', 'fa-thumbs-down', mati)}${tombol('Abstain', 'abstain', 'fa-minus', mati)}</div>`;
+
+  let html = `<div class="poll-tanya">${esc(poll.deskripsi)}</div>`;
+  if (poll.hasil_aktif){
+    html += info(false) + hasilPolling(d.suara, 'Hasil Polling');
+  } else if (d.jawaban_keluarga){
+    html += info(poll.terbuka) + `<div class="poll-keluarga">${d.oleh_saya ? 'Pendapat Anda' : 'Keluarga Anda telah memberikan pendapatnya yaitu'} <b>${esc(d.jawaban_keluarga)}</b>${d.oleh_saya ? ' telah tercatat untuk keluarga Anda' : ''} dengan rencana/kebijakan RT.</div>` + grid(true);
+  } else if (poll.terbuka){
+    html += info(true) + grid(false);
+  } else {
+    html += info(false) + '<div class="poll-kosong">Polling belum dibuka atau sudah berakhir.</div>';
+  }
+  isi.innerHTML = html;
+  isi.querySelectorAll('[data-pilih]').forEach(b => b.addEventListener('click', () => mintaKonfirmasiPoll(b.dataset.pilih)));
+
+  if ($('pollHitung')){                                  // hitung mundur hanya saat polling masih terbuka
+    const batas = Date.parse(poll.batas_waktu);
+    const ubah = async () => {
+      if (!$('pollHitung')){ hentikanHitungPoll(); return; }
+      const sisa = batas - sekarangPoll();
+      if (isNaN(batas) || sisa <= 0){                    // waktu habis: muat ulang tampilan
+        hentikanHitungPoll();
+        const n = await ambilPolling();
+        if (n.ok && n.ada && $('pollUserModal').classList.contains('tampil')) gambarPollingUser(n);
+        return;
+      }
+      const dt = Math.floor(sisa / 1000);
+      $('pollHitung').textContent = `${dua(Math.floor(dt / 3600))}:${dua(Math.floor(dt % 3600 / 60))}:${dua(dt % 60)}`;
+    };
+    ubah(); plTimer = setInterval(ubah, 1000);
   }
 }
+function mintaKonfirmasiPoll(jawaban){
+  pollPilihan = jawaban;
+  $('pollConfirmTeks').innerHTML = `Anda <b>${esc(jawaban.toUpperCase())}</b> dengan rencana/kebijakan RT?<small>Pendapat berlaku untuk satu keluarga (NKK) dan tidak dapat diubah setelah dikirim.</small>`;
+  bukaModalPoll('pollConfirmModal');
+}
+$('pollYa').addEventListener('click', async () => {
+  if (!pollStatus || !pollStatus.poll || !pollPilihan) return;
+  const btn = $('pollYa'); btn.disabled = true;
+  const h = await kirimRpc('polling_pilih', { poll_id: pollStatus.poll.id, jawaban: pollPilihan });
+  btn.disabled = false;
+  if (h && h.ok){
+    toast('Pendapat Anda telah tersimpan.');
+    pollTutupBerantai = true; kembaliLapisan();          // tutup konfirmasi, lalu modal Polling Warga
+    muatStatusPolling();
+  } else {
+    pollTutupBerantai = false; kembaliLapisan();         // tutup konfirmasi saja
+    toast((h && h.pesan) || 'Pendapat gagal disimpan.');
+    const n = await ambilPolling();
+    if (n.ok && n.ada && $('pollUserModal').classList.contains('tampil')) gambarPollingUser(n);
+  }
+});
 
 /* =====================================================================
    MYDATA
