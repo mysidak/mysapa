@@ -860,50 +860,7 @@
     <div class="subform-isi" id="isiSubform"></div>
   </section>
 
-  <!-- Modal Polling: Kelola Polling (admin), Polling Warga, konfirmasi pendapat -->
-  <div class="poll-latar" id="pollAdminModal" aria-hidden="true">
-    <div class="poll-kotak" role="dialog" aria-modal="true" aria-labelledby="pollAdminJudul">
-      <div class="poll-kepala">
-        <div class="poll-judul" id="pollAdminJudul"><i class="fa-solid fa-square-poll-vertical" style="color:#2563eb"></i> Kelola Polling</div>
-        <span id="pollStatusAdmin"></span>
-        <button class="poll-tutup" type="button" id="pollAdminTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="poll-grup">
-        <label class="poll-label" for="pollDeskripsi">Deskripsi / Pertanyaan Polling <b>*</b></label>
-        <textarea id="pollDeskripsi" class="poll-input" maxlength="1000" placeholder="Tuliskan pertanyaan atau deskripsi polling..."></textarea>
-        <div class="poll-char"><span id="pollChar">0</span>/1000 karakter</div>
-      </div>
-      <div class="poll-grup">
-        <label class="poll-label" for="pollBatas">Batas Waktu Polling (WITA) <b>*</b></label>
-        <input id="pollBatas" class="poll-input" type="datetime-local">
-      </div>
-      <div class="poll-grup">
-        <div class="poll-cek-baris">
-          <label class="poll-cek" id="pollAktifL"><input id="pollAktif" type="checkbox"><span>Polling</span></label>
-          <label class="poll-cek"><input id="pollHasil" type="checkbox"><span>Hasil</span></label>
-        </div>
-        <div class="poll-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga. Pendapat dihitung satu suara per keluarga (NKK).</div>
-      </div>
-      <div class="poll-aksi">
-        <button class="poll-tbl sekunder" type="button" id="pollBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
-        <button class="poll-tbl utama" type="button" id="pollSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
-      </div>
-      <div class="poll-pesan" id="pollPesan" hidden></div>
-      <div class="poll-rekap-judul"><i class="fa-solid fa-chart-pie"></i> Rekap Suara</div>
-      <div id="pollRekap"></div>
-    </div>
-  </div>
-
-  <div class="poll-latar" id="pollUserModal" aria-hidden="true">
-    <div class="poll-kotak" role="dialog" aria-modal="true" aria-labelledby="pollUserJudul">
-      <div class="poll-kepala">
-        <div class="poll-judul" id="pollUserJudul"><i class="fa-solid fa-square-poll-vertical" style="color:#2563eb"></i> Polling Warga</div>
-        <button class="poll-tutup" type="button" id="pollUserTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div id="pollUserIsi"></div>
-    </div>
-  </div>
-
+  <!-- Modal konfirmasi pendapat polling -->
   <div class="poll-latar" id="pollConfirmModal" aria-hidden="true">
     <div class="poll-kotak" style="max-width:360px;text-align:center" role="dialog" aria-modal="true" aria-labelledby="pollConfirmJudul">
       <div class="poll-kepala" style="justify-content:center;margin-bottom:4px">
@@ -2011,7 +1968,7 @@ let versiSubform = 0;
 function bukaSubform(kunci){
   const s = DAFTAR_SUBFORM[kunci]; if (!s) return;
   if (MENU_KHUSUS.includes(kunci) && !aksesPenuh) return;
-  if (kunci === 'polling'){ bukaPolling(); return; }          // polling berbentuk modal, bukan subform
+  if (kunci === 'polling' && !pollingAktifUntukSaya()){ toast('Polling belum dibuka oleh admin.'); return; }
   if (kunci === 'absensironda' && !aksesRonda){ toast('Absensi Ronda hanya untuk petugas ronda dan Admin.'); return; }
   versiSubform++;
   $('judulSubform').textContent = s.judul;
@@ -2031,6 +1988,8 @@ function bukaSubform(kunci){
     renderMyData(isi);
   } else if (kunci === 'absensironda'){
     renderAbsensiRonda(isi);
+  } else if (kunci === 'polling'){
+    renderPolling(isi);
   } else if (kunci === 'programkerja'){
     renderProgramKerja(isi);
   } else if (kunci === 'bantuan'){
@@ -2096,7 +2055,15 @@ async function kirimRpc(fn, p){
     const { data, error } = await db.rpc(fn, { p_token: tokenSesi, p });
     if (error) throw error;
     return data || { ok:false, pesan:'Tidak ada respons dari server.' };
-  }catch(e){ console.error(e); return { ok:false, pesan:'Tidak dapat terhubung ke server.' }; }
+  }catch(e){
+    console.error(e);
+    const msg = String((e && e.message) || '');
+    if (e && (e.code || e.details || e.hint)){             // galat dari database / fungsi, bukan masalah jaringan
+      if (e.code === 'PGRST202' || /could not find the function/i.test(msg)) return { ok:false, pesan:'Fungsi di Supabase belum terpasang atau berbeda (' + fn + '). Jalankan ulang file SQL-nya.' };
+      return { ok:false, pesan:'Kesalahan server (' + fn + '): ' + (msg || e.code) };
+    }
+    return { ok:false, pesan:'Tidak dapat terhubung ke server.' };
+  }
 }
 
 /* ---------- Modal form generik ---------- */
@@ -2704,8 +2671,10 @@ function bangunEfekUltah(){
 /* =====================================================================
    POLLING (dibuka admin)
    ===================================================================== */
-/* Polling berbentuk modal (pola aplikasi lama): admin mengelola lewat "Kelola Polling", warga memilih lewat "Polling Warga" + konfirmasi.
-   Data di Supabase (09_polling.sql). Admin melihat polling terbaru apa adanya; warga hanya bila terbuka atau hasilnya ditampilkan. */
+/* Polling berbentuk subform. Alur: tombol Polling -> admin: Kelola Polling (simpan lalu kembali ke menu) / warga: Polling Warga
+   (pilih -> konfirmasi -> kembali ke menu). Data di Supabase (09_polling.sql). Admin melihat polling terbaru apa adanya;
+   warga hanya bila terbuka atau hasilnya ditampilkan. */
+const BATAS_TANYA_POLLING = 500;
 const sekarangPoll = () => Date.now() + pollSelisih;
 const keInputWita = (iso) => { const t = Date.parse(iso); return isNaN(t) ? '' : new Date(t + 8 * 3600 * 1000).toISOString().slice(0, 16); };
 const epochDariInput = (v) => v ? Date.parse(v + ':00+08:00') : NaN;     // isian datetime-local dibaca sebagai WITA
@@ -2736,29 +2705,25 @@ async function ambilPolling(){
   }catch(e){ console.error(e); return { ok:false, pesan:'Tidak dapat memuat polling. Periksa koneksi Anda.' }; }
 }
 async function muatStatusPolling(){ if (tokenSesi) await ambilPolling(); }
+function hentikanPoll(){ clearInterval(plTimer); clearInterval(plPoll); plTimer = plPoll = null; }
 
-/* ---------- Modal: buka / tutup (terhubung ke tombol back HP) ---------- */
-const MODAL_POLL = ['pollAdminModal', 'pollUserModal', 'pollConfirmModal'];
+/* ---------- Modal konfirmasi pendapat (terhubung ke tombol back HP) ---------- */
+const MODAL_POLL = ['pollConfirmModal'];
 let pollTutupBerantai = false, pollPilihan = '';
-function hentikanHitungPoll(){ clearInterval(plTimer); plTimer = null; }
 function bukaModalPoll(id){
   const el = $(id); el.classList.add('tampil'); el.setAttribute('aria-hidden', 'false');
-  el.scrollTop = 0; const k = el.querySelector('.poll-kotak'); if (k) k.scrollTop = 0;
   bukaLapisan(() => tutupModalPoll(id));
 }
 function tutupModalPoll(id){
   const el = $(id); if (!el) return;
   el.classList.remove('tampil'); el.setAttribute('aria-hidden', 'true');
-  if (id === 'pollUserModal') hentikanHitungPoll();
-  if (id === 'pollConfirmModal' && pollTutupBerantai){ pollTutupBerantai = false; setTimeout(kembaliLapisan, 0); }   // setelah memilih: tutup juga modal Polling Warga
+  if (id === 'pollConfirmModal' && pollTutupBerantai){ pollTutupBerantai = false; setTimeout(kembaliLapisan, 0); }   // setelah memilih: kembali ke menu
 }
 function tutupSemuaModalPoll(){
   MODAL_POLL.forEach(id => { const el = $(id); if (el){ el.classList.remove('tampil'); el.setAttribute('aria-hidden', 'true'); } });
-  hentikanHitungPoll(); pollTutupBerantai = false;
+  hentikanPoll(); pollTutupBerantai = false;
 }
 MODAL_POLL.forEach(id => $(id).addEventListener('click', e => { if (e.target === e.currentTarget) kembaliLapisan(); }));
-$('pollAdminTutup').addEventListener('click', kembaliLapisan);
-$('pollUserTutup').addEventListener('click', kembaliLapisan);
 $('pollTidak').addEventListener('click', kembaliLapisan);
 
 /* ---------- Diagram hasil ---------- */
@@ -2774,15 +2739,15 @@ function hasilPolling(suara, judul){
     <div class="poll-total">Total pendapat (per keluarga): ${fmt(total)}</div>`;
 }
 
-/* ---------- Klik tombol Polling di menu ---------- */
-async function bukaPolling(){
-  if (!tokenSesi) return;
-  if (aksesPenuh) return bukaPollingAdmin();
+/* ---------- Isi subform Polling ---------- */
+async function renderPolling(isi){
+  hentikanPoll();
+  const versi = versiSubform;
+  isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat polling...</div>';
   const d = await ambilPolling();
-  if (!d.ok){ toast(d.pesan); return; }
-  if (!d.ada || !d.poll){ toast('Polling belum dibuka oleh admin.'); return; }
-  gambarPollingUser(d);
-  bukaModalPoll('pollUserModal');
+  if (versi !== versiSubform) return;
+  if (!d.ok){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(d.pesan)}</div>`; return; }
+  if (aksesPenuh) gambarPollingAdmin(isi, d, versi); else gambarPollingUser(isi, d, versi);
 }
 
 /* ---------- Admin: Kelola Polling ---------- */
@@ -2794,10 +2759,12 @@ function statusPollingAdmin(poll){
   return '<span class="poll-status">Draft</span>';
 }
 function isiRekapPoll(d){
+  if (!$('pollRekap')) return;
   $('pollStatusAdmin').innerHTML = statusPollingAdmin(d.ada ? d.poll : null);
   $('pollRekap').innerHTML = d.ada && d.poll ? hasilPolling(d.suara) : '<div class="poll-kosong">Belum ada polling.</div>';
 }
 function aturKontrolPoll(){
+  if (!$('pollBatas')) return;
   const valid = epochDariInput($('pollBatas').value) >= sekarangPoll();
   const hasil = $('pollHasil').checked, aktif = $('pollAktif');
   aktif.disabled = !valid || hasil;
@@ -2805,58 +2772,95 @@ function aturKontrolPoll(){
   $('pollAktifL').classList.toggle('mati', aktif.disabled);
 }
 function pesanPollAdmin(teks, galat){
-  const el = $('pollPesan'); el.textContent = teks || ''; el.style.color = galat ? '#b91c1c' : '#15803d'; el.hidden = !teks;
+  const el = $('pollPesan'); if (!el) return;
+  el.textContent = teks || ''; el.style.color = galat ? '#b91c1c' : '#15803d'; el.hidden = !teks;
 }
-function kosongkanFormPoll(){
-  plIdAdmin = '';
-  $('pollDeskripsi').value = ''; $('pollBatas').value = ''; $('pollAktif').checked = false; $('pollHasil').checked = false;
-  $('pollChar').textContent = '0'; aturKontrolPoll();
-}
-async function bukaPollingAdmin(){
-  kosongkanFormPoll(); pesanPollAdmin('');
-  $('pollStatusAdmin').innerHTML = ''; $('pollRekap').innerHTML = '<div class="poll-kosong"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</div>';
-  bukaModalPoll('pollAdminModal');
-  const d = await ambilPolling();
-  if (!d.ok){ pesanPollAdmin(d.pesan, true); $('pollRekap').innerHTML = ''; return; }
-  if (d.ada && d.poll){
-    plIdAdmin = d.poll.id;
-    $('pollDeskripsi').value = d.poll.deskripsi || '';
-    $('pollBatas').value = keInputWita(d.poll.batas_waktu);
-    $('pollAktif').checked = !!d.poll.polling_aktif; $('pollHasil').checked = !!d.poll.hasil_aktif;
-    $('pollChar').textContent = $('pollDeskripsi').value.length;
+function gambarPollingAdmin(isi, d, versi){
+  const poll = d.ada ? d.poll : null;
+  plIdAdmin = poll ? poll.id : '';
+  isi.innerHTML = `
+    <div class="kartu-stat">
+      <div class="rd-judul-baris"><h3 class="st-judul"><i class="fa-solid fa-square-poll-vertical"></i> Kelola Polling</h3><span id="pollStatusAdmin"></span></div>
+      <div class="poll-grup">
+        <label class="poll-label" for="pollDeskripsi">Deskripsi / Pertanyaan Polling <b>*</b></label>
+        <textarea id="pollDeskripsi" class="poll-input" maxlength="${BATAS_TANYA_POLLING}" placeholder="Tuliskan pertanyaan atau deskripsi polling..."></textarea>
+        <div class="poll-char"><span id="pollChar">0</span>/${BATAS_TANYA_POLLING} karakter</div>
+      </div>
+      <div class="poll-grup">
+        <label class="poll-label" for="pollBatas">Batas Waktu Polling (WITA) <b>*</b></label>
+        <input id="pollBatas" class="poll-input" type="datetime-local">
+      </div>
+      <div class="poll-grup">
+        <div class="poll-cek-baris">
+          <label class="poll-cek" id="pollAktifL"><input id="pollAktif" type="checkbox"><span>Polling</span></label>
+          <label class="poll-cek"><input id="pollHasil" type="checkbox"><span>Hasil</span></label>
+        </div>
+        <div class="poll-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga. Pendapat dihitung satu suara per keluarga (NKK).</div>
+      </div>
+      <div class="poll-aksi">
+        <button class="poll-tbl sekunder" type="button" id="pollBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
+        <button class="poll-tbl utama" type="button" id="pollSimpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+      </div>
+      <div class="poll-pesan" id="pollPesan" hidden></div>
+    </div>
+    <div class="kartu-stat">
+      <h3 class="st-judul"><i class="fa-solid fa-chart-pie"></i> Rekap Suara</h3>
+      <div id="pollRekap"></div>
+    </div>`;
+  if (poll){
+    $('pollDeskripsi').value = poll.deskripsi || '';
+    $('pollBatas').value = keInputWita(poll.batas_waktu);
+    $('pollAktif').checked = !!poll.polling_aktif; $('pollHasil').checked = !!poll.hasil_aktif;
   }
+  $('pollChar').textContent = $('pollDeskripsi').value.length;
   isiRekapPoll(d); aturKontrolPoll();
+
+  $('pollDeskripsi').addEventListener('input', () => { $('pollChar').textContent = $('pollDeskripsi').value.length; });
+  $('pollBatas').addEventListener('change', aturKontrolPoll);
+  $('pollHasil').addEventListener('change', aturKontrolPoll);
+  $('pollBaru').addEventListener('click', () => {
+    plIdAdmin = '';
+    $('pollDeskripsi').value = ''; $('pollBatas').value = ''; $('pollAktif').checked = false; $('pollHasil').checked = false;
+    $('pollChar').textContent = '0'; aturKontrolPoll();
+    $('pollStatusAdmin').innerHTML = '<span class="poll-status">Polling baru</span>';
+    pesanPollAdmin('Polling baru akan menggantikan polling yang sekarang tampil bagi warga setelah disimpan.', false);
+    $('pollDeskripsi').focus();
+  });
+  $('pollSimpan').addEventListener('click', () => simpanPollingAdmin(versi));
+  plPoll = setInterval(async () => {                      // rekap suara selalu terbaru; isian formulir tidak disentuh
+    if (versi !== versiSubform || !$('pollRekap')){ hentikanPoll(); return; }
+    if (document.hidden) return;
+    const n = await ambilPolling();
+    if (versi === versiSubform && n.ok && $('pollRekap') && (n.ada ? n.poll.id : '') === plIdAdmin) isiRekapPoll(n);
+  }, 15000);
 }
-$('pollDeskripsi').addEventListener('input', () => { $('pollChar').textContent = $('pollDeskripsi').value.length; });
-$('pollBatas').addEventListener('change', aturKontrolPoll);
-$('pollHasil').addEventListener('change', aturKontrolPoll);
-$('pollBaru').addEventListener('click', () => {
-  kosongkanFormPoll();
-  $('pollStatusAdmin').innerHTML = '<span class="poll-status">Polling baru</span>';
-  pesanPollAdmin('Polling baru akan menggantikan polling yang sekarang tampil bagi warga setelah disimpan.', false);
-  $('pollDeskripsi').focus();
-});
-$('pollSimpan').addEventListener('click', async () => {
+async function simpanPollingAdmin(versi){
   const deskripsi = $('pollDeskripsi').value.trim(), batas = $('pollBatas').value;
   const aktif = $('pollAktif').checked, hasil = $('pollHasil').checked;
   if (!deskripsi) return pesanPollAdmin('Deskripsi / pertanyaan wajib diisi.', true);
-  if (deskripsi.length > 1000) return pesanPollAdmin('Deskripsi maksimal 1000 karakter.', true);
+  if (deskripsi.length > BATAS_TANYA_POLLING) return pesanPollAdmin('Deskripsi maksimal ' + BATAS_TANYA_POLLING + ' karakter.', true);
   if (!batas) return pesanPollAdmin('Batas waktu wajib ditentukan.', true);
   const btn = $('pollSimpan'); btn.disabled = true; pesanPollAdmin('Menyimpan...', false);
   const h = await kirimRpc('polling_admin_simpan', { id: plIdAdmin, deskripsi, batas_waktu: batas, polling_aktif: aktif, hasil_aktif: hasil });
+  if (versi !== versiSubform || !$('pollSimpan')) return;
   btn.disabled = false;
   if (!h || !h.ok) return pesanPollAdmin((h && h.pesan) || 'Polling gagal disimpan.', true);
   plIdAdmin = h.id || plIdAdmin;
   pesanPollAdmin(h.pesan || 'Data polling telah disimpan.', false);
+  toast('Data polling telah disimpan.');
   const n = await ambilPolling();
-  if (n.ok){ if (n.ada && n.poll) $('pollAktif').checked = !!n.poll.polling_aktif; isiRekapPoll(n); aturKontrolPoll(); }
-  setTimeout(() => { if ($('pollAdminModal').classList.contains('tampil')) kembaliLapisan(); }, 1200);
-});
+  if (versi === versiSubform && n.ok && $('pollRekap')){
+    if (n.ada && n.poll) $('pollAktif').checked = !!n.poll.polling_aktif;
+    isiRekapPoll(n); aturKontrolPoll();
+  }
+  setTimeout(() => { if (versi === versiSubform && $('subform').classList.contains('buka')) kembaliLapisan(); }, 1200);   // kembali ke menu
+}
 
 /* ---------- Warga: Polling Warga ---------- */
-function gambarPollingUser(d){
-  const poll = d.poll, isi = $('pollUserIsi');
-  hentikanHitungPoll();
+function gambarPollingUser(isi, d, versi){
+  const poll = d.poll;
+  hentikanPoll();
+  if (!d.ada || !poll){ isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-square-poll-vertical"></i>Polling belum dibuka oleh admin.</div>'; return; }
   const info = (hitung) => `<div class="poll-info"><div class="poll-batas"><i class="fa-regular fa-clock"></i> Batas Waktu: ${esc(tglWaktuPoll(poll.batas_waktu))}</div>
     ${hitung ? '<div class="poll-hitung"><i class="fa-solid fa-hourglass-half"></i> Sisa Waktu: <span id="pollHitung">--:--:--</span></div>' : ''}</div>`;
   const tombol = (jaw, kelas, ikon, mati) => `<button type="button" class="poll-pilih ${kelas}" data-pilih="${jaw}" ${mati ? 'disabled' : ''}><i class="fa-solid ${ikon}"></i><span>${jaw}</span></button>`;
@@ -2872,18 +2876,18 @@ function gambarPollingUser(d){
   } else {
     html += info(false) + '<div class="poll-kosong">Polling belum dibuka atau sudah berakhir.</div>';
   }
-  isi.innerHTML = html;
+  isi.innerHTML = `<div class="kartu-stat">${html}</div>`;
   isi.querySelectorAll('[data-pilih]').forEach(b => b.addEventListener('click', () => mintaKonfirmasiPoll(b.dataset.pilih)));
 
   if ($('pollHitung')){                                  // hitung mundur hanya saat polling masih terbuka
     const batas = Date.parse(poll.batas_waktu);
     const ubah = async () => {
-      if (!$('pollHitung')){ hentikanHitungPoll(); return; }
+      if (versi !== versiSubform || !$('pollHitung')){ hentikanPoll(); return; }
       const sisa = batas - sekarangPoll();
       if (isNaN(batas) || sisa <= 0){                    // waktu habis: muat ulang tampilan
-        hentikanHitungPoll();
+        hentikanPoll();
         const n = await ambilPolling();
-        if (n.ok && n.ada && $('pollUserModal').classList.contains('tampil')) gambarPollingUser(n);
+        if (versi === versiSubform && n.ok) gambarPollingUser($('isiSubform'), n, versi);
         return;
       }
       const dt = Math.floor(sisa / 1000);
@@ -2899,18 +2903,19 @@ function mintaKonfirmasiPoll(jawaban){
 }
 $('pollYa').addEventListener('click', async () => {
   if (!pollStatus || !pollStatus.poll || !pollPilihan) return;
+  const versi = versiSubform;
   const btn = $('pollYa'); btn.disabled = true;
   const h = await kirimRpc('polling_pilih', { poll_id: pollStatus.poll.id, jawaban: pollPilihan });
   btn.disabled = false;
   if (h && h.ok){
     toast('Pendapat Anda telah tersimpan.');
-    pollTutupBerantai = true; kembaliLapisan();          // tutup konfirmasi, lalu modal Polling Warga
+    pollTutupBerantai = true; kembaliLapisan();          // tutup konfirmasi, lalu kembali ke menu
     muatStatusPolling();
   } else {
     pollTutupBerantai = false; kembaliLapisan();         // tutup konfirmasi saja
     toast((h && h.pesan) || 'Pendapat gagal disimpan.');
     const n = await ambilPolling();
-    if (n.ok && n.ada && $('pollUserModal').classList.contains('tampil')) gambarPollingUser(n);
+    if (versi === versiSubform && n.ok) gambarPollingUser($('isiSubform'), n, versi);
   }
 });
 
