@@ -439,6 +439,56 @@
   #toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:#1e293b;color:#fff;
     padding:10px 16px;border-radius:12px;font-size:.8rem;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:90%}
   #toast.tampil{opacity:1;transform:translate(-50%,0)}
+  /* ===== Subform Program Kerja (dibatasi di .pk) ===== */
+ .pk{--bri-navy:#002D58;--bri-blue-dark:#003865;--bri-blue:#00529C;--bri-blue-light:#1072BA;--bri-accent-orange:#FF6B00;--bri-orange-soft:#FFF2EA;--bri-green:#10B981;--bri-green-soft:#E6F4EA;--bg-canvas:#F2F5F9;--card-bg:#FFFFFF;--text-main:#1E293B;--text-muted:#64748B;--border-color:#E2E8F0;color:var(--text-main)}
+  .pk *{box-sizing:border-box;margin:0;padding:0;font-family:inherit;-webkit-tap-highlight-color:transparent}
+  .pk .summary-card{background: #FFFFFF; border-radius: 20px; padding: 20px; margin: 0 0 16px 0; box-shadow: 0 10px 25px rgba(0, 56, 101, 0.08); position: relative; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.8);}
+  .pk .summary-header{display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;}
+  .pk .summary-title{font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
+  .pk .summary-percentage{font-size: 13px; font-weight: 800; color: var(--bri-blue); background: rgba(0, 82, 156, 0.08); padding: 4px 10px; border-radius: 20px;}
+  .pk .progress-bar-container{width: 100%; height: 10px; background: #E2E8F0; border-radius: 10px; overflow: hidden; margin-bottom: 16px;}
+  .pk .progress-bar-fill{height: 100%; width: 55%; background: linear-gradient(90deg, var(--bri-blue) 0%, var(--bri-accent-orange) 100%); border-radius: 10px; transition: width 0.8s ease;}
+  .pk .summary-grid{display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 14px;}
+  .pk .stat-item .stat-num{font-size: 22px; font-weight: 800; color: var(--bri-navy);}
+  .pk .stat-item .stat-label{font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 500;}
+  .pk .stat-realized{color: var(--bri-green) !important;}
+  .pk .stat-pending{color: var(--bri-accent-orange) !important;}
+  .pk .content-section{width: 100%;}
+  .pk .top-info-grid{display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 20px; width: 100%;}
+  .pk .visi-card{background: linear-gradient(135deg, #003865 0%, #00529C 100%); border-radius: 16px; padding: 18px 20px; color: white; position: relative; overflow: hidden; box-shadow: 0 6px 16px rgba(0, 56, 101, 0.12); display: flex; flex-direction: column; justify-content: center; width: 100%;}
+  .pk .visi-header{display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #FFB37C; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;}
+  .pk .visi-text{font-size: 13px; line-height: 1.55; opacity: 0.95; font-weight: 500;}
+  .pk .search-filter-box{background: #FFFFFF; padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; width: 100%; min-width: 0;}
+  .pk .search-input-wrapper{position: relative; margin-bottom: 12px; width: 100%;}
+  .pk .search-input-wrapper i{position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;}
+  .pk .search-input{width: 100%; padding: 12px 14px 12px 40px; border-radius: 12px; border: 1px solid var(--border-color); background: #FFFFFF; font-size: 13px; outline: none; transition: all 0.2s ease;}
+  .pk .search-input:focus{border-color: var(--bri-blue); box-shadow: 0 0 0 3px rgba(0, 82, 156, 0.1);}
+  .pk .filter-pills{display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%;}
+  .pk .pill-btn{padding: 8px 4px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid var(--border-color); background: #FFFFFF; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%;}
+  .pk .pill-btn.active{background: var(--bri-blue); color: white; border-color: var(--bri-blue); box-shadow: 0 4px 10px rgba(0, 82, 156, 0.2);}
+  .pk .section-title{font-size: 15px; font-weight: 700; color: var(--bri-navy); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between;}
+  .pk .misi-list{display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; width: 100%;}
+  .pk .misi-card-item{background: #FFFFFF; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02); width: 100%;}
+  .pk .misi-card-header{padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; background: #FFFFFF; transition: background 0.2s;}
+  .pk .misi-title-group{display: flex; align-items: center; gap: 12px; flex: 1; padding-right: 10px;}
+  .pk .misi-icon-badge{width: 42px; height: 42px; border-radius: 12px; background: rgba(0, 82, 156, 0.06); color: var(--bri-blue); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;}
+  .pk .misi-text-box h2{font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.35;}
+  .pk .misi-text-box span{font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; display: block;}
+  .pk .toggle-arrow{width: 30px; height: 30px; border-radius: 50%; background: var(--bg-canvas); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--text-muted); transition: transform 0.3s ease, background 0.3s ease;}
+  .pk .misi-card-body{max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); background: #FAFAFA; border-top: 1px solid transparent;}
+  .pk .program-inner-list{padding: 14px; display: flex; flex-direction: column; gap: 10px;}
+  .pk .program-box{background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;}
+  .pk .program-left-content{display: flex; align-items: flex-start; gap: 10px; flex: 1;}
+  .pk .program-num-tag{background: var(--bri-blue); color: white; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 6px; margin-top: 1px; flex-shrink: 0;}
+  .pk .program-title-text{font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.45;}
+  .pk .status-pill{font-size: 10.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; white-space: nowrap;}
+  .pk .status-realized{background: var(--bri-green-soft); color: #067A4B; border: 1px solid #B7EBC9;}
+  .pk .status-pending{background: var(--bri-orange-soft); color: var(--bri-accent-orange); border: 1px solid #FFD8C2;}
+  .pk .misi-card-item.active{border-color: var(--bri-blue); box-shadow: 0 4px 16px rgba(0, 82, 156, 0.08);}
+  .pk .misi-card-item.active .misi-card-header{background: #F8FAFC;}
+  .pk .misi-card-item.active .misi-icon-badge{background: var(--bri-blue); color: white;}
+  .pk .misi-card-item.active .toggle-arrow{transform: rotate(180deg); background: var(--bri-blue); color: white;}
+  .pk .misi-card-item.active .misi-card-body{max-height: 800px; border-top-color: var(--border-color);}
 </style>
 </head>
 <body>
@@ -921,6 +971,379 @@ async function renderStatistik(isi){
     options:opsiBar(true, false), plugins:[pluginNilai] }));
 }
 
+
+/* ---------- Subform Program Kerja ---------- */
+function renderProgramKerja(isi){
+  isi.innerHTML = `<div class="pk" id="pkRoot">
+<!-- Floating Dashboard Summary Card -->
+    <div class="summary-card">
+      <div class="summary-left-pane">
+        <div class="summary-header">
+          <div class="summary-title">
+            <i class="fa-solid fa-chart-pie" style="color: var(--bri-blue);"></i> Capaian Program
+          </div>
+          <div class="summary-percentage">55% Selesai</div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="progress-bar-container" style="margin-bottom: 0;">
+          <div class="progress-bar-fill" id="pkBar"></div>
+        </div>
+      </div>
+
+      <!-- Grid Stat Summary -->
+      <div class="summary-grid">
+        <div class="stat-item">
+          <div class="stat-num">11</div>
+          <div class="stat-label">Total Program</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num stat-realized">6</div>
+          <div class="stat-label">Terealisasi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num stat-pending">5</div>
+          <div class="stat-label">Rencana</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-section">
+
+      <!-- Grid Info Section -->
+      <div class="top-info-grid">
+        <!-- Visi Card -->
+        <div class="visi-card">
+          <div class="visi-header">
+            <i class="fa-solid fa-bullseye"></i> Visi Utama RT 09
+          </div>
+          <div class="visi-text">
+            “Terwujudnya RT yang unggul dalam pelayanan, nyaman, berkelanjutan, dan tangguh terhadap tantangan lingkungan.”
+          </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="search-filter-box">
+          <div class="search-input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="pkCari" class="search-input" placeholder="Cari program kerja RT...">
+          </div>
+
+          <div class="filter-pills">
+            <button class="pill-btn active" data-pk-filter="all">Semua (11)</button>
+            <button class="pill-btn" data-pk-filter="realized"><i class="fa-solid fa-circle-check" style="color: var(--bri-green);"></i> Selesai (6)</button>
+            <button class="pill-btn" data-pk-filter="pending"><i class="fa-solid fa-clock" style="color: var(--bri-accent-orange);"></i> Rencana (5)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Heading -->
+      <div class="section-title">
+        <span>Daftar Misi & Program</span>
+        <span style="font-size: 11px; font-weight: 600; color: var(--bri-blue);">5 Misi Utama</span>
+      </div>
+
+      <!-- Accordion Misi List -->
+      <div class="misi-list" id="misiContainer">
+
+        <!-- Misi 1 -->
+        <div class="misi-card-item">
+          <div class="misi-card-header">
+            <div class="misi-title-group">
+              <div class="misi-icon-badge">
+                <i class="fa-solid fa-laptop-code"></i>
+              </div>
+              <div class="misi-text-box">
+                <h2>Sistem Pelayanan Berbasis Digital</h2>
+                <span>1 Program • 100% Terealisasi</span>
+              </div>
+            </div>
+            <div class="toggle-arrow">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="misi-card-body">
+            <div class="program-inner-list">
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">1.1</span>
+                  <div class="program-title-text">Menciptakan Aplikasi Sistem Informasi dan Pelayanan Administrasi (MySAPA)</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Misi 2 -->
+        <div class="misi-card-item">
+          <div class="misi-card-header">
+            <div class="misi-title-group">
+              <div class="misi-icon-badge">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </div>
+              <div class="misi-text-box">
+                <h2>Peningkatan Mutu Prasarana Umum</h2>
+                <span>1 Program • 100% Terealisasi</span>
+              </div>
+            </div>
+            <div class="toggle-arrow">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="misi-card-body">
+            <div class="program-inner-list">
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">2.1</span>
+                  <div class="program-title-text">Renovasi Poskamling menjadi Balai SAPA Terpadu</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Misi 3 -->
+        <div class="misi-card-item">
+          <div class="misi-card-header">
+            <div class="misi-title-group">
+              <div class="misi-icon-badge">
+                <i class="fa-solid fa-building-circle-check"></i>
+              </div>
+              <div class="misi-text-box">
+                <h2>Pembangunan Sarana Umum</h2>
+                <span>4 Program • 25% Terealisasi</span>
+              </div>
+            </div>
+            <div class="toggle-arrow">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="misi-card-body">
+            <div class="program-inner-list">
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">3.1</span>
+                  <div class="program-title-text">Pembangunan SAPA Kreatif untuk Ruang Terbuka Hijau (RTH)</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">3.2</span>
+                  <div class="program-title-text">Pemeliharaan rutin lampu penerang jalan</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">3.3</span>
+                  <div class="program-title-text">Penambahan titik baru lampu penerang jalan</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">3.4</span>
+                  <div class="program-title-text">Pembuatan trotoar dan sarana rehat publik</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Misi 4 -->
+        <div class="misi-card-item">
+          <div class="misi-card-header">
+            <div class="misi-title-group">
+              <div class="misi-icon-badge">
+                <i class="fa-solid fa-people-group"></i>
+              </div>
+              <div class="misi-text-box">
+                <h2>Pemberdayaan Masyarakat</h2>
+                <span>4 Program • 75% Terealisasi</span>
+              </div>
+            </div>
+            <div class="toggle-arrow">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="misi-card-body">
+            <div class="program-inner-list">
+
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">4.1</span>
+                  <div class="program-title-text">Fasilitasi lapak takjil Ramadhan bagi UMKM warga</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">4.2</span>
+                  <div class="program-title-text">Pemeriksaan kesehatan gratis berkala</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">4.3</span>
+                  <div class="program-title-text">Kegiatan senam sehat bersama warga</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+              <div class="program-box" data-status="realized">
+                <div class="program-left-content">
+                  <span class="program-num-tag">4.4</span>
+                  <div class="program-title-text">Pembentukan & operasional Satgas Keamanan dan Kebersihan</div>
+                </div>
+                <span class="status-pill status-realized">
+                  <i class="fa-solid fa-circle-check"></i> Terealisasi
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Misi 5 -->
+        <div class="misi-card-item">
+          <div class="misi-card-header">
+            <div class="misi-title-group">
+              <div class="misi-icon-badge">
+                <i class="fa-solid fa-house-flood-water"></i>
+              </div>
+              <div class="misi-text-box">
+                <h2>Mitigasi Penanganan Banjir</h2>
+                <span>2 Program • 0% Terealisasi</span>
+              </div>
+            </div>
+            <div class="toggle-arrow">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="misi-card-body">
+            <div class="program-inner-list">
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">5.1</span>
+                  <div class="program-title-text">Perbaikan dan normalisasi saluran drainase</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+              <div class="program-box" data-status="pending">
+                <div class="program-left-content">
+                  <span class="program-num-tag">5.2</span>
+                  <div class="program-title-text">Peninggian talud di bagian hilir wilayah RT</div>
+                </div>
+                <span class="status-pill status-pending">
+                  <i class="fa-solid fa-clock"></i> Rencana
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>`;
+  const root = $('pkRoot');
+  let filter = 'all';
+
+  // Hitung ulang angka ringkasan dari status tiap program (data-status), jadi tidak perlu diubah manual
+  function hitung(){
+    const semua = root.querySelectorAll('.program-box');
+    const selesai = root.querySelectorAll('.program-box[data-status="realized"]').length;
+    const total = semua.length, rencana = total - selesai;
+    const persen = total ? Math.round(selesai / total * 100) : 0;
+    const nums = root.querySelectorAll('.stat-num');
+    if (nums.length >= 3){ nums[0].textContent = total; nums[1].textContent = selesai; nums[2].textContent = rencana; }
+    root.querySelector('.summary-percentage').textContent = persen + '% Selesai';
+    $('pkBar').style.width = persen + '%';
+    const pil = root.querySelectorAll('.pill-btn');
+    if (pil.length >= 3){
+      pil[0].lastChild.textContent = ' Semua (' + total + ')';
+      pil[1].lastChild.textContent = ' Selesai (' + selesai + ')';
+      pil[2].lastChild.textContent = ' Rencana (' + rencana + ')';
+    }
+    root.querySelectorAll('.misi-card-item').forEach(m => {
+      const n = m.querySelectorAll('.program-box').length;
+      const r = m.querySelectorAll('.program-box[data-status="realized"]').length;
+      m.querySelector('.misi-text-box span').textContent = n + ' Program • ' + (n ? Math.round(r / n * 100) : 0) + '% Terealisasi';
+    });
+    const judulMisi = root.querySelectorAll('.misi-card-item').length;
+    const ket = root.querySelector('.section-title span:last-child');
+    if (ket) ket.textContent = judulMisi + ' Misi Utama';
+  }
+
+  function saring(){
+    const kata = $('pkCari').value.trim().toLowerCase();
+    root.querySelectorAll('.misi-card-item').forEach(misi => {
+      let tampil = 0;
+      misi.querySelectorAll('.program-box').forEach(p => {
+        const teks = p.querySelector('.program-title-text').textContent.toLowerCase();
+        const cocok = teks.includes(kata) && (filter === 'all' || filter === p.dataset.status);
+        p.style.display = cocok ? 'flex' : 'none';
+        if (cocok) tampil++;
+      });
+      misi.style.display = tampil ? 'block' : 'none';
+      if (tampil && kata) misi.classList.add('active');
+    });
+  }
+
+  root.addEventListener('click', (e) => {
+    const pil = e.target.closest('.pill-btn');
+    if (pil){
+      filter = pil.dataset.pkFilter || 'all';
+      root.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      pil.classList.add('active');
+      saring(); return;
+    }
+    const kepala = e.target.closest('.misi-card-header');
+    if (kepala){
+      const kartu = kepala.parentElement;
+      root.querySelectorAll('.misi-card-item').forEach(k => { if (k !== kartu) k.classList.remove('active'); });
+      kartu.classList.toggle('active');
+    }
+  });
+  $('pkCari').addEventListener('input', saring);
+  hitung();
+}
+
 /* ---------- Subform (kerangka) ---------- */
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
@@ -964,6 +1387,8 @@ function bukaSubform(kunci){
     renderMyData(isi);
   } else if (kunci === 'polling'){
     renderPolling(isi);
+  } else if (kunci === 'programkerja'){
+    renderProgramKerja(isi);
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
