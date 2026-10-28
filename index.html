@@ -441,7 +441,8 @@
   #toast.tampil{opacity:1;transform:translate(-50%,0)}
   /* ===== Subform Program Kerja (dibatasi di .pk) ===== */
  .pk{--bri-navy:#002D58;--bri-blue-dark:#003865;--bri-blue:#00529C;--bri-blue-light:#1072BA;--bri-accent-orange:#FF6B00;--bri-orange-soft:#FFF2EA;--bri-green:#10B981;--bri-green-soft:#E6F4EA;--bg-canvas:#F2F5F9;--card-bg:#FFFFFF;--text-main:#1E293B;--text-muted:#64748B;--border-color:#E2E8F0;color:var(--text-main)}
-  .pk *{box-sizing:border-box;margin:0;padding:0;font-family:inherit;-webkit-tap-highlight-color:transparent}
+  .pk *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  .pk button,.pk input{font-family:inherit}
   .pk .summary-card{background: #FFFFFF; border-radius: 20px; padding: 20px; margin: 0 0 16px 0; box-shadow: 0 10px 25px rgba(0, 56, 101, 0.08); position: relative; z-index: 10; border: 1px solid rgba(255, 255, 255, 0.8);}
   .pk .summary-header{display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;}
   .pk .summary-title{font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;}
@@ -491,7 +492,8 @@
   .pk .misi-card-item.active .misi-card-body{max-height: 800px; border-top-color: var(--border-color);}
   /* ===== Subform Bantuan (dibatasi di .bt; tanpa Bootstrap) ===== */
   .bt{color:#334155}
-  .bt *{box-sizing:border-box;font-family:inherit}
+  .bt *{box-sizing:border-box}
+  .bt button,.bt input{font-family:inherit}
   .bt h2{margin:0;font-size:inherit}
   .bt p{margin:0}
   .bt ol{margin:0 0 .5rem}
