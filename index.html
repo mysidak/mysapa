@@ -525,6 +525,62 @@
   .bt .custom-accordion .accordion-body{padding: 16px 18px 20px 18px; font-size: 13px; line-height: 1.65; color: #475569;}
   .bt .recommendation-card{background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; color: #0369a1;}
   .bt .contact-badge{display: inline-flex; align-items: center; gap: 8px; background-color: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; margin: 6px 6px 6px 0;}
+  /* ===== Subform Profil RT (dibatasi di .pr; ikon Font Awesome tidak ditimpa) ===== */
+  .pr{--pr-dark:#0f172a;--pr-blue:#2563eb;--pr-cyan:#06b6d4;--pr-emerald:#10b981;--pr-amber:#f59e0b;--pr-purple:#8b5cf6;--pr-text:#1e293b;--pr-muted:#64748b;--pr-border:#e2e8f0;color:var(--pr-text)}
+  .pr *{box-sizing:border-box}
+  .pr .pr-hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);color:#fff;border-radius:20px;padding:18px 18px 16px;margin-bottom:16px;box-shadow:0 10px 25px -5px rgba(15,23,42,.18)}
+  .pr .pr-hero-sub{font-size:12px;opacity:.92;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+  .pr .pr-hero-sub i{color:#60a5fa;margin-top:3px}
+  .pr .pr-tenure{margin-top:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:12px}
+  .pr .pr-tenure-ico{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px;color:#38bdf8;flex-shrink:0}
+  .pr .pr-tenure-lbl{font-size:11px;opacity:.85;font-weight:600;letter-spacing:.4px}
+  .pr .pr-tenure-val{font-size:13px;font-weight:600;margin-top:2px}
+  .pr .pr-card{background:#fff;border-radius:18px;margin-bottom:12px;border:1px solid var(--pr-border);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);overflow:hidden;transition:all .3s ease}
+  .pr .pr-card.active{box-shadow:0 10px 25px -5px rgba(15,23,42,.08);border-color:rgba(37,99,235,.3)}
+  .pr .pr-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none;background:#fff}
+  .pr .pr-head-l{display:flex;align-items:center;gap:12px;min-width:0}
+  .pr .pr-ico{width:42px;height:42px;border-radius:12px;background:rgba(37,99,235,.1);color:var(--pr-blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .pr .pr-ico.hijau{color:var(--pr-emerald);background:rgba(16,185,129,.1)}
+  .pr .pr-ico.kuning{color:var(--pr-amber);background:rgba(245,158,11,.1)}
+  .pr .pr-ico.ungu{color:var(--pr-purple);background:rgba(139,92,246,.1)}
+  .pr .pr-title{font-size:14px;font-weight:600;color:var(--pr-dark)}
+  .pr .pr-sub{font-size:11px;color:var(--pr-muted);margin-top:2px}
+  .pr .pr-arrow{width:30px;height:30px;border-radius:50%;background:#f1f5f9;color:var(--pr-muted);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:transform .3s ease,background .3s ease,color .3s ease}
+  .pr .pr-card.active .pr-arrow{transform:rotate(180deg);background:rgba(37,99,235,.1);color:var(--pr-blue)}
+  .pr .pr-body{max-height:0;overflow:hidden;padding:0 16px;transition:max-height .35s ease,padding .3s ease}
+  .pr .pr-card.active .pr-body{max-height:4000px;padding:8px 16px 18px;border-top:1px solid #f1f5f9}
+  .pr .pr-map{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--pr-border);background:#f1f5f9;cursor:pointer;margin-top:8px}
+  .pr .pr-map img{width:100%;height:auto;max-height:420px;object-fit:cover;display:block}
+  .pr .pr-map-badge{position:absolute;bottom:10px;right:10px;background:rgba(15,23,42,.85);color:#fff;font-size:11px;font-weight:600;padding:6px 12px;border-radius:30px;display:flex;align-items:center;gap:6px}
+  .pr .pr-rekap{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:8px 0 16px}
+  .pr .pr-rekap-card{background:linear-gradient(135deg,#f8fafc,#edf2f7);border:1px solid var(--pr-border);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px}
+  .pr .pr-rekap-ico{width:38px;height:38px;border-radius:10px;background:#fff;color:var(--pr-blue);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.04);flex-shrink:0}
+  .pr .pr-rekap-val{font-size:14px;font-weight:800;color:var(--pr-dark)}
+  .pr .pr-rekap-lbl{font-size:11px;color:var(--pr-muted);font-weight:600}
+  .pr .pr-list-title{font-size:12px;font-weight:700;color:var(--pr-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+  .pr .pr-kawasan{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .pr .pr-kawasan-item{background:#fff;border:1px solid var(--pr-border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .pr .pr-kawasan-name{font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;min-width:0}
+  .pr .pr-kawasan-name i{color:var(--pr-blue)}
+  .pr .pr-kawasan-badge{background:rgba(37,99,235,.08);color:var(--pr-blue);font-size:12px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap}
+  .pr .pr-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px}
+  .pr .pr-pcard{background:#fff;border:1px solid var(--pr-border);border-radius:16px;padding:12px;text-align:center;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.02)}
+  .pr .pr-avatar{width:64px;height:64px;border-radius:50%;margin-bottom:8px;padding:3px;background:linear-gradient(135deg,var(--pr-blue),var(--pr-cyan));flex-shrink:0}
+  .pr .pr-avatar.amber{background:linear-gradient(135deg,var(--pr-amber),#f97316)}
+  .pr .pr-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#f1f5f9;display:block}
+  .pr .pr-avatar-fb{width:100%;height:100%;border-radius:50%;background:#e2e8f0;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
+  .pr .pr-badge{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--pr-blue);background:rgba(37,99,235,.08);padding:3px 10px;border-radius:20px;margin-bottom:6px}
+  .pr .pr-badge.amber{color:#b45309;background:rgba(245,158,11,.12)}
+  .pr .pr-name{font-size:13px;font-weight:700;color:var(--pr-dark);margin-bottom:4px;line-height:1.3;word-break:break-word}
+  .pr .pr-alamat{font-size:11px;color:var(--pr-muted);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:4px}
+  .pr .pr-wa{margin-top:auto;width:100%;padding:7px 10px;border-radius:8px;background:#25d366;color:#fff;text-decoration:none;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  .pr .pr-kosong{font-size:12px;color:var(--pr-muted);padding:8px 0}
+  .pr .pr-muat{text-align:center;padding:24px;color:var(--pr-muted);font-size:13px}
+  .pr .pr-muat i{display:block;font-size:24px;color:var(--pr-blue);margin-bottom:8px}
+  .pr-lightbox{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.92);opacity:0;visibility:hidden;transition:opacity .2s ease,visibility 0s linear .2s}
+  .pr-lightbox.tampil{opacity:1;visibility:visible;transition:opacity .2s ease,visibility 0s}
+  .pr-lightbox img{max-width:100%;max-height:90%;border-radius:14px;object-fit:contain;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
+  .pr-lightbox .pr-lb-tutup{position:absolute;top:calc(16px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -685,6 +741,11 @@
         </div>
       </form>
     </div>
+  </div>
+  <!-- Lightbox peta (Profil RT) -->
+  <div class="pr-lightbox" id="prLightbox" aria-hidden="true">
+    <button type="button" class="pr-lb-tutup" id="prLbTutup" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+    <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1788749985/Peta_n2dvqg.png" alt="Peta batas wilayah RT">
   </div>
 </div>
 <div id="toast"></div>
@@ -1582,6 +1643,121 @@ function renderBantuan(isi){
   });
 }
 
+/* ---------- Subform Profil RT ---------- */
+/* URL web app Apps Script "Profil RT" (Deploy > Web app > salin URL berakhiran /exec) */
+const URL_PROFIL_RT = 'https://script.google.com/macros/s/AKfycbxSLVFxMUnAy0G53_JBRMtsgrnRQSZUjhSvJOcmBlYH5u5S0ry1UayD4F0ySwLlqxA/exec';
+const URL_PETA_RT = 'https://res.cloudinary.com/q7sznixw/image/upload/v1788749985/Peta_n2dvqg.png';
+
+function prMasaKerja(){
+  const mulai = new Date(2026, 0, 7), h = new Date();
+  if (h < mulai) return 'Belum Dimulai';
+  let th = h.getFullYear() - mulai.getFullYear(), bl = h.getMonth() - mulai.getMonth(), hr = h.getDate() - mulai.getDate();
+  if (hr < 0){ bl -= 1; hr += new Date(h.getFullYear(), h.getMonth(), 0).getDate(); }
+  if (bl < 0){ th -= 1; bl += 12; }
+  const total = Math.round((Date.UTC(h.getFullYear(), h.getMonth(), h.getDate()) - Date.UTC(2026, 0, 7)) / 86400000);
+  const bag = [];
+  if (th > 0) bag.push(th + ' Tahun');
+  if (bl > 0 || th > 0) bag.push(bl + ' Bulan');
+  bag.push(hr + ' Hari');
+  return bag.join(', ') + ' (' + total + ' Hari)';
+}
+function prFotoUrl(u){
+  u = String(u || '').trim(); if (!u) return '';
+  if (u.includes('drive.google.com')){
+    const m = u.match(/\/d\/([a-zA-Z0-9_-]+)/) || u.match(/id=([a-zA-Z0-9_-]+)/);
+    if (m && m[1]) return 'https://lh3.googleusercontent.com/d/' + m[1];
+  }
+  return /^https?:\/\//i.test(u) ? u : '';
+}
+function prWaUrl(hp){
+  let c = String(hp || '').replace(/[^0-9]/g, '');
+  if (c.startsWith('0')) c = '62' + c.substring(1);
+  return 'https://wa.me/' + c;
+}
+function prInisial(nama){
+  const k = String(nama || '').trim().split(/\s+/).filter(Boolean);
+  if (!k.length) return 'RT';
+  return (k.length >= 2 ? k[0][0] + k[1][0] : k[0][0]).toUpperCase();
+}
+function prAvatar(foto, nama, kelas){
+  const url = prFotoUrl(foto), ini = esc(prInisial(nama));
+  const isi = url
+    ? `<img src="${esc(url)}" alt="${esc(nama)}" data-ini="${ini}" onerror="prAvatarGagal(this)" referrerpolicy="no-referrer">`
+    : `<div class="pr-avatar-fb">${ini}</div>`;
+  return `<div class="pr-avatar ${kelas || ''}">${isi}</div>`;
+}
+function prAvatarGagal(img){
+  const d = document.createElement('div'); d.className = 'pr-avatar-fb'; d.textContent = img.dataset.ini || 'RT'; img.replaceWith(d);
+}
+function prBukaPeta(){
+  const l = $('prLightbox'); if (l.classList.contains('tampil')) return;
+  l.classList.add('tampil'); l.setAttribute('aria-hidden', 'false');
+  bukaLapisan(() => { l.classList.remove('tampil'); l.setAttribute('aria-hidden', 'true'); });
+}
+$('prLightbox').addEventListener('click', () => kembaliLapisan());
+
+async function renderProfilRT(isi){
+  const versi = versiSubform;
+  isi.innerHTML = '<div class="kosong"><i class="fa-solid fa-spinner fa-spin"></i>Memuat profil RT...</div>';
+  let d = null, gagal = '';
+  if (!URL_PROFIL_RT){
+    gagal = 'Layanan Profil RT belum dihubungkan. Isi URL_PROFIL_RT di index.html dengan URL web app Apps Script.';
+  } else {
+    try{
+      const resp = await fetch(URL_PROFIL_RT + (URL_PROFIL_RT.includes('?') ? '&' : '?') + 'aksi=profil');
+      const r = await resp.json();
+      if (r && r.success) d = r.data; else gagal = (r && r.error) || 'Gagal mengambil data profil RT.';
+    }catch(e){ console.error(e); gagal = 'Tidak dapat memuat profil RT. Periksa koneksi Anda.'; }
+  }
+  if (versi !== versiSubform) return;
+  if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
+
+  const kosong = (t) => `<div class="pr-kosong">${t}</div>`;
+  const ikonRekap = ['fa-house-user','fa-building','fa-store','fa-chart-pie','fa-warehouse'];
+  const rekap = (d.rekapBangunan || []).map((x, i) => `<div class="pr-rekap-card"><div class="pr-rekap-ico"><i class="fa-solid ${ikonRekap[i % ikonRekap.length]}"></i></div>
+      <div><div class="pr-rekap-val">${esc(x.status)}</div><div class="pr-rekap-lbl">${esc(x.kategori)}</div></div></div>`).join('');
+  const kawasan = (d.detailBangunan || []).map(x => `<div class="pr-kawasan-item"><div class="pr-kawasan-name"><i class="fa-solid fa-tree-city"></i><span>${esc(x.kawasan)}</span></div>
+      <div class="pr-kawasan-badge">${esc(x.status)}</div></div>`).join('');
+  const pengurus = (d.kepengurusan || []).map(p => `<div class="pr-pcard">${prAvatar(p.foto, p.nama)}
+      <span class="pr-badge">${esc(p.jabatan)}</span><div class="pr-name">${esc(p.nama)}</div>
+      ${p.alamat ? `<div class="pr-alamat"><i class="fa-solid fa-location-dot"></i> ${esc(p.alamat)}</div>` : ''}
+      ${p.hp ? `<a class="pr-wa" href="${esc(prWaUrl(p.hp))}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> Hubungi WA</a>` : ''}</div>`).join('');
+  const periode = (d.periodisasi || []).map(x => `<div class="pr-pcard">${prAvatar(x.foto, x.nama, 'amber')}
+      <span class="pr-badge amber">${esc(x.periode)}</span><div class="pr-name">${esc(x.nama)}</div>
+      ${x.alamat ? `<div class="pr-alamat"><i class="fa-solid fa-house"></i> ${esc(x.alamat)}</div>` : ''}</div>`).join('');
+
+  const sek = (kelas, ikon, judul, sub, isiHtml, aktif) => `<section class="pr-card ${aktif ? 'active' : ''}">
+      <div class="pr-head" data-prtoggle><div class="pr-head-l"><div class="pr-ico ${kelas}"><i class="fa-solid ${ikon}"></i></div>
+        <div><h2 class="pr-title">${judul}</h2><p class="pr-sub">${sub}</p></div></div>
+        <div class="pr-arrow"><i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="pr-body">${isiHtml}</div></section>`;
+
+  isi.innerHTML = `<div class="pr">
+    <div class="pr-hero">
+      <div class="pr-hero-sub"><i class="fa-solid fa-location-dot"></i><span>Mengenal lebih dekat RT 09 RW 05 Kel. Bonggoeya Kec. Wua-Wua, Kota Kendari.</span></div>
+      <div class="pr-tenure"><div class="pr-tenure-ico"><i class="fa-solid fa-business-time"></i></div>
+        <div><div class="pr-tenure-lbl">Masa Kerja (7 Jan 2026)</div><div class="pr-tenure-val">${esc(prMasaKerja())}</div></div></div>
+    </div>
+    ${sek('', 'fa-map-location-dot', 'Batas Wilayah', 'Peta Wilayah Administratif',
+      `<div class="pr-map" data-prpeta><img src="${URL_PETA_RT}" alt="Peta Batas Wilayah RT"><div class="pr-map-badge"><i class="fa-solid fa-expand"></i> Perbesar Peta</div></div>`, true)}
+    ${sek('hijau', 'fa-city', 'Bangunan per Kawasan', 'Jumlah yang dihuni /Total',
+      `<div class="pr-rekap">${rekap || kosong('Tidak ada data rekap.')}</div>
+       <h3 class="pr-list-title"><i class="fa-solid fa-list-check"></i> Jumlah bangunan fungsional /Total</h3>
+       <div class="pr-kawasan">${kawasan || kosong('Tidak ada data kawasan.')}</div>`)}
+    ${sek('kuning', 'fa-user-tie', 'Kepengurusan RT 09', 'Periode 2026 s.d 2030', `<div class="pr-grid">${pengurus || kosong('Tidak ada data pengurus.')}</div>`)}
+    ${sek('ungu', 'fa-clock-rotate-left', 'Periodisasi Kepemimpinan', 'Histori Ketua RT dari Masa ke Masa', `<div class="pr-grid">${periode || kosong('Tidak ada data periodisasi.')}</div>`)}
+  </div>`;
+
+  const root = isi.querySelector('.pr');
+  root.addEventListener('click', (e) => {
+    if (e.target.closest('[data-prpeta]')) return prBukaPeta();
+    const kepala = e.target.closest('[data-prtoggle]'); if (!kepala) return;
+    const kartu = kepala.parentElement, aktif = kartu.classList.contains('active');
+    root.querySelectorAll('.pr-card').forEach(k => k.classList.remove('active'));
+    if (!aktif) kartu.classList.add('active');
+  });
+}
+
 /* ---------- Subform (kerangka) ---------- */
 const DAFTAR_SUBFORM = {
   statistik:     { judul:'Data Statistik' },
@@ -1629,6 +1805,8 @@ function bukaSubform(kunci){
     renderProgramKerja(isi);
   } else if (kunci === 'bantuan'){
     renderBantuan(isi);
+  } else if (kunci === 'profilrt'){
+    renderProfilRT(isi);
   } else {
     isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-screwdriver-wrench"></i>
       Subform <b>${s.judul}</b> sedang disiapkan.</div>`;
