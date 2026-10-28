@@ -155,7 +155,7 @@
     color:#fff;font-size:.65rem;font-weight:700;display:none;align-items:center;justify-content:center;border:2px solid #1558c9;line-height:1}
   .badge-notif.tampil{display:flex}
   .btn-ikon.berbunyi i,.fitur.berbunyi .lingkaran i,.fitur.berbunyi .lingkaran svg{animation:goyang 1.8s ease-in-out infinite;transform-origin:50% 0}
-  .fitur .badge-notif{top:2px;right:8px;border-color:var(--bg)}
+  .fitur .badge-notif{border-color:var(--bg)}
   .fitur .lingkaran i.fa-bell{font-size:1.45rem;position:relative;z-index:1}
   @keyframes goyang{0%,55%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-12deg)}30%{transform:rotate(8deg)}40%{transform:rotate(-6deg)}50%{transform:rotate(3deg)}}
 
@@ -215,7 +215,9 @@
   .ik{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;position:relative;z-index:1}
   .ik .d{fill:rgba(255,255,255,.30)}
   .fitur span.nama{font-size:12px;font-weight:500;text-align:center;line-height:1.2}
-  .fitur .alert{position:absolute;top:4px;right:6px;color:#e53935;font-size:1.05rem;display:none;
+  /* Lencana (Data Pengajuan, Info Aktual, Polling): di sudut kanan atas ikon dan selalu di depan ikon */
+  .fitur .alert,.fitur .badge-notif{position:absolute;top:1px;left:calc(50% + 11px);right:auto;z-index:5}
+  .fitur .alert{color:#e53935;font-size:1.1rem;line-height:1;background:#fff;border-radius:50%;box-shadow:0 0 0 1.5px #fff;display:none;
     animation:denyut 1.4s ease-in-out infinite}
   .fitur .alert.tampil{display:block}
   @keyframes denyut{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
@@ -833,7 +835,7 @@
         <button class="fitur" data-buka="programkerja"><span class="lingkaran c14"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M8 3v3M16 3v3M8 12.5l2.2 2.2 4-4.4M8 18h8"/></svg></span><span class="nama">Program Kerja</span></button>
         <button class="fitur" data-buka="profilrt"><span class="lingkaran c13"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 20V9.5L12 4l8 5.5V20z"/><path d="M9.5 20v-5h5v5M8.5 11.5h1.2M14.3 11.5h1.2"/></svg></span><span class="nama">Profil RT</span></button>
         <button class="fitur" data-buka="bantuan" data-akses="biasa"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
-        <button class="fitur" id="btnPolling" data-buka="polling" hidden><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
+        <button class="fitur" id="btnPolling" data-buka="polling" hidden><i class="fa-solid fa-circle-exclamation alert" id="alertPolling"></i><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Administrasi</span></button>
       </div>
 
@@ -2685,9 +2687,18 @@ function tglWaktuPoll(iso){
 function pollingAktifUntukSaya(){
   return aksesPenuh || !!(pollStatus && pollStatus.ada && pollStatus.poll && (pollStatus.poll.terbuka || pollStatus.poll.hasil_aktif));
 }
+const kunciPollDilihat = () => 'mysapa_poll_hasil_' + ((profilSaya && (profilSaya.nik || profilSaya.nama)) || 'anon');
+function ambilPollDilihat(){ try{ return localStorage.getItem(kunciPollDilihat()) || ''; }catch(e){ return ''; } }
+function simpanPollDilihat(id){ try{ localStorage.setItem(kunciPollDilihat(), String(id)); }catch(e){} }
 function aturPolling(){
   const b = $('btnPolling'); if (!b) return;
   b.hidden = !pollingAktifUntukSaya();              // disembunyikan sampai admin membuka polling / menampilkan hasil (admin selalu melihatnya)
+  /* Warga: polling ditutup (manual) atau berakhir (otomatis) -> hasil tersedia -> alert + ikon bergoyang sampai hasilnya dibuka */
+  const p = pollStatus && pollStatus.ada && pollStatus.poll;
+  const baru = !aksesPenuh && !!(p && p.hasil_aktif) && ambilPollDilihat() !== String(p.id);
+  $('alertPolling').classList.toggle('tampil', baru);
+  b.classList.toggle('berbunyi', baru);
+  b.setAttribute('aria-label', baru ? 'Polling ditutup, hasil tersedia' : 'Polling');
 }
 async function ambilPolling(){
   try{
@@ -2795,7 +2806,7 @@ function gambarPollingAdmin(isi, d, versi){
           <label class="poll-cek" id="pollAktifL"><input id="pollAktif" type="checkbox"><span>Polling</span></label>
           <label class="poll-cek"><input id="pollHasil" type="checkbox"><span>Hasil</span></label>
         </div>
-        <div class="poll-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> menutup polling dan menampilkan hasil kepada warga. Pendapat dihitung satu suara per keluarga (NKK).</div>
+        <div class="poll-catatan">Ceklis <b>Polling</b> hanya dapat aktif jika batas waktu sudah ditentukan dan belum lewat. Ceklis <b>Hasil</b> kapan saja menutup polling dan menampilkan hasil kepada warga, tanpa menunggu batas waktu. Bila batas waktu berakhir, polling otomatis ditutup dan hasil otomatis ditampilkan. Pendapat dihitung satu suara per keluarga (NKK).</div>
       </div>
       <div class="poll-aksi">
         <button class="poll-tbl sekunder" type="button" id="pollBaru"><i class="fa-solid fa-plus"></i> Polling Baru</button>
@@ -2831,7 +2842,10 @@ function gambarPollingAdmin(isi, d, versi){
     if (versi !== versiSubform || !$('pollRekap')){ hentikanPoll(); return; }
     if (document.hidden) return;
     const n = await ambilPolling();
-    if (versi === versiSubform && n.ok && $('pollRekap') && (n.ada ? n.poll.id : '') === plIdAdmin) isiRekapPoll(n);
+    if (versi === versiSubform && n.ok && $('pollRekap') && (n.ada ? n.poll.id : '') === plIdAdmin){
+      isiRekapPoll(n);
+      if (n.poll.hasil_aktif && !$('pollHasil').checked){ $('pollHasil').checked = true; aturKontrolPoll(); }   // batas waktu berakhir: Hasil otomatis tercentang
+    }
   }, 15000);
 }
 async function simpanPollingAdmin(versi){
@@ -2850,7 +2864,7 @@ async function simpanPollingAdmin(versi){
   toast('Data polling telah disimpan.');
   const n = await ambilPolling();
   if (versi === versiSubform && n.ok && $('pollRekap')){
-    if (n.ada && n.poll) $('pollAktif').checked = !!n.poll.polling_aktif;
+    if (n.ada && n.poll){ $('pollHasil').checked = !!n.poll.hasil_aktif; $('pollAktif').checked = !!n.poll.polling_aktif; }
     isiRekapPoll(n); aturKontrolPoll();
   }
   setTimeout(() => { if (versi === versiSubform && $('subform').classList.contains('buka')) kembaliLapisan(); }, 1200);   // kembali ke menu
@@ -2868,6 +2882,7 @@ function gambarPollingUser(isi, d, versi){
 
   let html = `<div class="poll-tanya">${esc(poll.deskripsi)}</div>`;
   if (poll.hasil_aktif){
+    simpanPollDilihat(poll.id); aturPolling();           // hasil sudah dilihat: alert padam
     html += info(false) + hasilPolling(d.suara, 'Hasil Polling');
   } else if (d.jawaban_keluarga){
     html += info(poll.terbuka) + `<div class="poll-keluarga">${d.oleh_saya ? 'Pendapat Anda' : 'Keluarga Anda telah memberikan pendapatnya yaitu'} <b>${esc(d.jawaban_keluarga)}</b>${d.oleh_saya ? ' telah tercatat untuk keluarga Anda' : ''} dengan rencana/kebijakan RT.</div>` + grid(true);
