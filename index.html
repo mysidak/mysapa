@@ -2346,6 +2346,7 @@ async function formPengaduan(){
 }
 
 /* ---------- Inventaris (modal; default = record terakhir; Tambah / Ubah / Hapus) ---------- */
+const SUMBER_INV = ['Aset RT', 'Sumbangan', 'Iuran Bulanan'];
 async function formInventaris(){
   let items = [];
   const muat = async () => { const r = await kirimRpc('daftar_inventaris', {}); if (r.ok) items = r.items || []; return r; };
@@ -2355,7 +2356,7 @@ async function formInventaris(){
   const gambar = () => {
     const n = items.length, baru = idx >= n, it = baru ? {} : items[idx], dis = edit ? '' : 'disabled';
     const angka = (k) => Number(it[k]) || 0;
-    const num = (nm, lbl) => `<div><small>${lbl}</small><input class="inv-n" name="${nm}" type="number" inputmode="numeric" min="0" value="${angka(nm)}" ${dis}></div>`;
+    const num = (nm, lbl) => `<div><small>${lbl}</small><input class="inv-n" name="${nm}" type="number" inputmode="numeric" min="0" value="${angka(nm) || ''}" placeholder="0" ${dis}></div>`;
     let aksi;
     if (hapus) aksi = '<div class="pesan-err" style="margin:0 0 8px">Hapus data inventaris ini?</div>' +
       '<div class="mf-aksi-baris"><button type="button" data-mf="hapusbatal">Batal</button><button type="button" class="bahaya" data-mf="hapusya"><i class="fa-solid fa-trash"></i> Ya, Hapus</button></div>';
@@ -2369,6 +2370,8 @@ async function formInventaris(){
       `<div class="mf-field"><label>Keadaan Barang</label><div class="mf-empat">${num('baik', 'Baik')}${num('rusak_ringan', 'R. Ringan')}${num('rusak_berat', 'R. Berat')}` +
         `<div><small>Jumlah</small><input id="invJml" type="number" value="${angka('baik') + angka('rusak_ringan') + angka('rusak_berat')}" readonly tabindex="-1"></div></div></div>` +
       fld('Lokasi Penyimpanan (Keberadaan)', `<input name="lokasi" type="text" maxlength="200" value="${esc(it.lokasi || '')}" ${dis}>`) +
+      fld('Sumber Barang', '<select name="sumber" ' + dis + '><option value="">— Pilih —</option>' +
+        SUMBER_INV.map(o => `<option ${o === it.sumber ? 'selected' : ''}>${o}</option>`).join('') + '</select>', 1) +
       fld('Aksi', aksi);
     $('mfIsi').querySelectorAll('.inv-n').forEach(i => i.addEventListener('input', () => {
       let t = 0; $('mfIsi').querySelectorAll('.inv-n').forEach(x => { t += Math.max(0, parseInt(x.value, 10) || 0); });
@@ -2398,10 +2401,11 @@ async function formInventaris(){
       const fd = new FormData($('mfForm')), ang = (k) => Math.max(0, parseInt(val(fd, k), 10) || 0);
       if (!val(fd, 'tgl_terima')) return tampilGalatMf('Tgl terima wajib diisi.');
       if (!val(fd, 'nama_barang')) return tampilGalatMf('Nama barang wajib diisi.');
+      if (!val(fd, 'sumber')) return tampilGalatMf('Sumber barang wajib dipilih.');
       if (ang('baik') + ang('rusak_ringan') + ang('rusak_berat') < 1) return tampilGalatMf('Jumlah barang minimal 1.');
       const r = await kirimRpc('simpan_inventaris', {
         id: idx < n ? items[idx].id : '', tgl_terima: val(fd, 'tgl_terima'), nama_barang: val(fd, 'nama_barang'),
-        baik: ang('baik'), rusak_ringan: ang('rusak_ringan'), rusak_berat: ang('rusak_berat'), lokasi: val(fd, 'lokasi')
+        baik: ang('baik'), rusak_ringan: ang('rusak_ringan'), rusak_berat: ang('rusak_berat'), lokasi: val(fd, 'lokasi'), sumber: val(fd, 'sumber')
       });
       if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menyimpan.');
       toast(r.pesan || 'Data inventaris tersimpan.');
