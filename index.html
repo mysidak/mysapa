@@ -688,6 +688,47 @@
   .bt .custom-accordion .accordion-body{padding: 16px 18px 20px 18px; font-size: 13px; line-height: 1.65; color: #475569;}
   .bt .recommendation-card{background-color: #f0f9ff; border-left: 4px solid #0284c7; padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: 12.5px; color: #0369a1;}
   .bt .contact-badge{display: inline-flex; align-items: center; gap: 8px; background-color: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; margin: 6px 6px 6px 0;}
+  /* ===== Subform Info Arsip & Aset (dibatasi di .ar; tanpa Bootstrap) ===== */
+  .ar{color:#000}
+  .ar *{box-sizing:border-box}
+  .ar button,.ar input{font-family:inherit}
+  .ar .ar-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+  .ar .ar-stat{width:100%;background:#fff;border-radius:16px;padding:10px 4px;border:2px solid transparent;box-shadow:0 6px 16px rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;cursor:pointer;transition:.25s;user-select:none;min-width:0}
+  .ar .ar-stat.aktif{background:linear-gradient(135deg,#00529c,#0072ce);box-shadow:0 8px 20px rgba(0,82,156,.35)}
+  .ar .ar-ic{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .ar .ar-stat.aktif .ar-ic{background:rgba(255,255,255,.22)!important;color:#fff!important}
+  .ar .ar-tt{font-size:10.5px;color:#64748b;font-weight:600;margin:8px 0 0;min-height:26px;display:flex;align-items:center;justify-content:center;line-height:1.2}
+  .ar .ar-vl{font-size:18px;font-weight:800;color:#0f172a;margin:4px 0 0}
+  .ar .ar-stat.aktif .ar-tt{color:rgba(255,255,255,.88)}
+  .ar .ar-stat.aktif .ar-vl{color:#fff}
+  .ar .ar-cari{position:relative;margin-bottom:12px}
+  .ar .ar-cari i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
+  .ar .ar-cari input{width:100%;height:42px;border-radius:12px;padding:0 12px 0 40px;border:1px solid #cbd5e1;background:#fff;font-size:13px;outline:none}
+  .ar .ar-cari input:focus{border-color:#0072ce}
+  .ar .ar-muat{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 0;color:#64748b;font-weight:600;font-size:.85rem;gap:10px;text-align:center}
+  .ar .ar-muat i{font-size:1.6rem;color:#1558c9}
+  .ar .ar-box{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;border:1px solid #cbd5e1;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.03)}
+  .ar .ar-box.sp{overflow-y:auto;overflow-x:hidden}
+  .ar table{border-collapse:separate;border-spacing:0}
+  .ar .ar-h{width:max-content;min-width:100%}
+  .ar .ar-h th{position:sticky;left:0;z-index:2;background:#f8fafc;color:#000;font-weight:700;font-size:.75rem;border-right:2px solid #cbd5e1;border-bottom:1px solid #e2e8f0;padding:8px 9px;white-space:nowrap;text-align:left;box-shadow:3px 0 6px rgba(0,0,0,.04)}
+  .ar .ar-h td{padding:8px 10px;font-size:.78rem;color:#000;text-align:left;min-width:145px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;vertical-align:middle;background:#fff}
+  .ar .ar-h tr:last-child th,.ar .ar-h tr:last-child td{border-bottom:none}
+  .ar .ar-h tr.jml th,.ar .ar-h tr.jml td{font-weight:800}
+  .ar .ar-h tr.jml td{background:#f8fafc}
+  .ar .ar-inv td{width:130px;min-width:130px;max-width:130px;white-space:normal;overflow-wrap:anywhere;text-align:center}
+  .ar .ar-v{width:100%}
+  .ar .ar-v th{position:sticky;top:0;z-index:2;background:#f8fafc;color:#000;font-weight:700;font-size:.75rem;padding:8px 9px;text-align:left;white-space:nowrap;border-right:1px solid #e2e8f0;border-bottom:2px solid #cbd5e1}
+  .ar .ar-v th:nth-child(1){width:45%}.ar .ar-v th:nth-child(2){width:20%}.ar .ar-v th:nth-child(3){width:35%}
+  .ar .ar-v td{background:#fff;color:#000;font-size:.78rem;padding:8px 9px;text-align:left;vertical-align:middle;overflow-wrap:anywhere;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0}
+  .ar .ar-v th:last-child,.ar .ar-v td:last-child{border-right:none}
+  .ar .ar-v tr:last-child td{border-bottom:none}
+  .ar .ar-kosong{text-align:center;padding:24px 12px!important;color:#000}
+  .ar .ar-badge{background:#e0f2fe;color:#000;font-weight:600;padding:5px 8px;border-radius:8px;font-size:.7rem;display:inline-block}
+  .ar .ar-badge.masuk{background:#dcfce7}.ar .ar-badge.keluar{background:#ffedd5}
+  .ar .ar-btn{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:10px;padding:4px 8px;font-weight:600;font-size:.72rem;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer;transition:.2s}
+  .ar .ar-btn:hover{background:#2563eb;color:#fff}
+  .ar .nw{white-space:nowrap}.ar .fw6{font-weight:600}.ar .fw7{font-weight:700}.ar .tc{text-align:center!important}
   /* ===== Subform Profil RT (dibatasi di .pr; ikon Font Awesome tidak ditimpa) ===== */
   .pr{--pr-dark:#0f172a;--pr-blue:#2563eb;--pr-cyan:#06b6d4;--pr-emerald:#10b981;--pr-amber:#f59e0b;--pr-purple:#8b5cf6;--pr-text:#1e293b;--pr-muted:#64748b;--pr-border:#e2e8f0;color:var(--pr-text)}
   .pr *{box-sizing:border-box}
@@ -1140,7 +1181,7 @@ document.addEventListener('keydown', e => {
 async function keluar(){
   if (!(await konfirmasiKeluar())) return;
   try{ await db.rpc('logout_warga', { p_token: tokenSesi }); }catch(e){}
-  hapusToken(); tokenSesi = null; statistik = null;
+  hapusToken(); tokenSesi = null; statistik = null; arData = null;
   tampilkanLogin();
 }
 $('btnKeluar').addEventListener('click', keluar);
@@ -1857,6 +1898,209 @@ function renderBantuan(isi){
   });
 }
 
+/* ---------- Subform Info Arsip & Aset ---------- */
+let arData = null;
+const AR_BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const AR_BLN_IDX = {jan:0,feb:1,mar:2,apr:3,mei:4,may:4,jun:5,jul:6,agu:7,agt:7,aug:7,sep:8,okt:9,oct:9,nov:10,nop:10,des:11,dec:11};
+function arParseTgl(val){
+  if (val === null || val === undefined || val === '') return null;
+  const s = String(val).trim();
+  const bag = dt => ({ d:dt.getDate(), m:dt.getMonth(), y:dt.getFullYear() });
+  let m;
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return { d:+m[3], m:+m[2]-1, y:+m[1] };
+  if ((m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/))) return { d:+m[1], m:+m[2]-1, y:+m[3] };
+  if (/^\d{4}-\d{2}-\d{2}T/.test(s)){ const dt = new Date(s); if (!isNaN(dt)) return bag(dt); }
+  if ((m = s.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/))){
+    const idx = AR_BLN_IDX[m[2].slice(0,3).toLowerCase()];
+    if (idx !== undefined) return { d:+m[1], m:idx, y:+m[3] };
+  }
+  const dt = new Date(s);
+  return isNaN(dt) ? null : bag(dt);
+}
+function arFmtTgl(val){
+  if (val === null || val === undefined || val === '') return '-';
+  const t = arParseTgl(val);
+  return t ? `${String(t.d).padStart(2,'0')} ${AR_BLN[t.m]} ${t.y}` : String(val).trim();
+}
+function arWaktu(val){ const t = arParseTgl(val); return t ? new Date(t.y, t.m, t.d).getTime() : 0; }
+function arUrutTerbaru(a, b){
+  return arWaktu(b.tanggal) - arWaktu(a.tanggal) || String(b.urut || '').localeCompare(String(a.urut || ''));
+}
+function arBadge(jenis){
+  const j = String(jenis ?? '').toLowerCase();
+  return j.includes('masuk') ? 'masuk' : j.includes('keluar') ? 'keluar' : '';
+}
+function arNum(v){ const n = parseFloat(String(v ?? '').replace(',','.')); return isNaN(n) ? 0 : n; }
+
+/* Buka arsip surat (bucket privat -> tautan sementara 5 menit) */
+async function arBukaArsip(path){
+  const w = window.open('', '_blank');   // dibuka dulu agar tidak diblokir browser
+  try{
+    const { data, error } = await db.storage.from('arsip_surat').createSignedUrl(path, 300);
+    if (error || !data || !data.signedUrl) throw new Error('ditolak');
+    if (w){ w.opener = null; w.location.href = data.signedUrl; }
+    else window.location.href = data.signedUrl;
+  }catch(e){
+    if (w) w.close();
+    toast('Arsip belum dapat dibuka.');
+  }
+}
+
+function renderArsipAset(isi){
+  const versi = versiSubform;
+  let tab = 'surat';
+  isi.innerHTML = `<div class="ar">
+    <div class="ar-stats">
+      <button type="button" class="ar-stat aktif" data-tab="surat"><span class="ar-ic" style="background:#dbeafe;color:#2563eb"><i class="fa-solid fa-envelope"></i></span><span><p class="ar-tt">Korespondensi</p><h3 class="ar-vl" id="arNSurat">0</h3></span></button>
+      <button type="button" class="ar-stat" data-tab="sp"><span class="ar-ic" style="background:#dcfce7;color:#16a34a"><i class="fa-solid fa-file-signature"></i></span><span><p class="ar-tt">Surat Pengantar</p><h3 class="ar-vl" id="arNSp">0</h3></span></button>
+      <button type="button" class="ar-stat" data-tab="inv"><span class="ar-ic" style="background:#f3e8ff;color:#9333ea"><i class="fa-solid fa-boxes-stacked"></i></span><span><p class="ar-tt">Inventaris RT</p><h3 class="ar-vl" id="arNInv">0</h3></span></button>
+    </div>
+    <div class="ar-cari"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="arCari" placeholder="Cari data..." autocomplete="off"></div>
+    <div class="ar-muat" id="arMuat"><i class="fa-solid fa-spinner fa-spin"></i><span id="arMuatTeks">Memuat data...</span></div>
+    <div id="arKonten" style="display:none">
+      <div class="ar-box" id="arPanelSurat"><table class="ar-h" id="arTSurat"></table></div>
+      <div class="ar-box sp" id="arPanelSp" style="display:none"><table class="ar-v" id="arTSp"></table></div>
+      <div class="ar-box" id="arPanelInv" style="display:none"><table class="ar-h ar-inv" id="arTInv"></table></div>
+    </div>
+  </div>`;
+  const root = isi.querySelector('.ar');
+  const el = (id) => $(id);
+
+  const kosong = (bag, teks) => `<tbody><tr><td class="ar-kosong">${esc(bag.err || teks)}</td></tr></tbody>`;
+
+  function tampilSurat(list, bag){
+    const t = el('arTSurat');
+    if (!list.length){ t.innerHTML = kosong(bag, 'Tidak ada data surat.'); return; }
+    let r1='<tr><th>No. Surat</th>', r2='<tr><th>Tanggal</th>', r3='<tr><th>Jenis Surat</th>', r4='<tr><th>Perihal</th>', r5='<tr><th>Arsip</th>';
+    list.forEach(it => {
+      const btn = it.arsipPath
+        ? `<button type="button" class="ar-btn" data-arsip="${esc(it.arsipPath)}"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Arsip</button>`
+        : '<span style="color:#000">-</span>';
+      r1 += `<td class="fw6">${esc(it.noSurat || '-')}</td>`;
+      r2 += `<td class="nw">${esc(arFmtTgl(it.tanggal))}</td>`;
+      r3 += `<td><span class="ar-badge ${arBadge(it.jenisSurat)}">${esc(it.jenisSurat || 'Lainnya')}</span></td>`;
+      r4 += `<td style="max-width:180px">${esc(it.perihal || '-')}</td>`;
+      r5 += `<td class="tc">${btn}</td>`;
+    });
+    t.innerHTML = `<tbody>${r1}</tr>${r2}</tr>${r3}</tr>${r4}</tr>${r5}</tr></tbody>`;
+  }
+
+  /* Tampilkan 5 baris data; selebihnya digulir */
+  function batasiTinggiSp(){
+    const box = el('arPanelSp'), head = root.querySelector('#arTSp thead'), rows = root.querySelectorAll('#arTSp tbody tr');
+    if (!box) return;
+    box.style.maxHeight = '';
+    if (!head || rows.length <= 5) return;
+    let h = head.offsetHeight + 2;
+    for (let i = 0; i < 5; i++) h += rows[i].offsetHeight;
+    box.style.maxHeight = h + 'px';
+  }
+  function tampilSp(list, bag){
+    const t = el('arTSp');
+    if (!list.length){ t.innerHTML = kosong(bag, 'Tidak ada data surat pengantar.'); batasiTinggiSp(); return; }
+    const rows = list.map(it => `<tr>
+      <td class="fw6">${esc(it.noSurat || '-').replace(/\//g, '/<wbr>')}</td>
+      <td class="nw">${esc(arFmtTgl(it.tanggal))}</td>
+      <td>${esc(it.perihal || '-')}</td></tr>`).join('');
+    t.innerHTML = `<thead><tr><th>No. Surat</th><th>Tanggal</th><th>Perihal</th></tr></thead><tbody>${rows}</tbody>`;
+    batasiTinggiSp();
+  }
+
+  function tampilInv(items, bag){
+    const t = el('arTInv');
+    if (!items.length){ t.innerHTML = kosong(bag, 'Tidak ada data inventaris.'); return; }
+    let a='<tr><th>Tgl Terima</th>', b='<tr><th>Nama Aset</th>', c='<tr><th>Kondisi Baik</th>', d='<tr><th>Rusak Ringan</th>',
+        e='<tr><th>Rusak Berat</th>', f='<tr class="jml"><th>Jumlah Aset</th>', g='<tr><th>Lokasi Simpan</th>', h='<tr><th>Keterangan</th>';
+    items.forEach(it => {
+      const jumlah = arNum(it.baik) + arNum(it.ringan) + arNum(it.berat);
+      a += `<td>${it.tglTerima ? esc(arFmtTgl(it.tglTerima)) : '-'}</td>`;
+      b += `<td class="fw7">${esc(it.namaAset || '-')}</td>`;
+      c += `<td>${esc(arNum(it.baik))}</td>`;
+      d += `<td>${esc(arNum(it.ringan))}</td>`;
+      e += `<td>${esc(arNum(it.berat))}</td>`;
+      f += `<td>${esc(jumlah)}</td>`;
+      g += `<td>${esc(it.lokasi || '-')}</td>`;
+      h += `<td>${esc(it.ket || '-')}</td>`;
+    });
+    t.innerHTML = `<tbody>${a}</tr>${b}</tr>${c}</tr>${d}</tr>${e}</tr>${f}</tr>${g}</tr>${h}</tr></tbody>`;
+  }
+
+  function saring(){
+    if (!arData) return;
+    const q = el('arCari').value.toLowerCase().trim();
+    const has = (v) => String(v ?? '').toLowerCase().includes(q);
+    const nSurat = arData.surat.items.length, nSp = arData.sp.items.length, nInv = arData.inv.items.length;
+    let cS = nSurat, cP = nSp, cI = nInv;
+
+    if (tab === 'surat'){
+      const l = arData.surat.items.filter(it => has(it.noSurat) || has(it.perihal) || has(it.jenisSurat) || has(arFmtTgl(it.tanggal))).sort(arUrutTerbaru);
+      cS = l.length; tampilSurat(l, arData.surat);
+    } else if (tab === 'sp'){
+      const l = arData.sp.items.filter(it => has(it.noSurat) || has(it.perihal) || has(arFmtTgl(it.tanggal))).sort(arUrutTerbaru);
+      cP = l.length; tampilSp(l, arData.sp);
+    } else {
+      const l = arData.inv.items.filter(it =>
+        has(it.namaAset) || has(it.lokasi) || has(it.ket) || (it.tglTerima && has(arFmtTgl(it.tglTerima))) ||
+        has(it.baik) || has(it.ringan) || has(it.berat));
+      // Urut abjad A-Z berdasarkan Keterangan (yang kosong di akhir), lalu Nama Aset
+      const abjad = (a, b) => String(a ?? '').localeCompare(String(b ?? ''), 'id', { sensitivity:'base', numeric:true });
+      l.sort((a, b) => {
+        const ka = String(a.ket ?? '').trim(), kb = String(b.ket ?? '').trim();
+        if (!ka !== !kb) return ka ? -1 : 1;
+        return abjad(ka, kb) || abjad(a.namaAset, b.namaAset);
+      });
+      cI = l.length; tampilInv(l, arData.inv);
+    }
+    el('arNSurat').textContent = cS; el('arNSp').textContent = cP; el('arNInv').textContent = cI;
+  }
+
+  function pindahTab(nama){
+    tab = nama;
+    root.querySelectorAll('.ar-stat').forEach(k => k.classList.toggle('aktif', k.dataset.tab === nama));
+    el('arPanelSurat').style.display = nama === 'surat' ? '' : 'none';
+    el('arPanelSp').style.display = nama === 'sp' ? '' : 'none';
+    el('arPanelInv').style.display = nama === 'inv' ? '' : 'none';
+    el('arCari').value = '';
+    saring();
+  }
+
+  function tampilkan(){
+    el('arMuat').style.display = 'none';
+    el('arKonten').style.display = '';
+    saring();
+  }
+
+  async function muat(){
+    const [a, b, c] = await Promise.all([
+      kirimRpc('arsip_korespondensi', {}), kirimRpc('arsip_sp', {}), kirimRpc('arsip_inventaris', {})
+    ]);
+    if (versi !== versiSubform) return;      // subform sudah ditutup / diganti
+    const ambil = (r, peta) => (r && r.ok === true)
+      ? { items:(r.items || []).map(peta), err:'' }
+      : { items:[], err:String((r && (r.pesan || r.message)) || 'Gagal memuat data.') };
+    arData = {
+      surat: ambil(a, x => ({ noSurat:x.nomor_surat, tanggal:x.tgl_surat, jenisSurat:x.jenis, perihal:x.perihal, arsipPath:x.arsip_path, urut:x.urut })),
+      sp:    ambil(b, x => ({ noSurat:x.nomor_surat, tanggal:x.tgl_surat, perihal:x.perihal, urut:x.urut })),
+      inv:   ambil(c, x => ({ tglTerima:x.tgl_terima, namaAset:x.nama_barang, baik:x.baik, ringan:x.rusak_ringan, berat:x.rusak_berat, lokasi:x.lokasi, ket:x.sumber }))
+    };
+    tampilkan();
+  }
+
+  root.addEventListener('click', (e) => {
+    const k = e.target.closest('.ar-stat'); if (k){ pindahTab(k.dataset.tab); return; }
+    const b = e.target.closest('[data-arsip]'); if (b) arBukaArsip(b.getAttribute('data-arsip'));
+  });
+  el('arCari').addEventListener('input', saring);
+  window.addEventListener('resize', () => { if (tab === 'sp') batasiTinggiSp(); });
+
+  // Data terakhir langsung ditampilkan (jika ada), lalu diperbarui di latar belakang
+  if (arData) tampilkan();
+  muat().catch(err => {
+    console.error(err);
+    if (!arData){ el('arMuatTeks').textContent = 'Gagal memuat data.'; }
+  });
+}
+
 /* ---------- Subform Profil RT ---------- */
 /* URL web app Apps Script "Profil RT" (Deploy > Web app > salin URL berakhiran /exec) */
 const URL_PROFIL_RT = 'https://script.google.com/macros/s/AKfycbxSLVFxMUnAy0G53_JBRMtsgrnRQSZUjhSvJOcmBlYH5u5S0ry1UayD4F0ySwLlqxA/exec';
@@ -2024,6 +2268,8 @@ function bukaSubform(kunci){
     renderPolling(isi);
   } else if (kunci === 'programkerja'){
     renderProgramKerja(isi);
+  } else if (kunci === 'arsip'){
+    renderArsipAset(isi);
   } else if (kunci === 'bantuan'){
     renderBantuan(isi);
   } else if (kunci === 'profilrt'){
