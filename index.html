@@ -550,7 +550,7 @@
   }
   .subform.buka{
     transform:none;visibility:visible;
-    transition:transform .28s cubic-bezier(.22,.8,.3,1), visibility 0s;
+    transition:transform .25s cubic-bezier(.4,0,.2,1), visibility 0s;
   }
   .subform-header{display:flex;align-items:center;gap:12px;color:#fff;
     padding:calc(14px + env(safe-area-inset-top)) 16px 14px;
@@ -560,6 +560,8 @@
   .subform-header h2{flex:1;text-align:center;font-size:1rem;font-weight:600}
   .subform-header::after{content:"";flex:none;width:38px}   /* penyeimbang tombol kembali agar judul tepat di tengah */
   .subform-isi{flex:1;overflow-y:auto;padding:16px}
+  .subform-isi.penuh{padding:0;overflow:hidden;display:flex}
+  .subform-isi.penuh iframe{flex:1;width:100%;height:100%;border:0;background:#fff}
   .kosong{margin-top:40px;text-align:center;color:var(--abu);font-size:.85rem}
   .kosong i{font-size:2.4rem;color:var(--biru-muda);margin-bottom:10px;display:block}
   .kartu-stat{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:0 6px 16px rgba(11,42,111,.08)}
@@ -2000,8 +2002,11 @@ function bukaSubform(kunci){
   versiSubform++;
   $('judulSubform').textContent = s.judul;
   const isi = $('isiSubform');
+  isi.classList.toggle('penuh', kunci === 'pendataan');
 
-  if (kunci === 'statistik' && statistik){
+  if (kunci === 'pendataan'){
+    isi.innerHTML = '<iframe src="https://mysidak.github.io/nkk" title="Pendataan" allow="clipboard-write; camera; geolocation"></iframe>';
+  } else if (kunci === 'statistik' && statistik){
     renderStatistik(isi);
   } else if (kunci === 'verifikasi'){
     renderNotifSurat(isi);
@@ -2035,6 +2040,10 @@ function tutupSubform(){
   versiSubform++;
   $('subform').classList.remove('buka');
   $('subform').setAttribute('aria-hidden','true');
+  /* kosongkan iframe Pendataan setelah geseran tutup selesai */
+  if ($('isiSubform').classList.contains('penuh')) setTimeout(() => {
+    if (!$('subform').classList.contains('buka')){ $('isiSubform').innerHTML = ''; $('isiSubform').classList.remove('penuh'); }
+  }, 350);
 }
 $('btnKembali').addEventListener('click', kembaliLapisan);
 $('btnLonceng').addEventListener('click', () => bukaSubform('verifikasi'));
@@ -2173,18 +2182,35 @@ document.addEventListener('click', (e) => {
 const EKSTENSI_ARSIP = { 'application/pdf':'pdf', 'image/png':'png', 'image/jpeg':'jpg' };
 const BATAS_ARSIP = 5 * 1024 * 1024;
 
+const tgl10 = (v) => v ? String(v).slice(0,10) : '';
+const jam5  = (v) => v ? String(v).slice(0,5) : '';
+
 function formSuratMasuk(){
-  bukaModalForm('Surat Masuk',
-    fld('Nomor Surat', '<input name="nomor_surat" type="text" maxlength="100">', 1) +
-    '<div class="mf-dua">' +
-      fld('Tgl Surat', `<input name="tgl_surat" type="date" value="${hariIni()}">`, 1) +
-      fld('Tgl Pelaksanaan', '<input name="tgl_pelaksanaan" type="date">') +
-    '</div>' +
-    fld('Perihal', '<input name="perihal" type="text" maxlength="200">', 1) +
-    fld('Dari', '<input name="dari" type="text" maxlength="200">', 1) +
-    fld('Arsip (PDF, PNG, JPG, JPEG — maks. 5 MB)',
-        '<input name="arsip" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">'),
-    async (fd) => {
+  modalRiwayat({
+    judul:'Surat Masuk', rpc:'daftar_surat_masuk',
+    isi:(it, dis) => {
+      it = it || {};
+      return fld('Nomor Surat', `<input name="nomor_surat" type="text" maxlength="100" value="${esc(it.nomor_surat || '')}" ${dis}>`, 1) +
+      '<div class="mf-dua">' +
+        fld('Tgl Surat', `<input name="tgl_surat" type="date" value="${esc(tgl10(it.tgl_surat) || hariIni())}" ${dis}>`, 1) +
+        fld('Tgl Pelaksanaan', `<input name="tgl_pelaksanaan" type="date" value="${esc(tgl10(it.tgl_pelaksanaan))}" ${dis}>`) +
+      '</div>' +
+      fld('Perihal', `<input name="perihal" type="text" maxlength="200" value="${esc(it.perihal || '')}" ${dis}>`, 1) +
+      fld('Dari', `<input name="dari" type="text" maxlength="200" value="${esc(it.dari || '')}" ${dis}>`, 1) +
+      (dis
+        ? fld('Arsip', it.arsip_path
+            ? '<div class="mf-aksi-baris" style="margin-top:0"><button type="button" class="utama" data-mf="arsip"><i class="fa-solid fa-file-arrow-down"></i> Buka Arsip</button></div>'
+            : '<input type="text" value="Tidak ada arsip" disabled>')
+        : fld('Arsip (PDF, PNG, JPG, JPEG — maks. 5 MB)',
+            '<input name="arsip" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">'));
+    },
+    arsip: async (it) => {
+      if (!it || !it.arsip_path) return;
+      const { data, error } = await db.storage.from('arsip_surat').createSignedUrl(it.arsip_path, 300);
+      if (error || !data) return toast('Arsip tidak dapat dibuka.');
+      window.open(data.signedUrl, '_blank', 'noopener');
+    },
+    simpan: async (fd) => {
       const nomor = val(fd,'nomor_surat'), perihal = val(fd,'perihal'), dari = val(fd,'dari');
       if (!nomor) return { ok:false, pesan:'Nomor surat wajib diisi.' };
       if (!val(fd,'tgl_surat')) return { ok:false, pesan:'Tgl surat wajib diisi.' };
@@ -2205,43 +2231,55 @@ function formSuratMasuk(){
         nomor_surat:nomor, tgl_surat:val(fd,'tgl_surat'), tgl_pelaksanaan:val(fd,'tgl_pelaksanaan'),
         perihal, dari, arsip_path:path
       });
-    });
+    }
+  });
 }
 
 const PERIHAL_KELUAR = ['Himbauan','Penyampaian','Pemberitahuan','Pengumuman','Edaran',
                         'Rekomendasi','Peringatan','Pemberhentian','Pengangkatan'];
 function formSuratKeluar(){
-  bukaModalForm('Surat Keluar',
-    fld('Perihal', '<select name="perihal"><option value="">— Pilih perihal —</option>' +
-        PERIHAL_KELUAR.map(p => `<option>${p}</option>`).join('') + '</select>', 1) +
-    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
-    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
-    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>') +
-    fld('Deskripsi', '<textarea name="deskripsi" placeholder="Isi / keterangan surat"></textarea>') +
-    fld('Lampiran (opsional)', '<input name="lampiran" type="text" maxlength="200" placeholder="Contoh: 1 (satu) berkas">'),
-    async (fd) => {
+  modalRiwayat({
+    judul:'Surat Keluar', rpc:'daftar_surat_keluar',
+    isi:(it, dis) => {
+      it = it || {};
+      return (dis ? fld('Nomor Surat', `<input type="text" value="${esc(it.nomor_surat || '-')}" disabled>`) : '') +
+      fld('Perihal', `<select name="perihal" ${dis}><option value="">— Pilih perihal —</option>` +
+        PERIHAL_KELUAR.map(p => `<option ${p === it.perihal ? 'selected' : ''}>${p}</option>`).join('') + '</select>', 1) +
+      fld('Kepada', `<input name="kepada" type="text" maxlength="200" value="${esc(it.kepada || '')}" ${dis}>`, 1) +
+      fld('Pembuka', `<textarea name="pembuka" placeholder="Paragraf pembuka" ${dis}>${esc(it.pembuka || '')}</textarea>`) +
+      fld('Penutup', `<textarea name="penutup" placeholder="Paragraf penutup" ${dis}>${esc(it.penutup || '')}</textarea>`) +
+      fld('Deskripsi', `<textarea name="deskripsi" placeholder="Isi / keterangan surat" ${dis}>${esc(it.deskripsi || '')}</textarea>`) +
+      fld('Lampiran (opsional)', `<input name="lampiran" type="text" maxlength="200" placeholder="Contoh: 1 (satu) berkas" value="${esc(it.lampiran || '')}" ${dis}>`);
+    },
+    simpan: async (fd) => {
       if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib dipilih.' };
       if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
       return kirimRpc('simpan_surat_keluar', {
         tgl_surat:hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'), pembuka:val(fd,'pembuka'),
         penutup:val(fd,'penutup'), deskripsi:val(fd,'deskripsi'), lampiran:val(fd,'lampiran')
       });
-    });
+    }
+  });
 }
 
 function formUndangan(){
-  bukaModalForm('Undangan',
-    fld('Perihal', '<input name="perihal" type="text" maxlength="200" placeholder="Contoh: Rapat Pengurus RT">', 1) +
-    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
-    '<div class="mf-dua">' +
-      fld('Tanggal', '<input name="tgl_acara" type="date">', 1) +
-      fld('Jam', '<input name="jam_acara" type="time">', 1) +
-    '</div>' +
-    fld('Tempat', '<input name="tempat" type="text" maxlength="200">', 1) +
-    fld('Agenda', '<textarea name="agenda"></textarea>') +
-    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
-    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>'),
-    async (fd) => {
+  modalRiwayat({
+    judul:'Undangan', rpc:'daftar_undangan',
+    isi:(it, dis) => {
+      it = it || {};
+      return (dis ? fld('Nomor Surat', `<input type="text" value="${esc(it.nomor_surat || '-')}" disabled>`) : '') +
+      fld('Perihal', `<input name="perihal" type="text" maxlength="200" placeholder="Contoh: Rapat Pengurus RT" value="${esc(it.perihal || '')}" ${dis}>`, 1) +
+      fld('Kepada', `<input name="kepada" type="text" maxlength="200" value="${esc(it.kepada || '')}" ${dis}>`, 1) +
+      '<div class="mf-dua">' +
+        fld('Tanggal', `<input name="tgl_acara" type="date" value="${esc(tgl10(it.tgl_acara))}" ${dis}>`, 1) +
+        fld('Jam', `<input name="jam_acara" type="time" value="${esc(jam5(it.jam_acara))}" ${dis}>`, 1) +
+      '</div>' +
+      fld('Tempat', `<input name="tempat" type="text" maxlength="200" value="${esc(it.tempat || '')}" ${dis}>`, 1) +
+      fld('Agenda', `<textarea name="agenda" ${dis}>${esc(it.agenda || '')}</textarea>`) +
+      fld('Pembuka', `<textarea name="pembuka" placeholder="Paragraf pembuka" ${dis}>${esc(it.pembuka || '')}</textarea>`) +
+      fld('Penutup', `<textarea name="penutup" placeholder="Paragraf penutup" ${dis}>${esc(it.penutup || '')}</textarea>`);
+    },
+    simpan: async (fd) => {
       if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib diisi.' };
       if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
       if (!val(fd,'tgl_acara') || !val(fd,'jam_acara')) return { ok:false, pesan:'Tanggal dan jam wajib diisi.' };
@@ -2251,7 +2289,8 @@ function formUndangan(){
         jam_acara:val(fd,'jam_acara'), tempat:val(fd,'tempat'), agenda:val(fd,'agenda'),
         pembuka:val(fd,'pembuka'), penutup:val(fd,'penutup')
       });
-    });
+    }
+  });
 }
 
 async function formNotula(){
@@ -2263,23 +2302,28 @@ async function formNotula(){
     daftar = data.items || [];
   }catch(e){ console.error(e); return toast('Tidak dapat terhubung ke server.'); }
 
-  if (!daftar.length){
-    return bukaModalForm('Notula',
-      '<div class="kosong" style="margin:10px 0 20px"><i class="fa-solid fa-file-circle-question"></i>' +
-      'Belum ada undangan berperihal Rapat atau Rembug Warga.<br>Buat undangannya terlebih dahulu.</div>', null);
-  }
-  const opsi = daftar.map(u =>
-    `<option value="${esc(u.id)}">${esc(u.nomor_surat)} — ${esc(u.perihal)} (${tglIndo(u.tgl_acara)})</option>`).join('');
-  bukaModalForm('Notula',
-    fld('Nomor Undangan', `<select name="undangan_id"><option value="">— Pilih nomor undangan —</option>${opsi}</select>`, 1) +
-    fld('Jumlah Peserta Rapat', '<input name="jumlah_peserta" type="number" inputmode="numeric" min="0" max="99999">', 1) +
-    '<div class="mf-dua">' +
-      fld('Jam Mulai', '<input name="jam_mulai" type="time">', 1) +
-      fld('Jam Selesai', '<input name="jam_selesai" type="time">', 1) +
-    '</div>' +
-    fld('Pembahasan Rapat', '<textarea name="pembahasan"></textarea>', 1) +
-    fld('Hasil Rapat', '<textarea name="hasil"></textarea>', 1),
-    async (fd) => {
+  modalRiwayat({
+    judul:'Notula', rpc:'daftar_notula',
+    bisaSimpan: () => daftar.length > 0,
+    isi:(it, dis) => {
+      if (!it && !daftar.length)
+        return '<div class="kosong" style="margin:10px 0 20px"><i class="fa-solid fa-file-circle-question"></i>' +
+               'Belum ada undangan berperihal Rapat atau Rembug Warga.<br>Buat undangannya terlebih dahulu.</div>';
+      it = it || {};
+      let opsi = daftar.map(u =>
+        `<option value="${esc(u.id)}" ${String(u.id) === String(it.undangan_id) ? 'selected' : ''}>${esc(u.nomor_surat)} — ${esc(u.perihal)} (${tglIndo(u.tgl_acara)})</option>`).join('');
+      if (it.undangan_id && !daftar.some(u => String(u.id) === String(it.undangan_id)))
+        opsi += `<option value="${esc(it.undangan_id)}" selected>${esc(it.nomor_surat || '')}${it.perihal ? ' — ' + esc(it.perihal) : ''}</option>`;
+      return fld('Nomor Undangan', `<select name="undangan_id" ${dis}><option value="">— Pilih nomor undangan —</option>${opsi}</select>`, 1) +
+      fld('Jumlah Peserta Rapat', `<input name="jumlah_peserta" type="number" inputmode="numeric" min="0" max="99999" value="${esc(it.jumlah_peserta ?? '')}" ${dis}>`, 1) +
+      '<div class="mf-dua">' +
+        fld('Jam Mulai', `<input name="jam_mulai" type="time" value="${esc(jam5(it.jam_mulai))}" ${dis}>`, 1) +
+        fld('Jam Selesai', `<input name="jam_selesai" type="time" value="${esc(jam5(it.jam_selesai))}" ${dis}>`, 1) +
+      '</div>' +
+      fld('Pembahasan Rapat', `<textarea name="pembahasan" ${dis}>${esc(it.pembahasan || '')}</textarea>`, 1) +
+      fld('Hasil Rapat', `<textarea name="hasil" ${dis}>${esc(it.hasil || '')}</textarea>`, 1);
+    },
+    simpan: async (fd) => {
       if (!val(fd,'undangan_id')) return { ok:false, pesan:'Nomor undangan wajib dipilih.' };
       if (val(fd,'jumlah_peserta') === '') return { ok:false, pesan:'Jumlah peserta wajib diisi.' };
       if (!val(fd,'jam_mulai') || !val(fd,'jam_selesai')) return { ok:false, pesan:'Jam mulai dan jam selesai wajib diisi.' };
@@ -2290,7 +2334,8 @@ async function formNotula(){
         jam_mulai:val(fd,'jam_mulai'), jam_selesai:val(fd,'jam_selesai'),
         pembahasan:val(fd,'pembahasan'), hasil:val(fd,'hasil')
       });
-    });
+    }
+  });
 }
 
 /* ---------- Navigasi record: Awal, Sebelumnya, Berikutnya, Akhir (+ Baru) ---------- */
@@ -2311,6 +2356,31 @@ function geserNav(a, idx, n, baruAda){
   return idx;
 }
 const tampilGalatMf = (m) => { const g = $('mfGalat'); g.textContent = m; g.classList.add('tampil'); };
+
+/* ---------- Modal riwayat (Surat Masuk, Surat Keluar, Undangan, Notula) ----------
+   Default = form data baru (tanggal hari ini). Navigasi record hanya untuk MELIHAT data lama:
+   tampil tanpa tombol Simpan, semua isian terkunci (tidak dapat diubah atau dihapus). */
+async function modalRiwayat(cfg){
+  let items = [];
+  const r = await kirimRpc(cfg.rpc, {});
+  if (r.ok) items = r.items || []; else toast(r.pesan || 'Riwayat data tidak dapat dimuat.');
+  let idx = items.length;                                  // posisi setelah record terakhir = data baru
+  const gambar = () => {
+    const n = items.length, baru = idx >= n, it = baru ? null : items[idx];
+    $('mfIsi').innerHTML = barNav(idx, n, true, true) + cfg.isi(it, baru ? '' : 'disabled');
+    $('mfSimpan').style.display = (baru && (!cfg.bisaSimpan || cfg.bisaSimpan())) ? '' : 'none';
+    $('mfGalat').classList.remove('tampil');
+  };
+  bukaModalForm(cfg.judul, '', async (fd) => {
+    if (idx < items.length) return { ok:false, pesan:'Data lama hanya dapat dilihat.' };
+    return cfg.simpan(fd);
+  }, 'Simpan');
+  mfNavFn = (a) => {
+    if (a === 'arsip' && cfg.arsip) return cfg.arsip(items[idx]);
+    idx = geserNav(a, idx, items.length, true); gambar();
+  };
+  gambar();
+}
 
 /* ---------- Pengaduan (modal; default = aduan baru dengan waktu saat ini) ---------- */
 const STATUS_ADUAN = ['Selesai', 'Berproses', 'Tindak lanjut'];
@@ -2378,6 +2448,10 @@ async function formInventaris(){
       $('invJml').value = t;
     }));
     $('mfGalat').classList.remove('tampil');
+    if (edit && baru){                                    // tambah data: kursor langsung ke Nama Barang
+      const nb = $('mfIsi').querySelector('[name="nama_barang"]');
+      if (nb) setTimeout(() => nb.focus({ preventScroll:true }), 60);
+    }
   };
   bukaModalForm('Inventaris', '', null);
   $('mfBatal').textContent = 'Tutup';
