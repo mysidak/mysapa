@@ -522,6 +522,22 @@
   .mf-aksi .batal{background:#eef3fb;color:var(--abu)}
   .mf-aksi .simpan{background:linear-gradient(135deg,#1558c9,#2f86ec);color:#fff}
   .mf-aksi button:disabled{opacity:.6}
+  /* Navigasi record, baris 4 kolom, tombol aksi (Pengaduan, Inventaris, Arsip Polling) */
+  .mf-nav{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+  .mf-nav button{width:38px;height:38px;border:0;border-radius:10px;background:#e3ecfb;color:var(--biru);cursor:pointer;font-size:.85rem}
+  .mf-nav button:active:not(:disabled){transform:scale(.94)}
+  .mf-nav button:disabled{opacity:.4;cursor:not-allowed}
+  .mf-nav span{min-width:70px;text-align:center;font-size:.82rem;font-weight:600;color:var(--biru-tua)}
+  .mf-empat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .mf-empat small{display:block;text-align:center;font-size:.62rem;color:var(--abu);margin-bottom:3px;white-space:nowrap}
+  .mf-empat input{padding:9px 2px;text-align:center}
+  .mf-empat input[readonly]{background:#e3ecfb;font-weight:700;color:var(--biru-tua)}
+  .mf-aksi-baris{display:flex;gap:8px;margin-top:6px}
+  .mf-aksi-baris button{flex:1;border:0;border-radius:12px;padding:11px 6px;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;background:#eef3fb;color:var(--biru-tua)}
+  .mf-aksi-baris .utama{background:linear-gradient(135deg,#1558c9,#2f86ec);color:#fff}
+  .mf-aksi-baris .bahaya{background:#fdecec;color:#b42318}
+  .mf-aksi-baris button:disabled{opacity:.4;cursor:not-allowed}
+  .mf-field input:disabled,.mf-field select:disabled,.mf-field textarea:disabled{background:#f1f5f9;color:var(--teks);-webkit-text-fill-color:var(--teks);opacity:1}
 
   .footer-utama{text-align:center;font-size:.72rem;color:var(--abu);padding:8px 0 calc(22px + env(safe-area-inset-bottom))}
 
@@ -832,11 +848,13 @@
           <i class="fa-solid fa-circle-exclamation alert" id="alertInfo"></i>
           <span class="lingkaran c2"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 9.5h3l8-4v13l-8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/><path d="M7 14.5 8.2 19h2.4"/><path d="M18.2 9.2a4.5 4.5 0 0 1 0 5.6"/></svg></span><span class="nama">Info Aktual</span>
         </button>
+        <button class="fitur" id="btnPolling" data-buka="polling" hidden><i class="fa-solid fa-circle-exclamation alert" id="alertPolling"></i><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="programkerja"><span class="lingkaran c14"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M8 3v3M16 3v3M8 12.5l2.2 2.2 4-4.4M8 18h8"/></svg></span><span class="nama">Program Kerja</span></button>
         <button class="fitur" data-buka="profilrt"><span class="lingkaran c13"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 20V9.5L12 4l8 5.5V20z"/><path d="M9.5 20v-5h5v5M8.5 11.5h1.2M14.3 11.5h1.2"/></svg></span><span class="nama">Profil RT</span></button>
         <button class="fitur" data-buka="bantuan" data-akses="biasa"><span class="lingkaran c6"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect class="d" x="3" y="13" width="4" height="6" rx="1.7"/><rect class="d" x="17" y="13" width="4" height="6" rx="1.7"/><path d="M19 19v.4c0 1.2-1.3 2.1-3 2.1h-2"/></svg></span><span class="nama">Bantuan</span></button>
-        <button class="fitur" id="btnPolling" data-buka="polling" hidden><i class="fa-solid fa-circle-exclamation alert" id="alertPolling"></i><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="korespondensi" data-akses="khusus" hidden><span class="lingkaran c4"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="5.5" width="18" height="13" rx="2.8"/><path d="m3.8 7.8 8.2 5.6 8.2-5.6"/></svg></span><span class="nama">Administrasi</span></button>
+        <button class="fitur" data-buka="database" data-akses="khusus" hidden><span class="lingkaran c5"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><ellipse class="d" cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6M4.5 12v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"/></svg></span><span class="nama">Database</span></button>
+        <button class="fitur" data-buka="pendataan" data-akses="khusus" hidden><span class="lingkaran c10"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="5" y="4.5" width="14" height="16" rx="2.5"/><path d="M9 4.5V3.2h6v1.3M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg></span><span class="nama">Pendataan</span></button>
       </div>
 
       <div class="judul-seksi">Standar Pelayanan</div>
@@ -2069,8 +2087,13 @@ async function kirimRpc(fn, p){
 }
 
 /* ---------- Modal form generik ---------- */
-let mfSimpanFn = null;
+let mfSimpanFn = null, mfNavFn = null;
+$('mfIsi').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-mf]');
+  if (b && !b.disabled && mfNavFn) mfNavFn(b.dataset.mf);
+});
 function bukaModalForm(judul, isiHtml, onSimpan, labelSimpan){
+  mfNavFn = null; $('mfBatal').textContent = 'Batal';
   $('mfJudul').textContent = judul;
   $('mfIsi').innerHTML = isiHtml;
   $('mfGalat').classList.remove('tampil');
@@ -2120,11 +2143,9 @@ function renderKorespondensi(isi){
     ${baris('keluar','c4','fa-paper-plane','Surat Keluar','Pembuatan surat keluar')}
     ${baris('undangan','c2','fa-calendar-check','Undangan','Pembuatan undangan kegiatan RT')}
     ${baris('notula','c3','fa-file-pen','Notula','Pencatatan proses dan hasil rapat')}
-    ${baris('pengaduan','c11','fa-comment-dots','Pengaduan','Pencatatan pengaduan warga','sub')}
-    ${baris('inventaris','c8','fa-boxes-stacked','Inventaris','Pendataan inventaris dan aset RT','sub')}
+    ${baris('pengaduan','c11','fa-comment-dots','Pengaduan','Pencatatan pengaduan warga')}
+    ${baris('inventaris','c8','fa-boxes-stacked','Inventaris','Pendataan inventaris dan aset RT')}
     ${baris('laporan','c9','fa-file-lines','Laporan','Kondisi wilayah dan kegiatan RT','sub')}
-    ${baris('database','c5','fa-database','Database','Informasi data warga','sub')}
-    ${baris('pendataan','c10','fa-clipboard-list','Pendataan','Pendataan warga baru','sub')}
   </div>`;
 }
 document.addEventListener('click', (e) => {
@@ -2138,7 +2159,8 @@ document.addEventListener('click', (e) => {
     return;
   }
   const el = e.target.closest('[data-kores]'); if (!el) return;
-  ({ masuk:formSuratMasuk, keluar:formSuratKeluar, undangan:formUndangan, notula:formNotula })[el.dataset.kores]();
+  ({ masuk:formSuratMasuk, keluar:formSuratKeluar, undangan:formUndangan, notula:formNotula,
+     pengaduan:formPengaduan, inventaris:formInventaris })[el.dataset.kores]();
 });
 
 const EKSTENSI_ARSIP = { 'application/pdf':'pdf', 'image/png':'png', 'image/jpeg':'jpg' };
@@ -2262,6 +2284,127 @@ async function formNotula(){
         pembahasan:val(fd,'pembahasan'), hasil:val(fd,'hasil')
       });
     });
+}
+
+/* ---------- Navigasi record: Awal, Sebelumnya, Berikutnya, Akhir (+ Baru) ---------- */
+function barNav(idx, n, baruAda, tombolBaru){
+  const maks = baruAda ? n : n - 1, baru = baruAda && idx >= n;
+  const b = (k, ik, mati, t) => `<button type="button" data-mf="${k}" ${mati ? 'disabled' : ''} aria-label="${t}" title="${t}"><i class="fa-solid ${ik}"></i></button>`;
+  const label = baru ? 'Baru' : (n ? (idx + 1) + ' / ' + n : '0 / 0');
+  return `<div class="mf-nav">${b('awal','fa-backward-step',idx <= 0,'Awal')}${b('mundur','fa-chevron-left',idx <= 0,'Sebelumnya')}<span>${label}</span>` +
+         `${b('maju','fa-chevron-right',idx >= maks,'Berikutnya')}${b('akhir','fa-forward-step',n === 0 || idx === n - 1,'Akhir')}${tombolBaru ? b('baru','fa-plus',baru,'Data baru') : ''}</div>`;
+}
+function geserNav(a, idx, n, baruAda){
+  const maks = Math.max(0, baruAda ? n : n - 1);
+  if (a === 'awal') return 0;
+  if (a === 'mundur') return Math.max(0, idx - 1);
+  if (a === 'maju') return Math.min(maks, idx + 1);
+  if (a === 'akhir') return Math.max(0, n - 1);
+  if (a === 'baru') return n;
+  return idx;
+}
+const tampilGalatMf = (m) => { const g = $('mfGalat'); g.textContent = m; g.classList.add('tampil'); };
+
+/* ---------- Pengaduan (modal; default = aduan baru dengan waktu saat ini) ---------- */
+const STATUS_ADUAN = ['Selesai', 'Berproses', 'Tindak lanjut'];
+async function formPengaduan(){
+  const r0 = await kirimRpc('daftar_pengaduan', {});
+  if (!r0.ok) return toast(r0.pesan || 'Tidak dapat memuat pengaduan.');
+  const items = r0.items || [];
+  let idx = items.length;                                 // posisi setelah record terakhir = aduan baru
+  const gambar = () => {
+    const n = items.length, it = idx < n ? items[idx] : null;
+    const tgl = keInputWita(it ? it.tgl_aduan : new Date().toISOString());
+    const st = it ? it.status : 'Berproses';
+    $('mfIsi').innerHTML = barNav(idx, n, true, true) +
+      fld('Tanggal Aduan', `<input name="tgl_aduan" type="datetime-local" value="${esc(tgl)}">`, 1) +
+      fld('Nama Pengadu', `<input name="nama_pengadu" type="text" maxlength="150" value="${esc(it ? it.nama_pengadu : '')}">`, 1) +
+      fld('Uraian Aduan', `<textarea name="uraian">${esc(it ? it.uraian : '')}</textarea>`, 1) +
+      fld('Solusi / Pemecahan', `<textarea name="solusi">${esc(it ? it.solusi : '')}</textarea>`) +
+      fld('Status', '<select name="status">' + STATUS_ADUAN.map(s => `<option ${s === st ? 'selected' : ''}>${s}</option>`).join('') + '</select>', 1);
+    $('mfGalat').classList.remove('tampil');
+  };
+  bukaModalForm('Pengaduan', '', async (fd) => {
+    const epoch = epochDariInput(val(fd, 'tgl_aduan'));
+    if (isNaN(epoch)) return { ok:false, pesan:'Tanggal aduan wajib diisi.' };
+    if (!val(fd, 'nama_pengadu')) return { ok:false, pesan:'Nama pengadu wajib diisi.' };
+    if (!val(fd, 'uraian')) return { ok:false, pesan:'Uraian aduan wajib diisi.' };
+    return kirimRpc('simpan_pengaduan', {
+      id: idx < items.length ? items[idx].id : '', tgl_aduan: new Date(epoch).toISOString(),
+      nama_pengadu: val(fd, 'nama_pengadu'), uraian: val(fd, 'uraian'), solusi: val(fd, 'solusi'), status: val(fd, 'status')
+    });
+  }, 'Simpan');
+  mfNavFn = (a) => { idx = geserNav(a, idx, items.length, true); gambar(); };
+  gambar();
+}
+
+/* ---------- Inventaris (modal; default = record terakhir; Tambah / Ubah / Hapus) ---------- */
+async function formInventaris(){
+  let items = [];
+  const muat = async () => { const r = await kirimRpc('daftar_inventaris', {}); if (r.ok) items = r.items || []; return r; };
+  const r0 = await muat();
+  if (!r0.ok) return toast(r0.pesan || 'Tidak dapat memuat inventaris.');
+  let idx = Math.max(0, items.length - 1), edit = items.length === 0, hapus = false;
+  const gambar = () => {
+    const n = items.length, baru = idx >= n, it = baru ? {} : items[idx], dis = edit ? '' : 'disabled';
+    const angka = (k) => Number(it[k]) || 0;
+    const num = (nm, lbl) => `<div><small>${lbl}</small><input class="inv-n" name="${nm}" type="number" inputmode="numeric" min="0" value="${angka(nm)}" ${dis}></div>`;
+    let aksi;
+    if (hapus) aksi = '<div class="pesan-err" style="margin:0 0 8px">Hapus data inventaris ini?</div>' +
+      '<div class="mf-aksi-baris"><button type="button" data-mf="hapusbatal">Batal</button><button type="button" class="bahaya" data-mf="hapusya"><i class="fa-solid fa-trash"></i> Ya, Hapus</button></div>';
+    else if (edit) aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="batal">Batal</button><button type="button" class="utama" data-mf="simpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button></div>';
+    else aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="tambah"><i class="fa-solid fa-plus"></i> Tambah</button>' +
+      `<button type="button" class="utama" data-mf="ubah" ${baru ? 'disabled' : ''}><i class="fa-solid fa-pen"></i> Ubah</button>` +
+      `<button type="button" class="bahaya" data-mf="hapus" ${baru ? 'disabled' : ''}><i class="fa-solid fa-trash"></i> Hapus</button></div>`;
+    $('mfIsi').innerHTML = barNav(idx, n, baru) +
+      fld('Tgl Terima', `<input name="tgl_terima" type="date" value="${esc(it.tgl_terima || hariIni())}" ${dis}>`, 1) +
+      fld('Nama Barang', `<input name="nama_barang" type="text" maxlength="200" value="${esc(it.nama_barang || '')}" ${dis}>`, 1) +
+      `<div class="mf-field"><label>Keadaan Barang</label><div class="mf-empat">${num('baik', 'Baik')}${num('rusak_ringan', 'R. Ringan')}${num('rusak_berat', 'R. Berat')}` +
+        `<div><small>Jumlah</small><input id="invJml" type="number" value="${angka('baik') + angka('rusak_ringan') + angka('rusak_berat')}" readonly tabindex="-1"></div></div></div>` +
+      fld('Lokasi Penyimpanan (Keberadaan)', `<input name="lokasi" type="text" maxlength="200" value="${esc(it.lokasi || '')}" ${dis}>`) +
+      fld('Aksi', aksi);
+    $('mfIsi').querySelectorAll('.inv-n').forEach(i => i.addEventListener('input', () => {
+      let t = 0; $('mfIsi').querySelectorAll('.inv-n').forEach(x => { t += Math.max(0, parseInt(x.value, 10) || 0); });
+      $('invJml').value = t;
+    }));
+    $('mfGalat').classList.remove('tampil');
+  };
+  bukaModalForm('Inventaris', '', null);
+  $('mfBatal').textContent = 'Tutup';
+  mfNavFn = async (a) => {
+    const n = items.length;
+    $('mfGalat').classList.remove('tampil');
+    if (['awal', 'mundur', 'maju', 'akhir'].includes(a)){ idx = geserNav(a, idx, n, idx >= n); edit = false; hapus = false; return gambar(); }
+    if (a === 'tambah'){ idx = n; edit = true; return gambar(); }
+    if (a === 'ubah'){ edit = true; return gambar(); }
+    if (a === 'batal'){ if (n > 0){ if (idx >= n) idx = n - 1; edit = false; } return gambar(); }
+    if (a === 'hapus'){ hapus = true; return gambar(); }
+    if (a === 'hapusbatal'){ hapus = false; return gambar(); }
+    if (a === 'hapusya'){
+      const r = await kirimRpc('hapus_inventaris', { id: items[idx].id });
+      if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menghapus.');
+      toast(r.pesan || 'Data inventaris dihapus.');
+      await muat(); idx = Math.min(idx, Math.max(0, items.length - 1)); edit = items.length === 0; hapus = false;
+      return gambar();
+    }
+    if (a === 'simpan'){
+      const fd = new FormData($('mfForm')), ang = (k) => Math.max(0, parseInt(val(fd, k), 10) || 0);
+      if (!val(fd, 'tgl_terima')) return tampilGalatMf('Tgl terima wajib diisi.');
+      if (!val(fd, 'nama_barang')) return tampilGalatMf('Nama barang wajib diisi.');
+      if (ang('baik') + ang('rusak_ringan') + ang('rusak_berat') < 1) return tampilGalatMf('Jumlah barang minimal 1.');
+      const r = await kirimRpc('simpan_inventaris', {
+        id: idx < n ? items[idx].id : '', tgl_terima: val(fd, 'tgl_terima'), nama_barang: val(fd, 'nama_barang'),
+        baik: ang('baik'), rusak_ringan: ang('rusak_ringan'), rusak_berat: ang('rusak_berat'), lokasi: val(fd, 'lokasi')
+      });
+      if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menyimpan.');
+      toast(r.pesan || 'Data inventaris tersimpan.');
+      await muat();
+      const k = items.findIndex(x => x.id === r.id);
+      idx = k >= 0 ? k : Math.max(0, items.length - 1); edit = false;
+      return gambar();
+    }
+  };
+  gambar();
 }
 
 /* ---------- Info Aktual: kartu Agenda RT ---------- */
@@ -2817,7 +2960,8 @@ function gambarPollingAdmin(isi, d, versi){
     <div class="kartu-stat">
       <h3 class="st-judul"><i class="fa-solid fa-chart-pie"></i> Rekap Suara</h3>
       <div id="pollRekap"></div>
-    </div>`;
+    </div>
+    <div class="kartu-stat" id="pollArsip"><div class="kosong" style="margin:8px 0"><i class="fa-solid fa-spinner fa-spin"></i>Memuat arsip polling...</div></div>`;
   if (poll){
     $('pollDeskripsi').value = poll.deskripsi || '';
     $('pollBatas').value = keInputWita(poll.batas_waktu);
@@ -2838,6 +2982,7 @@ function gambarPollingAdmin(isi, d, versi){
     $('pollDeskripsi').focus();
   });
   $('pollSimpan').addEventListener('click', () => simpanPollingAdmin(versi));
+  muatArsipPolling(versi);
   plPoll = setInterval(async () => {                      // rekap suara selalu terbaru; isian formulir tidak disentuh
     if (versi !== versiSubform || !$('pollRekap')){ hentikanPoll(); return; }
     if (document.hidden) return;
@@ -2847,6 +2992,29 @@ function gambarPollingAdmin(isi, d, versi){
       if (n.poll.hasil_aktif && !$('pollHasil').checked){ $('pollHasil').checked = true; aturKontrolPoll(); }   // batas waktu berakhir: Hasil otomatis tercentang
     }
   }, 15000);
+}
+/* Arsip polling (admin): membuka semua polling dengan navigasi, hanya baca */
+async function muatArsipPolling(versi){
+  const wadah = $('pollArsip'); if (!wadah) return;
+  const judul = (st) => `<div class="rd-judul-baris"><h3 class="st-judul"><i class="fa-solid fa-clock-rotate-left"></i> Arsip Polling</h3><span>${st || ''}</span></div>`;
+  const r = await kirimRpc('polling_admin_daftar', {});
+  if (versi !== versiSubform || $('pollArsip') !== wadah) return;
+  if (!r.ok){ wadah.innerHTML = judul() + `<div class="poll-kosong">${esc(r.pesan || 'Arsip polling tidak dapat dimuat.')}</div>`; return; }
+  const items = r.items || [];
+  if (!items.length){ wadah.innerHTML = judul() + '<div class="poll-kosong">Belum ada data polling.</div>'; return; }
+  let idx = items.length - 1;                              // default: polling terbaru
+  const gambar = () => {
+    const it = items[idx];
+    wadah.innerHTML = judul(statusPollingAdmin(it)) + barNav(idx, items.length, false) +
+      `<div class="poll-grup"><label class="poll-label">Deskripsi / Pertanyaan Polling</label><textarea class="poll-input" readonly style="min-height:80px">${esc(it.deskripsi)}</textarea></div>
+       <div class="poll-grup"><label class="poll-label">Batas Waktu Polling</label><input class="poll-input" type="text" readonly value="${esc(tglWaktuPoll(it.batas_waktu))}"></div>` +
+      hasilPolling(it.suara);
+  };
+  wadah.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-mf]'); if (!b || b.disabled) return;
+    idx = geserNav(b.dataset.mf, idx, items.length, false); gambar();
+  });
+  gambar();
 }
 async function simpanPollingAdmin(versi){
   const deskripsi = $('pollDeskripsi').value.trim(), batas = $('pollBatas').value;
