@@ -2172,168 +2172,88 @@ document.addEventListener('click', (e) => {
 
 const EKSTENSI_ARSIP = { 'application/pdf':'pdf', 'image/png':'png', 'image/jpeg':'jpg' };
 const BATAS_ARSIP = 5 * 1024 * 1024;
-const PERIHAL_KELUAR = ['Himbauan','Penyampaian','Pemberitahuan','Pengumuman','Edaran',
-                        'Rekomendasi','Peringatan','Pemberhentian','Pengangkatan'];
-const SUMBER_INV = ['Aset RT', 'Sumbangan', 'Iuran Bulanan'];
 
-/* ---------- Mesin modal rekam: navigasi record + Tambah / Ubah / Hapus ----------
-   Dipakai Surat Masuk, Surat Keluar, Undangan, Notula, dan Inventaris. Default: record terakhir.
-   c = { judul, daftar, simpan, hapus (nama RPC), fokus (nama field), hapusTeks,
-         render(it, dis, baru, edit) -> html isian, sesudah() -> dipanggil setelah render,
-         ambil(fd) -> { galat } | { payload } (boleh async) } */
-const inpR = (nm, it, dis, tipe, extra) => `<input name="${nm}" type="${tipe || 'text'}" value="${esc(it[nm] ?? '')}" ${extra || ''} ${dis}>`;
-const areaR = (nm, it, dis) => `<textarea name="${nm}" ${dis}>${esc(it[nm] ?? '')}</textarea>`;
-const pilihR = (nm, daftar, nilai, dis) => `<select name="${nm}" ${dis}><option value="">— Pilih —</option>` +
-  daftar.map(o => `<option ${o === nilai ? 'selected' : ''}>${esc(o)}</option>`).join('') + '</select>';
-const nomorR = (it) => fld('Nomor Surat', `<input type="text" value="${esc(it.nomor_surat || '')}" placeholder="Otomatis saat disimpan" disabled>`);
-const jam5 = (v) => String(v || '').slice(0, 5);
-
-async function modalRekam(c){
-  let items = [];
-  const muat = async () => { const r = await kirimRpc(c.daftar, {}); if (r.ok) items = r.items || []; return r; };
-  const r0 = await muat();
-  if (!r0.ok) return toast(r0.pesan || 'Tidak dapat memuat data.');
-  let idx = Math.max(0, items.length - 1), edit = items.length === 0, hapus = false, sibuk = false;
-
-  const gambar = (fokus) => {
-    const n = items.length, baru = idx >= n, it = baru ? {} : items[idx], dis = edit ? '' : 'disabled';
-    let aksi;
-    if (hapus) aksi = `<div class="pesan-err" style="margin:0 0 8px">${esc(c.hapusTeks || 'Hapus data ini?')}</div>` +
-      '<div class="mf-aksi-baris"><button type="button" data-mf="hapusbatal">Batal</button><button type="button" class="bahaya" data-mf="hapusya"><i class="fa-solid fa-trash"></i> Ya, Hapus</button></div>';
-    else if (edit) aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="batal">Batal</button><button type="button" class="utama" data-mf="simpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button></div>';
-    else aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="tambah"><i class="fa-solid fa-plus"></i> Tambah</button>' +
-      `<button type="button" class="utama" data-mf="ubah" ${baru ? 'disabled' : ''}><i class="fa-solid fa-pen"></i> Ubah</button>` +
-      `<button type="button" class="bahaya" data-mf="hapus" ${baru ? 'disabled' : ''}><i class="fa-solid fa-trash"></i> Hapus</button></div>`;
-    $('mfIsi').innerHTML = barNav(idx, n, baru) + c.render(it, dis, baru, edit) + fld('Aksi', aksi);
-    if (c.sesudah) c.sesudah();
-    $('mfGalat').classList.remove('tampil');
-    if (fokus) setTimeout(() => { const e = $('mfForm').elements[c.fokus]; if (e && !e.disabled) e.focus(); }, 60);
-  };
-
-  bukaModalForm(c.judul, '', null);
-  $('mfBatal').textContent = 'Tutup';
-  mfNavFn = async (a) => {
-    if (sibuk) return;
-    sibuk = true;
-    try{
-      const n = items.length;
-      $('mfGalat').classList.remove('tampil');
-      if (['awal', 'mundur', 'maju', 'akhir'].includes(a)){ idx = geserNav(a, idx, n, idx >= n); edit = false; hapus = false; return gambar(); }
-      if (a === 'tambah'){ idx = n; edit = true; return gambar(true); }          // kursor otomatis di field pertama
-      if (a === 'ubah'){ edit = true; return gambar(); }
-      if (a === 'batal'){ if (n > 0){ if (idx >= n) idx = n - 1; edit = false; } return gambar(); }
-      if (a === 'hapus'){ hapus = true; return gambar(); }
-      if (a === 'hapusbatal'){ hapus = false; return gambar(); }
-      if (a === 'hapusya'){
-        const r = await kirimRpc(c.hapus, { id: items[idx].id });
-        if (!r.ok){ hapus = false; gambar(); return tampilGalatMf(r.pesan || 'Gagal menghapus.'); }
-        toast(r.pesan || 'Data dihapus.');
-        await muat(); idx = Math.min(idx, Math.max(0, items.length - 1)); edit = items.length === 0; hapus = false;
-        return gambar(edit);
-      }
-      if (a === 'simpan'){
-        const h = await c.ambil(new FormData($('mfForm')));
-        if (h.galat) return tampilGalatMf(h.galat);
-        const r = await kirimRpc(c.simpan, Object.assign({ id: idx < n ? items[idx].id : '' }, h.payload));
-        if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menyimpan.');
-        toast((r.pesan || 'Tersimpan.') + (r.nomor_surat ? ' No. ' + r.nomor_surat : ''));
-        await muat();
-        const k = items.findIndex(x => x.id === r.id);
-        idx = k >= 0 ? k : Math.max(0, items.length - 1); edit = false;
-        return gambar();
-      }
-    } finally { sibuk = false; }
-  };
-  gambar(edit);
-}
-
-/* ---------- Surat Masuk ---------- */
 function formSuratMasuk(){
-  return modalRekam({
-    judul:'Surat Masuk', daftar:'daftar_surat_masuk', simpan:'simpan_surat_masuk', hapus:'hapus_surat_masuk',
-    fokus:'nomor_surat', hapusTeks:'Hapus surat masuk ini?',
-    render:(it, dis, baru, edit) => {
-      const x = Object.assign({}, it, { tgl_surat: it.tgl_surat || hariIni() });
-      const info = it.arsip_path
-        ? `<div class="notif-ket" style="margin-bottom:6px"><i class="fa-solid fa-paperclip"></i> Arsip tersimpan (${esc(String(it.arsip_path).split('/').pop())})${edit ? ' — pilih berkas baru untuk menggantinya' : ''}</div>`
-        : (edit ? '' : '<div class="notif-ket">Tidak ada arsip.</div>');
-      return fld('Nomor Surat', inpR('nomor_surat', it, dis, 'text', 'maxlength="100"'), 1) +
-        '<div class="mf-dua">' + fld('Tgl Surat', inpR('tgl_surat', x, dis, 'date'), 1) + fld('Tgl Pelaksanaan', inpR('tgl_pelaksanaan', it, dis, 'date')) + '</div>' +
-        fld('Perihal', inpR('perihal', it, dis, 'text', 'maxlength="200"'), 1) +
-        fld('Dari', inpR('dari', it, dis, 'text', 'maxlength="200"'), 1) +
-        fld('Arsip (PDF, PNG, JPG, JPEG — maks. 5 MB)', info + (edit ? '<input name="arsip" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' : ''));
-    },
-    ambil: async (fd) => {
-      if (!val(fd,'nomor_surat')) return { galat:'Nomor surat wajib diisi.' };
-      if (!val(fd,'tgl_surat')) return { galat:'Tgl surat wajib diisi.' };
-      if (!val(fd,'perihal')) return { galat:'Perihal wajib diisi.' };
-      if (!val(fd,'dari')) return { galat:'Pengirim (Dari) wajib diisi.' };
-      let path = '';
+  bukaModalForm('Surat Masuk',
+    fld('Nomor Surat', '<input name="nomor_surat" type="text" maxlength="100">', 1) +
+    '<div class="mf-dua">' +
+      fld('Tgl Surat', `<input name="tgl_surat" type="date" value="${hariIni()}">`, 1) +
+      fld('Tgl Pelaksanaan', '<input name="tgl_pelaksanaan" type="date">') +
+    '</div>' +
+    fld('Perihal', '<input name="perihal" type="text" maxlength="200">', 1) +
+    fld('Dari', '<input name="dari" type="text" maxlength="200">', 1) +
+    fld('Arsip (PDF, PNG, JPG, JPEG — maks. 5 MB)',
+        '<input name="arsip" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">'),
+    async (fd) => {
+      const nomor = val(fd,'nomor_surat'), perihal = val(fd,'perihal'), dari = val(fd,'dari');
+      if (!nomor) return { ok:false, pesan:'Nomor surat wajib diisi.' };
+      if (!val(fd,'tgl_surat')) return { ok:false, pesan:'Tgl surat wajib diisi.' };
+      if (!perihal) return { ok:false, pesan:'Perihal wajib diisi.' };
+      if (!dari) return { ok:false, pesan:'Pengirim (Dari) wajib diisi.' };
+
+      let path = null;
       const file = fd.get('arsip');
       if (file && file.size > 0){
         const ext = EKSTENSI_ARSIP[file.type];
-        if (!ext) return { galat:'Arsip harus berupa PDF, PNG, JPG, atau JPEG.' };
-        if (file.size > BATAS_ARSIP) return { galat:'Ukuran arsip maksimal 5 MB.' };
+        if (!ext) return { ok:false, pesan:'Arsip harus berupa PDF, PNG, JPG, atau JPEG.' };
+        if (file.size > BATAS_ARSIP) return { ok:false, pesan:'Ukuran arsip maksimal 5 MB.' };
         path = 'masuk/' + crypto.randomUUID() + '.' + ext;
         const { error } = await db.storage.from('arsip_surat').upload(path, file, { contentType:file.type, upsert:false });
-        if (error) return { galat:'Gagal mengunggah arsip: ' + error.message };
+        if (error) return { ok:false, pesan:'Gagal mengunggah arsip: ' + error.message };
       }
-      return { payload:{ nomor_surat:val(fd,'nomor_surat'), tgl_surat:val(fd,'tgl_surat'), tgl_pelaksanaan:val(fd,'tgl_pelaksanaan'),
-        perihal:val(fd,'perihal'), dari:val(fd,'dari'), arsip_path:path } };
-    }
-  });
+      return kirimRpc('simpan_surat_masuk', {
+        nomor_surat:nomor, tgl_surat:val(fd,'tgl_surat'), tgl_pelaksanaan:val(fd,'tgl_pelaksanaan'),
+        perihal, dari, arsip_path:path
+      });
+    });
 }
 
-/* ---------- Surat Keluar (nomor otomatis dari server) ---------- */
+const PERIHAL_KELUAR = ['Himbauan','Penyampaian','Pemberitahuan','Pengumuman','Edaran',
+                        'Rekomendasi','Peringatan','Pemberhentian','Pengangkatan'];
 function formSuratKeluar(){
-  return modalRekam({
-    judul:'Surat Keluar', daftar:'daftar_surat_keluar', simpan:'simpan_surat_keluar', hapus:'hapus_surat_keluar',
-    fokus:'perihal', hapusTeks:'Hapus surat keluar ini? Nomor suratnya tidak dipakai ulang.',
-    render:(it, dis) => {
-      const x = Object.assign({}, it, { tgl_surat: it.tgl_surat || hariIni() });
-      return nomorR(it) + fld('Tgl Surat', inpR('tgl_surat', x, dis, 'date'), 1) +
-        fld('Perihal', pilihR('perihal', PERIHAL_KELUAR, it.perihal, dis), 1) +
-        fld('Kepada', inpR('kepada', it, dis, 'text', 'maxlength="200"'), 1) +
-        fld('Pembuka', areaR('pembuka', it, dis)) + fld('Penutup', areaR('penutup', it, dis)) +
-        fld('Deskripsi', areaR('deskripsi', it, dis)) +
-        fld('Lampiran (opsional)', inpR('lampiran', it, dis, 'text', 'maxlength="200" placeholder="Contoh: 1 (satu) berkas"'));
-    },
-    ambil: (fd) => {
-      if (!val(fd,'perihal')) return { galat:'Perihal wajib dipilih.' };
-      if (!val(fd,'kepada')) return { galat:'Kepada wajib diisi.' };
-      return { payload:{ tgl_surat:val(fd,'tgl_surat') || hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'),
-        pembuka:val(fd,'pembuka'), penutup:val(fd,'penutup'), deskripsi:val(fd,'deskripsi'), lampiran:val(fd,'lampiran') } };
-    }
-  });
+  bukaModalForm('Surat Keluar',
+    fld('Perihal', '<select name="perihal"><option value="">— Pilih perihal —</option>' +
+        PERIHAL_KELUAR.map(p => `<option>${p}</option>`).join('') + '</select>', 1) +
+    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
+    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
+    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>') +
+    fld('Deskripsi', '<textarea name="deskripsi" placeholder="Isi / keterangan surat"></textarea>') +
+    fld('Lampiran (opsional)', '<input name="lampiran" type="text" maxlength="200" placeholder="Contoh: 1 (satu) berkas">'),
+    async (fd) => {
+      if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib dipilih.' };
+      if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
+      return kirimRpc('simpan_surat_keluar', {
+        tgl_surat:hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'), pembuka:val(fd,'pembuka'),
+        penutup:val(fd,'penutup'), deskripsi:val(fd,'deskripsi'), lampiran:val(fd,'lampiran')
+      });
+    });
 }
 
-/* ---------- Undangan (nomor otomatis dari server) ---------- */
 function formUndangan(){
-  return modalRekam({
-    judul:'Undangan', daftar:'daftar_undangan', simpan:'simpan_undangan', hapus:'hapus_undangan',
-    fokus:'perihal', hapusTeks:'Hapus undangan ini? Undangan yang sudah memiliki notula tidak dapat dihapus.',
-    render:(it, dis) => {
-      const x = Object.assign({}, it, { tgl_surat: it.tgl_surat || hariIni(), jam_acara: jam5(it.jam_acara) });
-      return nomorR(it) + fld('Tgl Surat', inpR('tgl_surat', x, dis, 'date'), 1) +
-        fld('Perihal', inpR('perihal', it, dis, 'text', 'maxlength="200" placeholder="Contoh: Rapat Pengurus RT"'), 1) +
-        fld('Kepada', inpR('kepada', it, dis, 'text', 'maxlength="200"'), 1) +
-        '<div class="mf-dua">' + fld('Tanggal', inpR('tgl_acara', it, dis, 'date'), 1) + fld('Jam', inpR('jam_acara', x, dis, 'time'), 1) + '</div>' +
-        fld('Tempat', inpR('tempat', it, dis, 'text', 'maxlength="200"'), 1) +
-        fld('Agenda', areaR('agenda', it, dis)) + fld('Pembuka', areaR('pembuka', it, dis)) + fld('Penutup', areaR('penutup', it, dis));
-    },
-    ambil: (fd) => {
-      if (!val(fd,'perihal')) return { galat:'Perihal wajib diisi.' };
-      if (!val(fd,'kepada')) return { galat:'Kepada wajib diisi.' };
-      if (!val(fd,'tgl_acara') || !val(fd,'jam_acara')) return { galat:'Tanggal dan jam wajib diisi.' };
-      if (!val(fd,'tempat')) return { galat:'Tempat wajib diisi.' };
-      return { payload:{ tgl_surat:val(fd,'tgl_surat') || hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'),
-        tgl_acara:val(fd,'tgl_acara'), jam_acara:val(fd,'jam_acara'), tempat:val(fd,'tempat'), agenda:val(fd,'agenda'),
-        pembuka:val(fd,'pembuka'), penutup:val(fd,'penutup') } };
-    }
-  });
+  bukaModalForm('Undangan',
+    fld('Perihal', '<input name="perihal" type="text" maxlength="200" placeholder="Contoh: Rapat Pengurus RT">', 1) +
+    fld('Kepada', '<input name="kepada" type="text" maxlength="200">', 1) +
+    '<div class="mf-dua">' +
+      fld('Tanggal', '<input name="tgl_acara" type="date">', 1) +
+      fld('Jam', '<input name="jam_acara" type="time">', 1) +
+    '</div>' +
+    fld('Tempat', '<input name="tempat" type="text" maxlength="200">', 1) +
+    fld('Agenda', '<textarea name="agenda"></textarea>') +
+    fld('Pembuka', '<textarea name="pembuka" placeholder="Paragraf pembuka"></textarea>') +
+    fld('Penutup', '<textarea name="penutup" placeholder="Paragraf penutup"></textarea>'),
+    async (fd) => {
+      if (!val(fd,'perihal')) return { ok:false, pesan:'Perihal wajib diisi.' };
+      if (!val(fd,'kepada'))  return { ok:false, pesan:'Kepada wajib diisi.' };
+      if (!val(fd,'tgl_acara') || !val(fd,'jam_acara')) return { ok:false, pesan:'Tanggal dan jam wajib diisi.' };
+      if (!val(fd,'tempat'))  return { ok:false, pesan:'Tempat wajib diisi.' };
+      return kirimRpc('simpan_undangan', {
+        tgl_surat:hariIni(), perihal:val(fd,'perihal'), kepada:val(fd,'kepada'), tgl_acara:val(fd,'tgl_acara'),
+        jam_acara:val(fd,'jam_acara'), tempat:val(fd,'tempat'), agenda:val(fd,'agenda'),
+        pembuka:val(fd,'pembuka'), penutup:val(fd,'penutup')
+      });
+    });
 }
 
-/* ---------- Notula (terkait undangan berperihal Rapat / Rembug Warga) ---------- */
 async function formNotula(){
   let daftar = [];
   try{
@@ -2348,28 +2268,29 @@ async function formNotula(){
       '<div class="kosong" style="margin:10px 0 20px"><i class="fa-solid fa-file-circle-question"></i>' +
       'Belum ada undangan berperihal Rapat atau Rembug Warga.<br>Buat undangannya terlebih dahulu.</div>', null);
   }
-  const opsi = (pilihan, dis) => `<select name="undangan_id" ${dis}><option value="">— Pilih nomor undangan —</option>` +
-    daftar.map(u => `<option value="${esc(u.id)}" ${u.id === pilihan ? 'selected' : ''}>${esc(u.nomor_surat)} — ${esc(u.perihal)} (${tglIndo(u.tgl_acara)})</option>`).join('') + '</select>';
-  return modalRekam({
-    judul:'Notula', daftar:'daftar_notula', simpan:'simpan_notula', hapus:'hapus_notula',
-    fokus:'undangan_id', hapusTeks:'Hapus notula ini?',
-    render:(it, dis) => {
-      const x = Object.assign({}, it, { jam_mulai: jam5(it.jam_mulai), jam_selesai: jam5(it.jam_selesai) });
-      return fld('Nomor Undangan', opsi(it.undangan_id, dis), 1) +
-        fld('Jumlah Peserta Rapat', inpR('jumlah_peserta', it, dis, 'number', 'inputmode="numeric" min="0" max="99999"'), 1) +
-        '<div class="mf-dua">' + fld('Jam Mulai', inpR('jam_mulai', x, dis, 'time'), 1) + fld('Jam Selesai', inpR('jam_selesai', x, dis, 'time'), 1) + '</div>' +
-        fld('Pembahasan Rapat', areaR('pembahasan', it, dis), 1) + fld('Hasil Rapat', areaR('hasil', it, dis), 1);
-    },
-    ambil: (fd) => {
-      if (!val(fd,'undangan_id')) return { galat:'Nomor undangan wajib dipilih.' };
-      if (val(fd,'jumlah_peserta') === '') return { galat:'Jumlah peserta wajib diisi.' };
-      if (!val(fd,'jam_mulai') || !val(fd,'jam_selesai')) return { galat:'Jam mulai dan jam selesai wajib diisi.' };
-      if (!val(fd,'pembahasan')) return { galat:'Pembahasan rapat wajib diisi.' };
-      if (!val(fd,'hasil')) return { galat:'Hasil rapat wajib diisi.' };
-      return { payload:{ undangan_id:val(fd,'undangan_id'), jumlah_peserta:val(fd,'jumlah_peserta'),
-        jam_mulai:val(fd,'jam_mulai'), jam_selesai:val(fd,'jam_selesai'), pembahasan:val(fd,'pembahasan'), hasil:val(fd,'hasil') } };
-    }
-  });
+  const opsi = daftar.map(u =>
+    `<option value="${esc(u.id)}">${esc(u.nomor_surat)} — ${esc(u.perihal)} (${tglIndo(u.tgl_acara)})</option>`).join('');
+  bukaModalForm('Notula',
+    fld('Nomor Undangan', `<select name="undangan_id"><option value="">— Pilih nomor undangan —</option>${opsi}</select>`, 1) +
+    fld('Jumlah Peserta Rapat', '<input name="jumlah_peserta" type="number" inputmode="numeric" min="0" max="99999">', 1) +
+    '<div class="mf-dua">' +
+      fld('Jam Mulai', '<input name="jam_mulai" type="time">', 1) +
+      fld('Jam Selesai', '<input name="jam_selesai" type="time">', 1) +
+    '</div>' +
+    fld('Pembahasan Rapat', '<textarea name="pembahasan"></textarea>', 1) +
+    fld('Hasil Rapat', '<textarea name="hasil"></textarea>', 1),
+    async (fd) => {
+      if (!val(fd,'undangan_id')) return { ok:false, pesan:'Nomor undangan wajib dipilih.' };
+      if (val(fd,'jumlah_peserta') === '') return { ok:false, pesan:'Jumlah peserta wajib diisi.' };
+      if (!val(fd,'jam_mulai') || !val(fd,'jam_selesai')) return { ok:false, pesan:'Jam mulai dan jam selesai wajib diisi.' };
+      if (!val(fd,'pembahasan')) return { ok:false, pesan:'Pembahasan rapat wajib diisi.' };
+      if (!val(fd,'hasil')) return { ok:false, pesan:'Hasil rapat wajib diisi.' };
+      return kirimRpc('simpan_notula', {
+        undangan_id:val(fd,'undangan_id'), jumlah_peserta:val(fd,'jumlah_peserta'),
+        jam_mulai:val(fd,'jam_mulai'), jam_selesai:val(fd,'jam_selesai'),
+        pembahasan:val(fd,'pembahasan'), hasil:val(fd,'hasil')
+      });
+    });
 }
 
 /* ---------- Navigasi record: Awal, Sebelumnya, Berikutnya, Akhir (+ Baru) ---------- */
@@ -2424,37 +2345,77 @@ async function formPengaduan(){
   gambar();
 }
 
-/* ---------- Inventaris ---------- */
-function formInventaris(){
-  return modalRekam({
-    judul:'Inventaris', daftar:'daftar_inventaris', simpan:'simpan_inventaris', hapus:'hapus_inventaris',
-    fokus:'nama_barang', hapusTeks:'Hapus data inventaris ini?',
-    render:(it, dis) => {
-      const angka = (k) => Number(it[k]) || 0;
-      const num = (nm, lbl) => `<div><small>${lbl}</small><input class="inv-n" name="${nm}" type="number" inputmode="numeric" min="0" value="${angka(nm) || ''}" placeholder="0" ${dis}></div>`;
-      return fld('Tgl Terima', inpR('tgl_terima', Object.assign({}, it, { tgl_terima: it.tgl_terima || hariIni() }), dis, 'date'), 1) +
-        fld('Nama Barang', inpR('nama_barang', it, dis, 'text', 'maxlength="200"'), 1) +
-        `<div class="mf-field"><label>Keadaan Barang</label><div class="mf-empat">${num('baik', 'Baik')}${num('rusak_ringan', 'R. Ringan')}${num('rusak_berat', 'R. Berat')}` +
-          `<div><small>Jumlah</small><input id="invJml" type="number" value="${angka('baik') + angka('rusak_ringan') + angka('rusak_berat')}" readonly tabindex="-1"></div></div></div>` +
-        fld('Lokasi Penyimpanan (Keberadaan)', inpR('lokasi', it, dis, 'text', 'maxlength="200"')) +
-        fld('Sumber Barang', pilihR('sumber', SUMBER_INV, it.sumber, dis), 1);
-    },
-    sesudah:() => {
-      $('mfIsi').querySelectorAll('.inv-n').forEach(i => i.addEventListener('input', () => {
-        let t = 0; $('mfIsi').querySelectorAll('.inv-n').forEach(x => { t += Math.max(0, parseInt(x.value, 10) || 0); });
-        $('invJml').value = t;
-      }));
-    },
-    ambil:(fd) => {
-      const ang = (k) => Math.max(0, parseInt(val(fd, k), 10) || 0);
-      if (!val(fd, 'tgl_terima')) return { galat:'Tgl terima wajib diisi.' };
-      if (!val(fd, 'nama_barang')) return { galat:'Nama barang wajib diisi.' };
-      if (!val(fd, 'sumber')) return { galat:'Sumber barang wajib dipilih.' };
-      if (ang('baik') + ang('rusak_ringan') + ang('rusak_berat') < 1) return { galat:'Jumlah barang minimal 1.' };
-      return { payload:{ tgl_terima:val(fd, 'tgl_terima'), nama_barang:val(fd, 'nama_barang'), baik:ang('baik'),
-        rusak_ringan:ang('rusak_ringan'), rusak_berat:ang('rusak_berat'), lokasi:val(fd, 'lokasi'), sumber:val(fd, 'sumber') } };
+/* ---------- Inventaris (modal; default = record terakhir; Tambah / Ubah / Hapus) ---------- */
+const SUMBER_INV = ['Aset RT', 'Sumbangan', 'Iuran Bulanan'];
+async function formInventaris(){
+  let items = [];
+  const muat = async () => { const r = await kirimRpc('daftar_inventaris', {}); if (r.ok) items = r.items || []; return r; };
+  const r0 = await muat();
+  if (!r0.ok) return toast(r0.pesan || 'Tidak dapat memuat inventaris.');
+  let idx = Math.max(0, items.length - 1), edit = items.length === 0, hapus = false;
+  const gambar = () => {
+    const n = items.length, baru = idx >= n, it = baru ? {} : items[idx], dis = edit ? '' : 'disabled';
+    const angka = (k) => Number(it[k]) || 0;
+    const num = (nm, lbl) => `<div><small>${lbl}</small><input class="inv-n" name="${nm}" type="number" inputmode="numeric" min="0" value="${angka(nm) || ''}" placeholder="0" ${dis}></div>`;
+    let aksi;
+    if (hapus) aksi = '<div class="pesan-err" style="margin:0 0 8px">Hapus data inventaris ini?</div>' +
+      '<div class="mf-aksi-baris"><button type="button" data-mf="hapusbatal">Batal</button><button type="button" class="bahaya" data-mf="hapusya"><i class="fa-solid fa-trash"></i> Ya, Hapus</button></div>';
+    else if (edit) aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="batal">Batal</button><button type="button" class="utama" data-mf="simpan"><i class="fa-solid fa-floppy-disk"></i> Simpan</button></div>';
+    else aksi = '<div class="mf-aksi-baris"><button type="button" data-mf="tambah"><i class="fa-solid fa-plus"></i> Tambah</button>' +
+      `<button type="button" class="utama" data-mf="ubah" ${baru ? 'disabled' : ''}><i class="fa-solid fa-pen"></i> Ubah</button>` +
+      `<button type="button" class="bahaya" data-mf="hapus" ${baru ? 'disabled' : ''}><i class="fa-solid fa-trash"></i> Hapus</button></div>`;
+    $('mfIsi').innerHTML = barNav(idx, n, baru) +
+      fld('Tgl Terima', `<input name="tgl_terima" type="date" value="${esc(it.tgl_terima || hariIni())}" ${dis}>`, 1) +
+      fld('Nama Barang', `<input name="nama_barang" type="text" maxlength="200" value="${esc(it.nama_barang || '')}" ${dis}>`, 1) +
+      `<div class="mf-field"><label>Keadaan Barang</label><div class="mf-empat">${num('baik', 'Baik')}${num('rusak_ringan', 'R. Ringan')}${num('rusak_berat', 'R. Berat')}` +
+        `<div><small>Jumlah</small><input id="invJml" type="number" value="${angka('baik') + angka('rusak_ringan') + angka('rusak_berat')}" readonly tabindex="-1"></div></div></div>` +
+      fld('Lokasi Penyimpanan (Keberadaan)', `<input name="lokasi" type="text" maxlength="200" value="${esc(it.lokasi || '')}" ${dis}>`) +
+      fld('Sumber Barang', '<select name="sumber" ' + dis + '><option value="">— Pilih —</option>' +
+        SUMBER_INV.map(o => `<option ${o === it.sumber ? 'selected' : ''}>${o}</option>`).join('') + '</select>', 1) +
+      fld('Aksi', aksi);
+    $('mfIsi').querySelectorAll('.inv-n').forEach(i => i.addEventListener('input', () => {
+      let t = 0; $('mfIsi').querySelectorAll('.inv-n').forEach(x => { t += Math.max(0, parseInt(x.value, 10) || 0); });
+      $('invJml').value = t;
+    }));
+    $('mfGalat').classList.remove('tampil');
+  };
+  bukaModalForm('Inventaris', '', null);
+  $('mfBatal').textContent = 'Tutup';
+  mfNavFn = async (a) => {
+    const n = items.length;
+    $('mfGalat').classList.remove('tampil');
+    if (['awal', 'mundur', 'maju', 'akhir'].includes(a)){ idx = geserNav(a, idx, n, idx >= n); edit = false; hapus = false; return gambar(); }
+    if (a === 'tambah'){ idx = n; edit = true; return gambar(); }
+    if (a === 'ubah'){ edit = true; return gambar(); }
+    if (a === 'batal'){ if (n > 0){ if (idx >= n) idx = n - 1; edit = false; } return gambar(); }
+    if (a === 'hapus'){ hapus = true; return gambar(); }
+    if (a === 'hapusbatal'){ hapus = false; return gambar(); }
+    if (a === 'hapusya'){
+      const r = await kirimRpc('hapus_inventaris', { id: items[idx].id });
+      if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menghapus.');
+      toast(r.pesan || 'Data inventaris dihapus.');
+      await muat(); idx = Math.min(idx, Math.max(0, items.length - 1)); edit = items.length === 0; hapus = false;
+      return gambar();
     }
-  });
+    if (a === 'simpan'){
+      const fd = new FormData($('mfForm')), ang = (k) => Math.max(0, parseInt(val(fd, k), 10) || 0);
+      if (!val(fd, 'tgl_terima')) return tampilGalatMf('Tgl terima wajib diisi.');
+      if (!val(fd, 'nama_barang')) return tampilGalatMf('Nama barang wajib diisi.');
+      if (!val(fd, 'sumber')) return tampilGalatMf('Sumber barang wajib dipilih.');
+      if (ang('baik') + ang('rusak_ringan') + ang('rusak_berat') < 1) return tampilGalatMf('Jumlah barang minimal 1.');
+      const r = await kirimRpc('simpan_inventaris', {
+        id: idx < n ? items[idx].id : '', tgl_terima: val(fd, 'tgl_terima'), nama_barang: val(fd, 'nama_barang'),
+        baik: ang('baik'), rusak_ringan: ang('rusak_ringan'), rusak_berat: ang('rusak_berat'), lokasi: val(fd, 'lokasi'), sumber: val(fd, 'sumber')
+      });
+      if (!r.ok) return tampilGalatMf(r.pesan || 'Gagal menyimpan.');
+      toast(r.pesan || 'Data inventaris tersimpan.');
+      await muat();
+      const k = items.findIndex(x => x.id === r.id);
+      idx = k >= 0 ? k : Math.max(0, items.length - 1); edit = false;
+      return gambar();
+    }
+  };
+  gambar();
 }
 
 /* ---------- Info Aktual: kartu Agenda RT ---------- */
