@@ -3010,7 +3010,7 @@ function pesanPollAdmin(teks, galat){
   el.textContent = teks || ''; el.style.color = galat ? '#b91c1c' : '#15803d'; el.hidden = !teks;
 }
 function gambarPollingAdmin(isi, d, versi){
-  plIdAdmin = '';                                          // form selalu mulai kosong (polling baru)
+  plIdAdmin = '';
   isi.innerHTML = `
     <div class="kartu-stat">
       <div class="rd-judul-baris"><h3 class="st-judul"><i class="fa-solid fa-square-poll-vertical"></i> Kelola Polling</h3><span id="pollStatusAdmin"></span></div>
@@ -3038,7 +3038,34 @@ function gambarPollingAdmin(isi, d, versi){
     </div>
     <div class="kartu-stat" id="pollArsip"><div class="kosong" style="margin:8px 0"><i class="fa-solid fa-spinner fa-spin"></i>Memuat arsip polling...</div></div>`;
   $('pollStatusAdmin').innerHTML = '<span class="poll-status">Polling baru</span>';
+
+  /* Form membuka polling TERAKHIR. Ceklis Hasil otomatis tercentang bila polling sudah berakhir (batas waktu lewat)
+     atau sudah ditutup admin; Polling hanya tercentang selama masih berjalan. */
+  const terakhir = d && d.ada ? d.poll : null;
+  if (terakhir){
+    plIdAdmin = terakhir.id || '';
+    $('pollDeskripsi').value = terakhir.deskripsi || '';
+    $('pollChar').textContent = $('pollDeskripsi').value.length;
+    $('pollBatas').value = keInputWita(terakhir.batas_waktu);
+    const berakhir = !(Date.parse(terakhir.batas_waktu) > sekarangPoll());
+    const tutup = !!terakhir.hasil_aktif || (berakhir && !!terakhir.polling_aktif);
+    $('pollHasil').checked = tutup;
+    $('pollAktif').checked = !tutup && !!terakhir.terbuka;
+    $('pollStatusAdmin').innerHTML = statusPollingAdmin(tutup && !terakhir.hasil_aktif ? { ...terakhir, hasil_aktif:true } : terakhir);
+  }
   aturKontrolPoll();
+
+  /* Saat batas waktu tercapai ketika layar ini terbuka: Hasil tercentang otomatis, Polling dilepas */
+  hentikanPoll();
+  plTimer = setInterval(() => {
+    if (versi !== versiSubform || !$('pollBatas')){ hentikanPoll(); return; }
+    const aktif = $('pollAktif'), hasil = $('pollHasil');
+    if (aktif.checked && !hasil.checked && epochDariInput($('pollBatas').value) <= sekarangPoll()){
+      hasil.checked = true; aturKontrolPoll();
+      $('pollStatusAdmin').innerHTML = statusPollingAdmin({ hasil_aktif:true });
+      pesanPollAdmin('Batas waktu berakhir: polling ditutup dan Hasil tercentang otomatis.', false);
+    }
+  }, 1000);
 
   $('pollDeskripsi').addEventListener('input', () => { $('pollChar').textContent = $('pollDeskripsi').value.length; });
   $('pollBatas').addEventListener('change', aturKontrolPoll);
