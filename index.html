@@ -3451,6 +3451,13 @@ function dbSesi(){      // klien khusus yang mengirim token sesi (header x-sesi)
   return klienSesi;
 }
 async function bukaKK(path){
+  // Data lama: kolom link_kk berisi tautan Google Drive (https://...) -> buka langsung.
+  // Data baru: berisi path file di bucket Storage 'kk' -> buat signed URL dulu.
+  if (/^https?:\/\//i.test(path || '')){
+    const a = window.open(path, '_blank', 'noopener');
+    if (!a) window.location.href = path;      // popup diblokir -> buka di tab yang sama
+    return;
+  }
   const w = window.open('', '_blank');
   try{
     const { data, error } = await dbSesi().storage.from('kk').createSignedUrl(path, 120);
