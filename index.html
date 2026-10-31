@@ -98,7 +98,7 @@
   /* ============ LOGIN ============ */
   #login{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px}
   .kotak-login{
-    position:relative;width:100%;max-width:380px;padding:36px 24px 24px;border-radius:24px;
+    position:relative;width:100%;max-width:380px;padding:14px 24px 24px;border-radius:24px;
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
     -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
     box-shadow:0 24px 60px rgba(4,18,60,.45);color:#fff;
@@ -809,8 +809,8 @@
       <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792972591/Logo_My_SAPA_dengan_Swoosh_Biru_aiucfx.webp" alt="Logo MySapa">
     </div>
     <div class="footer-splash">
-      <div>Layanan digital untuk warga RT 09 RW 05 Kel. Bonggoeya Kec. Wua-Wua</div>
-      <div>Dikembangkan dengan sistem keamanan terbaik untuk pelayanan administrasi dan informasi warga </div>
+      <div>Dikembangkan dengan sistem keamanan terbaik.</div>
+      <div>Layanan administrasi dan informasi berbasis digital.</div>
       <div>Powered by Anto Design Concept &copy; 2026</div>
       <div class="versi-app">Versi 4.10</div>
     </div>
@@ -3910,6 +3910,31 @@ document.addEventListener('click', (e) => {
 })();
 
 mulai();
+
+/* Login: jarak tepi atas kartu ke logo (yang terlihat) disamakan dengan jarak teks terakhir ke tepi bawah kartu.
+   Ruang transparan di atas gambar logo diukur otomatis; bila gagal diukur, CSS bawaan tetap dipakai. */
+(function(){
+  const TARGET = 26;   // px, jarak yang diinginkan (setara jarak teks terakhir ke tepi bawah kartu)
+  const el = document.querySelector('.kotak-login .logo-kecil'); if (!el) return;
+  const im = new Image(); im.crossOrigin = 'anonymous';
+  im.onload = () => {
+    try{
+      const w = im.naturalWidth, h = im.naturalHeight; if (!w || !h) return;
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const g = c.getContext('2d'); g.drawImage(im, 0, 0);
+      const d = g.getImageData(0, 0, w, h).data;
+      let atas = -1;
+      for (let y = 0; y < h && atas < 0; y++){ for (let x = 0; x < w; x++){ if (d[(y * w + x) * 4 + 3] > 24){ atas = y; break; } } }
+      if (atas < 0) return;
+      const kotak = 160, skala = Math.min(kotak / w, kotak / h);
+      const kosongAtas = (kotak - h * skala) / 2 + atas * skala;   // ruang kosong di atas logo terlihat
+      const geser = 12;                                            // logo sudah digeser naik 12px lewat CSS (top:-12px)
+      const f = el.closest('.kotak-login'); if (f) f.style.paddingTop = '0px';
+      el.style.marginTop = Math.round(TARGET + geser - kosongAtas) + 'px';
+    }catch(e){ /* canvas diblokir (CORS): biarkan CSS bawaan */ }
+  };
+  im.src = el.currentSrc || el.src;
+})();
 </script>
 </body>
 </html>
