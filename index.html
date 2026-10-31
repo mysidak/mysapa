@@ -14,6 +14,9 @@
 
 <style>
   :root{
+    /* Warna latar splash, login & header: berubah menurut waktu (lihat html[data-waktu] di bawah). Bawaan = siang */
+    --lt-a:#2a7bff; --lt-b:#00b4ff; --lt-1:#0a2463; --lt-2:#0f3a9e; --lt-3:#1558c9;
+    --hd-1:#0a2463; --hd-2:#1558c9; --hd-3:#4aa3ff;
     --biru-tua:#0b2a6f;
     --biru:#1558c9;
     --biru-muda:#4aa3ff;
@@ -28,6 +31,12 @@
   html,body{height:100%}
   body{font-family:'Poppins',system-ui,sans-serif;background:#0b2a6f;color:var(--teks);overflow:hidden}
 
+  /* Tema warna menurut waktu */
+  html[data-waktu="pagi"]{--lt-a:#ffb957; --lt-b:#46d1e8; --lt-1:#0b5f8f; --lt-2:#1783b8; --lt-3:#3aa6d6; --hd-1:#0b5f8f; --hd-2:#1783b8; --hd-3:#5cc0e6}
+  html[data-waktu="siang"]{--lt-a:#2a7bff; --lt-b:#00b4ff; --lt-1:#0a2463; --lt-2:#0f3a9e; --lt-3:#1558c9; --hd-1:#0a2463; --hd-2:#1558c9; --hd-3:#4aa3ff}
+  html[data-waktu="sore"]{--lt-a:#ff9a3c; --lt-b:#c04aa0; --lt-1:#3b1f6b; --lt-2:#8a3a86; --lt-3:#d9644f; --hd-1:#3b1f6b; --hd-2:#a8437f; --hd-3:#ff8a4c}
+  html[data-waktu="malam"]{--lt-a:#1c3fa8; --lt-b:#0b5a99; --lt-1:#050d2b; --lt-2:#0b1f5c; --lt-3:#12307f; --hd-1:#050d2b; --hd-2:#0b1f5c; --hd-3:#1d3f9c}
+
   /* Wadah aplikasi (tampilan mobile di tengah pada layar lebar) */
   #app{position:relative;width:100%;max-width:480px;height:100%;margin:0 auto;overflow:hidden;background:var(--bg)}
 
@@ -35,9 +44,9 @@
   .latar-biru{
     position:absolute;inset:0;overflow:hidden;
     background:
-      radial-gradient(120% 80% at 10% 0%, #2a7bff 0%, transparent 55%),
-      radial-gradient(100% 70% at 100% 100%, #00b4ff 0%, transparent 55%),
-      linear-gradient(160deg,#0a2463 0%,#0f3a9e 55%,#1558c9 100%);
+      radial-gradient(120% 80% at 10% 0%, var(--lt-a) 0%, transparent 55%),
+      radial-gradient(100% 70% at 100% 100%, var(--lt-b) 0%, transparent 55%),
+      linear-gradient(160deg,var(--lt-1) 0%,var(--lt-2) 55%,var(--lt-3) 100%);
   }
   .latar-biru::before{ /* garis grid halus */
     content:"";position:absolute;inset:0;opacity:.12;
@@ -137,7 +146,7 @@
   #utama.tampil{display:block}
 
   .header{
-    background:linear-gradient(160deg,#0a2463 0%,#1558c9 60%,#4aa3ff 100%);
+    background:linear-gradient(160deg,var(--hd-1) 0%,var(--hd-2) 60%,var(--hd-3) 100%);
     color:#fff;padding:calc(16px + env(safe-area-inset-top)) 18px 22px;border-radius:0 0 30px 30px;position:relative;
   }
   .baris-atas{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -3934,6 +3943,28 @@ mulai();
     }catch(e){ /* canvas diblokir (CORS): biarkan CSS bawaan */ }
   };
   im.src = el.currentSrc || el.src;
+})();
+
+/* Tema warna menurut waktu: pagi 05-10, siang 11-14, sore 15-17, malam 18-04 (jam perangkat) */
+(function(){
+  const WARNA = { pagi:'#0b5f8f', siang:'#0b2a6f', sore:'#3b1f6b', malam:'#050d2b' };
+  let paksa = null;   // diisi bila tema dipilih manual (untuk uji tampilan)
+  function pasang(w){
+    if (document.documentElement.dataset.waktu === w) return;
+    document.documentElement.dataset.waktu = w;
+    const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = WARNA[w];
+  }
+  function atur(){
+    if (paksa) return pasang(paksa);
+    const j = new Date().getHours();
+    pasang(j >= 5 && j <= 10 ? 'pagi' : j >= 11 && j <= 14 ? 'siang' : j >= 15 && j <= 17 ? 'sore' : 'malam');
+  }
+  /* Uji tampilan: tambahkan ?waktu=pagi|siang|sore|malam pada alamat halaman,
+     atau ketik setWaktu('sore') di konsol browser; setWaktu() tanpa isi = kembali otomatis */
+  window.setWaktu = function(w){ paksa = WARNA[w] ? w : null; atur(); return paksa || 'otomatis'; };
+  const q = new URLSearchParams(location.search).get('waktu');
+  if (q && WARNA[q]) paksa = q;
+  atur(); setInterval(atur, 60000);
 })();
 </script>
 </body>
