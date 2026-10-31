@@ -81,16 +81,16 @@
   }
   .logo-pusat img{max-width:100%;max-height:100%;object-fit:contain;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));animation:muncul .9s ease both}
-  .teks-selamat{ /* jarak 24px di atas logo: tepi bawah teks = tepi atas logo - 24px */
-    position:absolute;left:0;right:0;
-    bottom:calc(50% + 100px + 24px);
-    text-align:center;color:#fff;font-size:1.6rem;font-weight:600;letter-spacing:.5px;
-    text-shadow:0 2px 12px rgba(0,0,0,.25);animation:muncul .9s .15s ease both;
-  }
   .footer-biru{
     position:absolute;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));
     text-align:center;color:rgba(255,255,255,.85);font-size:.75rem;
   }
+  .footer-splash{ /* 4 baris di dasar splash */
+    position:absolute;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom));padding:0 28px;
+    text-align:center;color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.5;
+  }
+  .footer-splash div+div{margin-top:3px}
+  .footer-splash .versi-app{font-weight:700;color:#fff}
   @keyframes muncul{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .logo-pusat img{animation-name:muncul-logo}
   @keyframes muncul-logo{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
@@ -98,7 +98,7 @@
   /* ============ LOGIN ============ */
   #login{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px}
   .kotak-login{
-    position:relative;width:100%;max-width:380px;padding:14px 24px 24px;border-radius:24px;
+    position:relative;width:100%;max-width:380px;padding:36px 24px 24px;border-radius:24px;
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
     -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
     box-shadow:0 24px 60px rgba(4,18,60,.45);color:#fff;
@@ -116,6 +116,7 @@
     font:inherit;font-size:.92rem;background:#fff;color:var(--teks);outline:none;transition:.2s;
   }
   .field input:focus{border-color:var(--oranye)}
+  .kotak-login .field input::placeholder{color:#94a3b8;opacity:.7}
   .field .mata{position:absolute;right:6px;bottom:4px;width:38px;height:38px;border:0;background:none;
     color:var(--abu);font-size:.95rem;cursor:pointer}
   .btn{
@@ -697,8 +698,8 @@
   .ar .ar-stat.aktif{background:linear-gradient(135deg,#00529c,#0072ce);box-shadow:0 8px 20px rgba(0,82,156,.35)}
   .ar .ar-ic{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
   .ar .ar-stat.aktif .ar-ic{background:rgba(255,255,255,.22)!important;color:#fff!important}
-  .ar .ar-tt{font-size:10.5px;color:#64748b;font-weight:600;margin:8px 0 0;min-height:26px;display:flex;align-items:center;justify-content:center;line-height:1.2}
-  .ar .ar-vl{font-size:18px;font-weight:800;color:#0f172a;margin:4px 0 0}
+  .ar .ar-tt{font-size:12.5px;color:#64748b;font-weight:600;margin:8px 0 0;min-height:30px;display:flex;align-items:center;justify-content:center;line-height:1.2}
+  .ar .ar-vl{font-size:20px;font-weight:800;color:#0f172a;margin:4px 0 0}
   .ar .ar-stat.aktif .ar-tt{color:rgba(255,255,255,.88)}
   .ar .ar-stat.aktif .ar-vl{color:#fff}
   .ar .ar-cari{position:relative;margin-bottom:12px}
@@ -739,6 +740,14 @@
   .pr .pr-tenure-ico{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px;color:#38bdf8;flex-shrink:0}
   .pr .pr-tenure-lbl{font-size:11px;opacity:.85;font-weight:600;letter-spacing:.4px}
   .pr .pr-tenure-val{font-size:13px;font-weight:600;margin-top:2px}
+  .pr .pr-masa{background:#fff;border-radius:20px;padding:20px;margin-bottom:16px;border:1px solid var(--pr-border);box-shadow:0 10px 25px rgba(0,56,101,.08)}
+  .pr .pr-masa-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+  .pr .pr-masa-title{font-size:12px;font-weight:700;color:var(--pr-muted);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+  .pr .pr-masa-title i{color:#00529C}
+  .pr .pr-masa-pct{font-size:13px;font-weight:800;color:#00529C;background:rgba(0,82,156,.08);padding:4px 10px;border-radius:20px;flex-shrink:0}
+  .pr .pr-masa-bar{width:100%;height:10px;background:#E2E8F0;border-radius:10px;overflow:hidden}
+  .pr .pr-masa-fill{height:100%;background:linear-gradient(90deg,#00529C 0%,#FF6B00 100%);border-radius:10px;transition:width .8s ease}
+  .pr .pr-masa-val{margin-top:12px;font-size:14px;font-weight:700;color:var(--pr-dark);text-align:center}
   .pr .pr-card{background:#fff;border-radius:18px;margin-bottom:12px;border:1px solid var(--pr-border);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);overflow:hidden;transition:all .3s ease}
   .pr .pr-card.active{box-shadow:0 10px 25px -5px rgba(15,23,42,.08);border-color:rgba(37,99,235,.3)}
   .pr .pr-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none;background:#fff}
@@ -796,11 +805,15 @@
       <i class="bentuk b1"></i><i class="bentuk b2"></i><i class="bentuk b3"></i><i class="bentuk b4"></i>
       <i class="bentuk b5"></i><i class="bentuk b6"></i><i class="bentuk b7"></i>
     </div>
-    <div class="teks-selamat">Selamat Datang</div>
     <div class="logo-pusat">
       <img src="https://res.cloudinary.com/q7sznixw/image/upload/v1792972591/Logo_My_SAPA_dengan_Swoosh_Biru_aiucfx.webp" alt="Logo MySapa">
     </div>
-    <div class="footer-biru">Powered by Anto Design Concept &copy; 2026</div>
+    <div class="footer-splash">
+      <div>Layanan digital untuk warga RT 09 RW 05 Kel. Bonggoeya Kec. Wua-Wua</div>
+      <div>Dikembangkan dengan sistem keamanan terbaik untuk pelayanan administrasi dan informasi warga </div>
+      <div>Powered by Anto Design Concept &copy; 2026</div>
+      <div class="versi-app">Versi 4.10</div>
+    </div>
   </section>
 
   <!-- ========== A. HALAMAN LOGIN ========== -->
@@ -886,11 +899,11 @@
         <button class="fitur" data-buka="mydata"><span class="lingkaran c3"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="9" cy="10.8" r="2.2"/><path d="M5.4 16.4c.7-1.6 2-2.4 3.6-2.4s2.9.8 3.6 2.4"/><path d="M15 10h3.5M15 13.5h3"/></svg></span><span class="nama">MyData</span></button>
         <button class="fitur" data-buka="arsip"><span class="lingkaran c1"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3" y="4" width="18" height="4.5" rx="1.3"/><path d="M5 8.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5"/><path d="M10 12.5h4"/></svg></span><span class="nama">Info Arsip &amp; Aset</span></button>
         <button class="fitur nonaktif" id="btnRonda" data-buka="absensironda" disabled aria-disabled="true"><span class="lingkaran c15"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M9 4.5V3.2h6v1.3"/><path d="m8.5 13 2.4 2.4 4.6-4.9"/></svg></span><span class="nama">Absensi Ronda</span></button>
-        <button class="fitur nonaktif" id="btnLonceng" disabled aria-disabled="true" aria-label="Data Pengajuan"><span class="lingkaran c12"><i class="fa-solid fa-bell"></i></span><span class="badge-notif" id="badgeNotif">0</span><span class="nama">Data Pengajuan</span></button>
         <button class="fitur" id="btnInfo" data-buka="info">
           <i class="fa-solid fa-circle-exclamation alert" id="alertInfo"></i>
           <span class="lingkaran c2"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 9.5h3l8-4v13l-8-4H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"/><path d="M7 14.5 8.2 19h2.4"/><path d="M18.2 9.2a4.5 4.5 0 0 1 0 5.6"/></svg></span><span class="nama">Info Aktual</span>
         </button>
+        <button class="fitur nonaktif" id="btnLonceng" disabled aria-disabled="true" aria-label="Data Pengajuan"><span class="lingkaran c12"><i class="fa-solid fa-bell"></i></span><span class="badge-notif" id="badgeNotif">0</span><span class="nama">Data Pengajuan</span></button>
         <button class="fitur" id="btnPolling" data-buka="polling" hidden><i class="fa-solid fa-circle-exclamation alert" id="alertPolling"></i><span class="lingkaran c7"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 16.5v-3.5M12 16.5V8M15.5 16.5v-5.5"/></svg></span><span class="nama">Polling</span></button>
         <button class="fitur" data-buka="programkerja"><span class="lingkaran c14"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect class="d" x="4" y="4.5" width="16" height="16" rx="2.8"/><path d="M8 3v3M16 3v3M8 12.5l2.2 2.2 4-4.4M8 18h8"/></svg></span><span class="nama">Program Kerja</span></button>
         <button class="fitur" data-buka="profilrt"><span class="lingkaran c13"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path class="d" d="M4 20V9.5L12 4l8 5.5V20z"/><path d="M9.5 20v-5h5v5M8.5 11.5h1.2M14.3 11.5h1.2"/></svg></span><span class="nama">Profil RT</span></button>
@@ -1052,8 +1065,8 @@ function aturRonda(){
 function aturMenuPengguna(profil){
   const nama = namaTanpaGelar(profil && profil.nama).toLowerCase().replace(/\s+/g, ' ').trim();
   aksesPenuh = nama === NAMA_AKSES_PENUH;
-  const bp = $('btnPolling'), ga = $('gridAdmin');                  // Polling: admin di Fitur Admin, warga setelah Info Aktual
-  if (bp && ga){ if (aksesPenuh) ga.prepend(bp); else $('btnInfo').after(bp); }
+  const bp = $('btnPolling'), ga = $('gridAdmin');                  // Polling: admin di Fitur Admin, warga setelah Data Pengajuan
+  if (bp && ga){ if (aksesPenuh) ga.prepend(bp); else $('btnLonceng').after(bp); }
   if (!profil) pollStatus = null;
   const namaPenuh = normNama(profil && profil.nama);
   aksesRonda = aksesPenuh || NAMA_AKSES_RONDA.includes(namaPenuh) || NAMA_AKSES_RONDA.includes(nama.replace(/[.,]/g, ' ').replace(/\s+/g, ' ').trim());
@@ -2106,17 +2119,15 @@ const URL_PROFIL_RT = 'https://script.google.com/macros/s/AKfycbxSLVFxMUnAy0G53_
 const URL_PETA_RT = 'https://res.cloudinary.com/q7sznixw/image/upload/v1788749985/Peta_n2dvqg.png';
 
 function prMasaKerja(){
-  const mulai = new Date(2026, 0, 7), h = new Date();
-  if (h < mulai) return 'Belum Dimulai';
+  const mulai = new Date(2026, 0, 7), akhir = new Date(2030, 0, 7), h = new Date();
+  if (h < mulai) return { teks:'Belum Dimulai', persen:0 };
   let th = h.getFullYear() - mulai.getFullYear(), bl = h.getMonth() - mulai.getMonth(), hr = h.getDate() - mulai.getDate();
   if (hr < 0){ bl -= 1; hr += new Date(h.getFullYear(), h.getMonth(), 0).getDate(); }
   if (bl < 0){ th -= 1; bl += 12; }
-  const total = Math.round((Date.UTC(h.getFullYear(), h.getMonth(), h.getDate()) - Date.UTC(2026, 0, 7)) / 86400000);
-  const bag = [];
-  if (th > 0) bag.push(th + ' Tahun');
-  if (bl > 0 || th > 0) bag.push(bl + ' Bulan');
-  bag.push(hr + ' Hari');
-  return bag.join(', ') + ' (' + total + ' Hari)';
+  const hari = (a, b) => Math.round((Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) - Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())) / 86400000);
+  const total = hari(mulai, h), masa = hari(mulai, akhir);   // masa jabatan periode 2026 s.d 2030
+  const persen = Math.min(100, Math.max(0, Math.round(total / masa * 100)));
+  return { teks: th + ' thn . ' + bl + ' bln . ' + hr + ' hr --- (' + total + ' hari)', persen };
 }
 function prFotoUrl(u){
   u = String(u || '').trim(); if (!u) return '';
@@ -2169,6 +2180,7 @@ async function renderProfilRT(isi){
   if (versi !== versiSubform) return;
   if (gagal){ isi.innerHTML = `<div class="kosong"><i class="fa-solid fa-triangle-exclamation"></i>${esc(gagal)}</div>`; return; }
 
+  const masa = prMasaKerja();
   const kosong = (t) => `<div class="pr-kosong">${t}</div>`;
   const ikonRekap = ['fa-house-user','fa-building','fa-store','fa-chart-pie','fa-warehouse'];
   const rekap = (d.rekapBangunan || []).map((x, i) => `<div class="pr-rekap-card"><div class="pr-rekap-ico"><i class="fa-solid ${ikonRekap[i % ikonRekap.length]}"></i></div>
@@ -2190,10 +2202,13 @@ async function renderProfilRT(isi){
       <div class="pr-body">${isiHtml}</div></section>`;
 
   isi.innerHTML = `<div class="pr">
-    <div class="pr-hero">
-      <div class="pr-hero-sub"><i class="fa-solid fa-location-dot"></i><span>Mengenal lebih dekat RT 09 RW 05 Kel. Bonggoeya Kec. Wua-Wua, Kota Kendari.</span></div>
-      <div class="pr-tenure"><div class="pr-tenure-ico"><i class="fa-solid fa-business-time"></i></div>
-        <div><div class="pr-tenure-lbl">Masa Kerja (7 Jan 2026)</div><div class="pr-tenure-val">${esc(prMasaKerja())}</div></div></div>
+    <div class="pr-masa">
+      <div class="pr-masa-head">
+        <div class="pr-masa-title"><i class="fa-solid fa-business-time"></i> Masa Kerja (7 Jan 2026)</div>
+        <div class="pr-masa-pct">${masa.persen}%</div>
+      </div>
+      <div class="pr-masa-bar"><div class="pr-masa-fill" style="width:${masa.persen}%"></div></div>
+      <div class="pr-masa-val">${esc(masa.teks)}</div>
     </div>
     ${sek('', 'fa-map-location-dot', 'Batas Wilayah', 'Peta Wilayah Administratif',
       `<div class="pr-map" data-prpeta><img src="${URL_PETA_RT}" alt="Peta Batas Wilayah RT"><div class="pr-map-badge"><i class="fa-solid fa-expand"></i> Perbesar Peta</div></div>`, true)}
